@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -214,7 +215,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               _buildMetricCard(
                 "GOLD 24K (PER TOLA)",
                 "₨ ${_currencyFormat.format(tolaRate)}",
-                Color(0xFFFBBF24),
+                AppConstants.accentGold,
                 isDesktop,
               ),
               _buildMetricCard(
@@ -246,7 +247,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
 
           // Main Editor Sections
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -321,8 +322,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            child: InstitutionalHScroll(
               child: Row(
                 children: [
                   _tickerItem("🥇 24K Gold (Gram)", "₨ ${_currencyFormat.format(gramRate)}"),
@@ -371,7 +371,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xFFFBBF24).withValues(alpha: 0.3)),
+        border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -381,12 +381,12 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             children: [
               Row(
                 children: const [
-                  Icon(Icons.workspace_premium_rounded, color: Color(0xFFFBBF24), size: 22),
+                  Icon(Icons.workspace_premium_rounded, color: AppConstants.accentGold, size: 22),
                   SizedBox(width: 8),
                   Text(
                     "24K PHYSICAL GOLD SPOT PRICING ENGINE",
                     style: TextStyle(
-                      color: Color(0xFFFBBF24),
+                      color: AppConstants.accentGold,
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
@@ -462,7 +462,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                     labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
                     hintText: "24500.00",
                     prefixText: "₨ ",
-                    prefixStyle: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold),
+                    prefixStyle: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold),
                     filled: true,
                     fillColor: AppConstants.surfaceCard,
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -681,7 +681,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               filled: true,
               fillColor: AppConstants.surfaceCard,
               prefixText: "₨ ",
-              prefixStyle: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold),
+              prefixStyle: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
             ),
             onChanged: (_) => setState(() {}),

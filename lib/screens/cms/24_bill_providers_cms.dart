@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
@@ -125,7 +126,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
           .toList();
       setState(() => _providersList = list);
     } else {
-      setState(() => _providersList = List.from(_defaultProviders));
+      setState(() => _providersList = <dynamic>[]);
     }
   }
 
@@ -380,10 +381,9 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -644,7 +644,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,

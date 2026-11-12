@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -108,7 +109,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
       setState(() => _plansList = list);
     } else {
       setState(() {
-        _plansList = _defaultPlans.map((p) => Map<String, dynamic>.from(p)).toList();
+        _plansList = [];
       });
     }
   }
@@ -366,10 +367,9 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -569,7 +569,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   if (cat == 'HEALTH') color = Color(0xFFEF4444);
   if (cat == 'LIFE') color = Color(0xFFA855F7);
   if (cat == 'MOTOR') color = Color(0xFF38BDF8);
-  if (cat == 'DEVICE') color = Color(0xFFFBBF24);
+  if (cat == 'DEVICE') color = AppConstants.accentGold;
   if (cat == 'TRAVEL') color = Color(0xFF22C55E);
 
   return Container(
@@ -626,7 +626,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 540),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,

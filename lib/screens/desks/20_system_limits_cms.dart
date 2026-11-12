@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -222,7 +223,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
 
           // Main Limits Editor Form
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Form(
                 key: _formKey,
                 child: Column(

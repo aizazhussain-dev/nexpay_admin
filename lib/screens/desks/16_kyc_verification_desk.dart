@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -252,10 +253,9 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -541,7 +541,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
             Expanded(
               child: _isLoadingDocs
                   ? const Center(child: CircularProgressIndicator(color: AppConstants.accentGreen))
-                  : SingleChildScrollView(
+                  : InstitutionalVScroll(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

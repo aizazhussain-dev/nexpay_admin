@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -256,10 +257,9 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
-        child: SingleChildScrollView(
+        child: InstitutionalVScroll(
           scrollDirection: Axis.vertical,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+          child: InstitutionalHScroll(
             child: DataTable(
               headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
               dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -360,7 +360,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("₨ ${_currencyFormat.format(bal)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 13.5)),
-                          Text("\$ ${crypto.toStringAsFixed(2)} USDT", style: const TextStyle(color: Color(0xFFF3BA2F), fontSize: 11, fontWeight: FontWeight.bold)),
+                          Text("\$ ${crypto.toStringAsFixed(2)} USDT", style: const TextStyle(color: AppConstants.accentGold, fontSize: 11, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -579,7 +579,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
           ),
           content: Container(
             constraints: const BoxConstraints(maxWidth: 580),
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

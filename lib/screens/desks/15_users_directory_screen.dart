@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -232,10 +233,9 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -288,13 +288,13 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   DataCell(
   Text(
   "\$ ${crypto.toStringAsFixed(2)}",
-  style: const TextStyle(color: Color(0xFFF3BA2F), fontWeight: FontWeight.w800, fontSize: 13),
+  style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 13),
   ),
   ),
   DataCell(
   Text(
   "${gold.toStringAsFixed(3)} g",
-  style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w800, fontSize: 13),
+  style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 13),
   ),
   ),
   DataCell(
@@ -379,14 +379,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   Column(
   children: [
   const Text("USDT Crypto", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFF3BA2F), fontWeight: FontWeight.bold, fontSize: 13)),
+  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold, fontSize: 13)),
   ],
   ),
   Column(
   crossAxisAlignment: CrossAxisAlignment.end,
   children: [
   const Text("Gold Vault", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold, fontSize: 13)),
+  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold, fontSize: 13)),
   ],
   ),
   ],
@@ -474,7 +474,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 680, maxHeight: 600),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
@@ -505,7 +505,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   children: [
   const Text("CRYPTO (USDT)", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
   const SizedBox(height: 4),
-  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFF3BA2F), fontWeight: FontWeight.w700, fontSize: 16)),
+  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16)),
   ],
   ),
   ),
@@ -520,7 +520,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   children: [
   const Text("24K GOLD BULLION", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
   const SizedBox(height: 4),
-  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 16)),
+  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16)),
   ],
   ),
   ),
@@ -593,14 +593,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
 
   // Adjust Crypto Balance
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: Color(0xFFF3BA2F)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: AppConstants.accentGold),
   onPressed: () => _promptAdjustBalance(ctx, mobile, 'crypto', crypto, admin),
   child: const Text("± Edit USDT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
   ),
 
   // Adjust Gold Balance
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: Color(0xFFFBBF24)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: AppConstants.accentGold),
   onPressed: () => _promptAdjustBalance(ctx, mobile, 'gold', gold, admin),
   child: const Text("± Edit Gold", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
   ),

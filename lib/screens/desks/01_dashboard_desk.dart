@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -62,7 +63,7 @@ class DashboardDeskScreen extends StatelessWidget {
     final pendingLoans = admin.loans.where((l) => (l['status'] ?? '').toString().toUpperCase() == 'UNDER_REVIEW').toList();
     final openTickets = admin.tickets.where((t) => (t['status'] ?? '').toString().toUpperCase() == 'OPEN').toList();
 
-    return SingleChildScrollView(
+    return InstitutionalVScroll(
     padding: EdgeInsets.all(isDesktop ? 24 : 16),
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,

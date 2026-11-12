@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +145,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
           .toList();
       setState(() => _packagesList = list);
     } else {
-      setState(() => _packagesList = List.from(_defaultPackages));
+      setState(() => _packagesList = <dynamic>[]);
     }
   }
 
@@ -404,10 +405,9 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -664,7 +664,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,

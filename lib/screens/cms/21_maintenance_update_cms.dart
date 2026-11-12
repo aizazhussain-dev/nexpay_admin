@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
@@ -194,7 +195,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
 
           // Main Editor Sections
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Form(
                 key: _formKey,
                 child: Column(

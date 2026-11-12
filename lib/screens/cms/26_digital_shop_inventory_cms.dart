@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -135,7 +136,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
       setState(() => _productsList = list);
     } else {
       setState(() {
-        _productsList = _defaultProducts.map((p) => Map<String, dynamic>.from(p)).toList();
+        _productsList = [];
       });
     }
   }
@@ -403,10 +404,9 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -509,7 +509,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
   onPressed: () => _openManageKeysModal(context, p, admin),
-  icon: const Icon(Icons.vpn_key_rounded, size: 13, color: Color(0xFFFBBF24)),
+  icon: const Icon(Icons.vpn_key_rounded, size: 13, color: AppConstants.accentGold),
   label: const Text("Vault", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
   ),
   ],
@@ -648,7 +648,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   if (cat == 'STREAMING') color = Color(0xFFEF4444);
   if (cat == 'AI_TOOLS') color = Color(0xFF38BDF8);
   if (cat == 'MUSIC') color = Color(0xFF22C55E);
-  if (cat == 'GAMING') color = Color(0xFFFBBF24);
+  if (cat == 'GAMING') color = AppConstants.accentGold;
 
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
@@ -708,7 +708,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   Expanded(
   child: Row(
   children: [
-  const Icon(Icons.vpn_key_rounded, color: Color(0xFFFBBF24)),
+  const Icon(Icons.vpn_key_rounded, color: AppConstants.accentGold),
   const SizedBox(width: 8),
   Expanded(
   child: Text(
@@ -735,7 +735,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 580, maxHeight: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
@@ -901,7 +901,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,

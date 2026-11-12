@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -291,10 +292,9 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
-        child: SingleChildScrollView(
+        child: InstitutionalVScroll(
           scrollDirection: Axis.vertical,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+          child: InstitutionalHScroll(
             child: DataTable(
               headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
               dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -357,7 +357,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("₨ ${_currencyFormat.format(grossPot)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 13)),
+                          Text("₨ ${_currencyFormat.format(grossPot)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 13)),
                           Text("Net: ₨ ${_currencyFormat.format(netPayout)} (1.5% Fee)", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
                         ],
                       ),
@@ -511,7 +511,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text("Net Pot Release", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text("₨ ${_currencyFormat.format(netPayout)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 15)),
+                      Text("₨ ${_currencyFormat.format(netPayout)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 15)),
                     ],
                   ),
                 ],
@@ -851,9 +851,9 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                 margin: const EdgeInsets.only(bottom: 8),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isCurrentWinner ? Color(0xFFFBBF24).withValues(alpha: 0.1) : AppConstants.surfaceCard,
+                  color: isCurrentWinner ? AppConstants.accentGold.withValues(alpha: 0.1) : AppConstants.surfaceCard,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: isCurrentWinner ? Color(0xFFFBBF24) : Color(0xFFE2E8F0)),
+                  border: Border.all(color: isCurrentWinner ? AppConstants.accentGold : Color(0xFFE2E8F0)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -866,7 +866,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                             Text(m['user_name'] ?? 'Member', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13.5)),
                             if (isCurrentWinner) ...[
                               const SizedBox(width: 6),
-                              const Text("👑 WINNER", style: TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 10)),
+                              const Text("👑 WINNER", style: TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 10)),
                             ],
                           ],
                         ),

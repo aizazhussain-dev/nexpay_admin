@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
@@ -114,7 +115,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
       setState(() => _staffList = list);
     } else {
       setState(() {
-        _staffList = _defaultStaff.map((s) => Map<String, dynamic>.from(s)).toList();
+        _staffList = [];
       });
     }
   }
@@ -372,10 +373,9 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -708,7 +708,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   children: [
@@ -854,7 +854,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   children: [

@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -202,7 +203,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
 
           // Main Editor & Preview Section
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: isDesktop ? _buildDesktopLayout(admin, isActive) : _buildMobileLayout(admin, isActive),
             ),
           ),

@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -252,10 +253,9 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              child: SingleChildScrollView(
+              child: InstitutionalVScroll(
                 scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                child: InstitutionalHScroll(
                   child: DataTable(
                     headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
                     dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -301,7 +301,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               ],
                             ),
                           ),
-                          DataCell(Text("\$ ${priceUsd.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 14))),
+                          DataCell(Text("\$ ${priceUsd.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 14))),
                           DataCell(Text("₨ ${_currencyFormat.format(pricePkr)}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13))),
                           DataCell(
                             Container(
@@ -406,10 +406,9 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              child: SingleChildScrollView(
+              child: InstitutionalVScroll(
                 scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                child: InstitutionalHScroll(
                   child: DataTable(
                     headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
                     dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -489,7 +488,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                             ),
                           ),
                           DataCell(Text("${shares.toStringAsFixed(4)} Sh", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13))),
-                          DataCell(Text("\$ ${execPriceUsd.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold))),
+                          DataCell(Text("\$ ${execPriceUsd.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold))),
                           DataCell(
                             Row(
                               children: [
@@ -599,10 +598,9 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
     ),
     child: ClipRRect(
     borderRadius: BorderRadius.circular(18),
-    child: SingleChildScrollView(
+    child: InstitutionalVScroll(
     scrollDirection: Axis.vertical,
-    child: SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
+    child: InstitutionalHScroll(
     child: DataTable(
     headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
     dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -630,7 +628,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
     ),
     DataCell(Text(h['symbol'], style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 14))),
     DataCell(Text("${(h['shares'] as double).toStringAsFixed(4)} Sh", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13))),
-    DataCell(Text("\$ ${(h['valUsd'] as double).toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold))),
+    DataCell(Text("\$ ${(h['valUsd'] as double).toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold))),
     DataCell(Text("₨ ${_currencyFormat.format(h['valPkr'])}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 13.5))),
     ],
     );
@@ -685,7 +683,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                 const SizedBox(width: 14),
                 Expanded(child: _buildMetricCard("TRANSACTED SHARES", "${totalShares.toStringAsFixed(4)} Sh", AppConstants.accentBlue, true)),
                 const SizedBox(width: 14),
-                Expanded(child: _buildMetricCard("BROKER SPREAD GAIN", "₨ ${_currencyFormat.format(houseMargin)}", Color(0xFFFBBF24), true)),
+                Expanded(child: _buildMetricCard("BROKER SPREAD GAIN", "₨ ${_currencyFormat.format(houseMargin)}", AppConstants.accentGold, true)),
               ],
             ),
           ],
@@ -714,7 +712,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
           title: Text(isEdit ? "Edit Stock: ${existing['symbol']}" : "Add Wall Street Stock", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           content: Container(
             constraints: const BoxConstraints(maxWidth: 480),
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

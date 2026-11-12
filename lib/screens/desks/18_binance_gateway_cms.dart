@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -100,13 +101,13 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
-                            color: Color(0xFFF3BA2F).withValues(alpha: 0.15),
+                            color: AppConstants.accentGold.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Color(0xFFF3BA2F).withValues(alpha: 0.3)),
+                            border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             "BINANCE PAY & TRC-20",
-                            style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 10, fontWeight: FontWeight.w700),
+                            style: TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -146,7 +147,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
             runSpacing: 10,
             children: [
               _buildMetricCard("DEPOSIT RATE (PKR)", "₨ ${depRate.toStringAsFixed(2)}", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("WITHDRAWAL RATE (PKR)", "₨ ${wthRate.toStringAsFixed(2)}", Color(0xFFF3BA2F), isDesktop),
+              _buildMetricCard("WITHDRAWAL RATE (PKR)", "₨ ${wthRate.toStringAsFixed(2)}", AppConstants.accentGold, isDesktop),
               _buildMetricCard("HOUSE SPREAD MARGIN", "₨ ${spreadMargin.toStringAsFixed(2)} / USDT", AppConstants.accentBlue, isDesktop),
               _buildMetricCard("SETTLEMENT PROTOCOL", "TRC-20 / Binance Pay", Color(0xFF64748B), isDesktop),
             ],
@@ -155,7 +156,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
 
           // Main Form Section
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: Form(
                 key: _formKey,
                 child: Container(
@@ -172,7 +173,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                       // Section 1: Depository Credentials
                       const Text(
                         "OFFICIAL CRYPTO RECEIVING DESTINATIONS",
-                        style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                        style: TextStyle(color: AppConstants.accentGold, fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
                       ),
                       const SizedBox(height: 14),
 
@@ -283,7 +284,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                                 filled: true,
                                 fillColor: AppConstants.surfaceCard,
                                 prefixText: "₨ ",
-                                prefixStyle: const TextStyle(color: Color(0xFFF3BA2F), fontWeight: FontWeight.bold),
+                                prefixStyle: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold),
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                               ),
                               onChanged: (_) => setState(() {}),
@@ -308,7 +309,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.info_outline_rounded, color: Color(0xFFF3BA2F), size: 20),
+                            const Icon(Icons.info_outline_rounded, color: AppConstants.accentGold, size: 20),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(

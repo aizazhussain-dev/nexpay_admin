@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +97,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
       setState(() => _tiersList = list);
     } else {
       setState(() {
-        _tiersList = _defaultTiers.map((t) => Map<String, dynamic>.from(t)).toList();
+        _tiersList = [];
       });
     }
   }
@@ -353,10 +354,9 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -605,7 +605,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,

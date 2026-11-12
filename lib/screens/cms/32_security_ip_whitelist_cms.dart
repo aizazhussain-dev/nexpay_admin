@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
@@ -91,7 +92,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
       setState(() => _whitelistedIps = list);
     } else {
       setState(() {
-        _whitelistedIps = _defaultIps.map((ip) => Map<String, dynamic>.from(ip)).toList();
+        _whitelistedIps = [];
       });
     }
   }
@@ -246,7 +247,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
 
           // Main Screen Sections
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: isDesktop ? _buildDesktopLayout(admin, filteredIps) : _buildMobileLayout(admin, filteredIps),
             ),
           ),

@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -131,7 +132,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
       setState(() => _logsList = list);
     } else {
       setState(() {
-        _logsList = _defaultAuditLogs.map((l) => Map<String, dynamic>.from(l)).toList();
+        _logsList = [];
       });
     }
     setState(() => _isLoading = false);
@@ -388,10 +389,9 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -574,7 +574,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 580, maxHeight: 480),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [

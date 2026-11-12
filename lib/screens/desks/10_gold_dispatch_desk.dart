@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -193,7 +194,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     children: [
     _buildMetricCard("PENDING DISPATCH", "$pendingCount Ingot Orders", pendingCount > 0 ? AppConstants.accentGold : AppConstants.accentGreen, isDesktop),
     _buildMetricCard("SHIPPED VIA COURIER", "$dispatchedCount Handover Completed", AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("TOTAL GOLD MINTED", "${totalGramsOrdered.toStringAsFixed(2)} g 24K", Color(0xFFFBBF24), isDesktop),
+    _buildMetricCard("TOTAL GOLD MINTED", "${totalGramsOrdered.toStringAsFixed(2)} g 24K", AppConstants.accentGold, isDesktop),
     _buildMetricCard("TOTAL DELIVERY ORDERS", "${orders.length} Logged", AppConstants.accentBlue, isDesktop),
     ],
     ),
@@ -301,10 +302,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
-  child: SingleChildScrollView(
+  child: InstitutionalVScroll(
   scrollDirection: Axis.vertical,
-  child: SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
+  child: InstitutionalHScroll(
   child: DataTable(
   headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
   dataRowColor: WidgetStateProperty.all(Colors.transparent),
@@ -348,11 +348,11 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   DataCell(
   Row(
   children: [
-  const Icon(Icons.workspace_premium_rounded, size: 16, color: Color(0xFFFBBF24)),
+  const Icon(Icons.workspace_premium_rounded, size: 16, color: AppConstants.accentGold),
   const SizedBox(width: 4),
   Text(
   "${grams.toStringAsFixed(2)} g 24K",
-  style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 13.5),
+  style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 13.5),
   ),
   ],
   ),
@@ -452,7 +452,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isPending ? Color(0xFFFBBF24).withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
+  border: Border.all(color: isPending ? AppConstants.accentGold.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,9 +462,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   children: [
   Row(
   children: [
-  const Icon(Icons.workspace_premium_rounded, size: 16, color: Color(0xFFFBBF24)),
+  const Icon(Icons.workspace_premium_rounded, size: 16, color: AppConstants.accentGold),
   const SizedBox(width: 4),
-  Text("${grams.toStringAsFixed(2)} g 24K Gold Ingot", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 14)),
+  Text("${grams.toStringAsFixed(2)} g 24K Gold Ingot", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 14)),
   ],
   ),
   _buildStatusBadge(isPending, isDispatched, isRejected),
@@ -533,8 +533,8 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   String label;
 
   if (isPending) {
-  bg = Color(0xFFFBBF24).withValues(alpha: 0.15);
-  text = Color(0xFFFBBF24);
+  bg = AppConstants.accentGold.withValues(alpha: 0.15);
+  text = AppConstants.accentGold;
   label = "PENDING DISPATCH";
   } else if (isDispatched) {
   bg = AppConstants.accentGreen.withValues(alpha: 0.15);
@@ -588,7 +588,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   children: [
   Text("Customer: ${o['name']} ($mob)", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 12, fontWeight: FontWeight.bold)),
   const SizedBox(height: 2),
-  Text("Mint Bar: $grams Grams 24K Pure Bullion", style: const TextStyle(color: Color(0xFFFBBF24), fontSize: 12, fontWeight: FontWeight.w800)),
+  Text("Mint Bar: $grams Grams 24K Pure Bullion", style: const TextStyle(color: AppConstants.accentGold, fontSize: 12, fontWeight: FontWeight.w800)),
   const SizedBox(height: 4),
   Text("Destination: ${o['address']}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
   const SizedBox(height: 16),

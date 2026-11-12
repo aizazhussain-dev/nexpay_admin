@@ -1,3 +1,4 @@
+import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -173,7 +174,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
 
           // Main Editor & Live Preview Body
           Expanded(
-            child: SingleChildScrollView(
+            child: InstitutionalVScroll(
               child: isDesktop ? _buildDesktopLayout(admin, isActive) : _buildMobileLayout(admin, isActive),
             ),
           ),
