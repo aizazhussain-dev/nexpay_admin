@@ -8,7 +8,6 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class TakafulPlansCmsScreen extends StatefulWidget {
   const TakafulPlansCmsScreen({super.key});
-
   @override
   State<TakafulPlansCmsScreen> createState() => _TakafulPlansCmsScreenState();
 }

@@ -7,7 +7,6 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class TelecomPackagesCmsScreen extends StatefulWidget {
   const TelecomPackagesCmsScreen({super.key});
-
   @override
   State<TelecomPackagesCmsScreen> createState() => _TelecomPackagesCmsScreenState();
 }

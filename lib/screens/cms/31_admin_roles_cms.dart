@@ -7,7 +7,6 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class AdminRolesCmsScreen extends StatefulWidget {
   const AdminRolesCmsScreen({super.key});
-
   @override
   State<AdminRolesCmsScreen> createState() => _AdminRolesCmsScreenState();
 }

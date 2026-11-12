@@ -509,13 +509,7 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
                   tooltip: 'Lock & Sign Out',
                   icon: const Icon(Icons.logout_rounded, color: Color(0xFFF87171), size: 19),
                   onPressed: () async {
-                    await context.read<AuthProvider>().logout();
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      );
-                    }
+                    final auth = context.read<AuthProvider>(); final nav = Navigator.of(context); await auth.logout(); nav.pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
                   },
                 ),
               ],
