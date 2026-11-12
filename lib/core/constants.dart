@@ -23,16 +23,16 @@ class AppConstants {
   static const Color dangerRed = Color(0xFFDC2626);
   static const Color dangerRedLight = Color(0xFFFEE2E2);
 
-  // --- API & Auth Credentials ---
-  static const String baseUrl = "https://nexpay.vip/api/admin";
-  static const String apiEndpoint = "$baseUrl/api.php";
-  static const Duration connectTimeout = Duration(seconds: 15);
-  static const Duration receiveTimeout = Duration(seconds: 15);
+  // --- Live Hostinger API & Auth Credentials ---
+  static const String baseUrl = "https://smartvest.tech";
+  static const String apiEndpoint = "https://smartvest.tech/api.php";
+  static const Duration connectTimeout = Duration(seconds: 20);
+  static const Duration receiveTimeout = Duration(seconds: 20);
 
-  // Auth Constants for Console Security & Handshake
-  static const String adminSecret = "nexpay_super_secret_admin_token_2026";
-  static const String defaultAdminUser = "root_admin";
-  static const String defaultAdminPass = "admin123";
+  // Server Master Key & Admin Console Login
+  static const String adminSecret = "NexPay_Master_Admin_Sec_#2026";
+  static const String defaultAdminUser = "aizaz_admin";
+  static const String defaultAdminPass = "NexPay@2026";
 
   // --- Shadows ---
   static List<BoxShadow> get cardShadow => [

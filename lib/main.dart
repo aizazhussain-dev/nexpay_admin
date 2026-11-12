@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'core/constants.dart';
 import 'providers/admin_provider.dart';
 import 'providers/auth_provider.dart';
+import 'screens/login_screen.dart';
 import 'screens/main_layout.dart';
 
 void main() async {
@@ -17,7 +18,7 @@ class NexPayAdminApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()..checkAuthStatus()),
         ChangeNotifierProvider(create: (_) => AdminProvider()..fetchAllData()),
       ],
       child: MaterialApp(
@@ -32,7 +33,11 @@ class NexPayAdminApp extends StatelessWidget {
             backgroundColor: AppConstants.surface,
             elevation: 0,
             iconTheme: IconThemeData(color: AppConstants.textPrimary),
-            titleTextStyle: TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.w900, fontSize: 16),
+            titleTextStyle: TextStyle(
+              color: AppConstants.textPrimary,
+              fontWeight: FontWeight.w900,
+              fontSize: 16,
+            ),
           ),
           cardTheme: CardThemeData(
             color: AppConstants.surface,
@@ -48,7 +53,19 @@ class NexPayAdminApp extends StatelessWidget {
             onSurface: AppConstants.textPrimary,
           ),
         ),
-        home: const MainAdminLayout(),
+        home: Consumer<AuthProvider>(
+          builder: (context, auth, _) {
+            if (auth.isLoading) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (auth.isAuthenticated) {
+              return const MainAdminLayout();
+            }
+            return const LoginScreen();
+          },
+        ),
       ),
     );
   }

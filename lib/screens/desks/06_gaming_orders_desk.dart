@@ -82,7 +82,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                         Text(
                           "Gaming Shop Top-Up & Voucher Queue",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -115,7 +115,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -149,7 +149,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Mobile, UID, Voucher, TID...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -173,13 +173,13 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                 decoration: BoxDecoration(
                   color: AppConstants.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white12),
+                  border: Border.all(color: Color(0xFFE2E8F0)),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _gameFilter,
                     dropdownColor: AppConstants.surfaceCard,
-                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
                     items: const [
                       DropdownMenuItem(value: "ALL", child: Text("All Games")),
                       DropdownMenuItem(value: "PUBG", child: Text("🎯 PUBG Mobile")),
@@ -204,7 +204,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No gaming voucher orders found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -225,7 +225,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,11 +246,11 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -261,7 +261,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -304,7 +304,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(o['user_name'] ?? 'Player', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(o['user_name'] ?? 'Player', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(userMob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -347,14 +347,14 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                         ],
                       ),
                     ),
-                    DataCell(Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.5))),
+                    DataCell(Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5))),
                     DataCell(
                       Text(
                         "₨ ${_currencyFormat.format(amount)}",
                         style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w900, fontSize: 14),
                       ),
                     ),
-                    DataCell(Text(o['order_tid'] ?? '-', style: const TextStyle(color: Colors.white60, fontSize: 11, fontFamily: 'monospace'))),
+                    DataCell(Text(o['order_tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
                     DataCell(_buildStatusBadge(status)),
                     DataCell(
                       isPending
@@ -363,7 +363,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: const Color(0xFF021A13),
+                              foregroundColor: Color(0xFF021A13),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -422,7 +422,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,7 +455,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                      Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                       const SizedBox(height: 2),
                       Row(
                         children: [
@@ -471,7 +471,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                   ),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -480,7 +480,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                 ],
               ),
               const SizedBox(height: 4),
-              Text("TID: ${o['order_tid'] ?? '-'}", style: const TextStyle(color: Colors.white54, fontSize: 10.5, fontFamily: 'monospace')),
+              Text("TID: ${o['order_tid'] ?? '-'}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
               if (isPending) ...[
                 const SizedBox(height: 12),
                 Row(
@@ -489,7 +489,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -572,12 +572,12 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(isReject ? Icons.warning_amber_rounded : Icons.check_circle_rounded, color: isReject ? AppConstants.dangerRed : AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text(isReject ? "Reject & Auto-Refund" : "Deliver Voucher", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(isReject ? "Reject & Auto-Refund" : "Deliver Voucher", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -587,11 +587,11 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: isReject ? AppConstants.dangerRed : AppConstants.accentGreen,
-              foregroundColor: isReject ? Colors.white : const Color(0xFF021A13),
+              foregroundColor: isReject ? Color(0xFF0F172A) : Color(0xFF021A13),
             ),
             onPressed: () async {
               Navigator.pop(ctx);
@@ -617,7 +617,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                         backgroundColor: isReject ? AppConstants.dangerRed : AppConstants.accentGreen,
                         content: Text(
                           isReject ? "✓ Order rejected & ₨ ${_currencyFormat.format(amount)} refunded to $userMobile!" : "✓ Voucher order marked as delivered!",
-                          style: TextStyle(color: isReject ? Colors.white : const Color(0xFF021A13), fontWeight: FontWeight.bold),
+                          style: TextStyle(color: isReject ? Color(0xFF0F172A) : Color(0xFF021A13), fontWeight: FontWeight.bold),
                         ),
                       ),
                     );

@@ -119,7 +119,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                         const Text(
                           "App Maintenance Shield & Force Update CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -156,7 +156,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -187,7 +187,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
               ),
               _buildMetricCard("MIN SUPPORTED VERSION", "v${_minVersionController.text}", AppConstants.accentGold, isDesktop),
               _buildMetricCard("LATEST RELEASE VERSION", "v${_latestVersionController.text}", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("UPDATE PROTOCOL", "Mandatory Direct APK", Colors.white70, isDesktop),
+              _buildMetricCard("UPDATE PROTOCOL", "Mandatory Direct APK", Color(0xFF64748B), isDesktop),
             ],
           ),
           const SizedBox(height: 24),
@@ -216,12 +216,12 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isShieldActive ? AppConstants.dangerRed : AppConstants.accentGreen,
-                          foregroundColor: isShieldActive ? Colors.white : const Color(0xFF021A13),
+                          foregroundColor: isShieldActive ? Color(0xFF0F172A) : Color(0xFF021A13),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
                         onPressed: _isSaving ? null : () => _saveMaintenanceAndVersion(admin),
                         icon: _isSaving
-                            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Color(0xFF0F172A), strokeWidth: 2))
                             : const Icon(Icons.shield_rounded, size: 20),
                         label: Text(
                           _isSaving
@@ -253,7 +253,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
         border: Border.all(
           color: isShieldActive
               ? AppConstants.dangerRed.withValues(alpha: 0.35)
-              : Colors.white10,
+              : Color(0xFFE2E8F0),
           width: isShieldActive ? 1.5 : 1,
         ),
       ),
@@ -277,7 +277,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                       Text(
                         "SYSTEM MAINTENANCE MODE SWITCH",
                         style: TextStyle(
-                          color: isShieldActive ? AppConstants.dangerRed : Colors.white,
+                          color: isShieldActive ? AppConstants.dangerRed : Color(0xFF0F172A),
                           fontSize: 13,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.6,
@@ -299,7 +299,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                 decoration: BoxDecoration(
                   color: AppConstants.surfaceCard,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white10),
+                  border: Border.all(color: Color(0xFFE2E8F0)),
                 ),
                 child: Row(
                   children: [
@@ -314,7 +314,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                         child: Text(
                           "🟢 OFF (Live App)",
                           style: TextStyle(
-                            color: !isShieldActive ? const Color(0xFF021A13) : AppConstants.textMuted,
+                            color: !isShieldActive ? Color(0xFF021A13) : AppConstants.textMuted,
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                           ),
@@ -332,7 +332,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                         child: Text(
                           "🔴 ON (Lock App)",
                           style: TextStyle(
-                            color: isShieldActive ? Colors.white : AppConstants.textMuted,
+                            color: isShieldActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                           ),
@@ -349,12 +349,12 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
           // Maintenance Dialog Title
           TextFormField(
             controller: _maintTitleController,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.5),
+            style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13.5),
             decoration: InputDecoration(
               labelText: "MAINTENANCE DIALOG TITLE",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
               hintText: "e.g. Scheduled Core Banking Maintenance",
-              hintStyle: const TextStyle(color: Colors.white24),
+              hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
               filled: true,
               fillColor: AppConstants.surfaceCard,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -372,12 +372,12 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
           TextFormField(
             controller: _maintMsgController,
             maxLines: 3,
-            style: const TextStyle(color: Colors.white, fontSize: 12.5, height: 1.4),
+            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, height: 1.4),
             decoration: InputDecoration(
               labelText: "MESSAGE DISPLAYED TO USERS",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
               hintText: "Server infrastructure upgrade is in progress. Regular operations will resume shortly.",
-              hintStyle: const TextStyle(color: Colors.white24),
+              hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
               filled: true,
               fillColor: AppConstants.surfaceCard,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -401,7 +401,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,7 +433,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                   children: [
                     TextFormField(
                       controller: _minVersionController,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
+                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14),
                       decoration: InputDecoration(
                         labelText: "MINIMUM SUPPORTED VERSION (FORCE TRIGGER)",
                         labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -462,7 +462,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                   children: [
                     TextFormField(
                       controller: _latestVersionController,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
+                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14),
                       decoration: InputDecoration(
                         labelText: "LATEST RELEASE VERSION",
                         labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -489,12 +489,12 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
           // Download URL
           TextFormField(
             controller: _downloadUrlController,
-            style: const TextStyle(color: Colors.white, fontSize: 12.5, fontFamily: 'monospace'),
+            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontFamily: 'monospace'),
             decoration: InputDecoration(
               labelText: "DIRECT APK DOWNLOAD / STORE URL",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
               hintText: "https://smartvest.tech/nexpay-release.apk",
-              hintStyle: const TextStyle(color: Colors.white24),
+              hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
               filled: true,
               fillColor: AppConstants.surfaceCard,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -511,12 +511,12 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
           TextFormField(
             controller: _changelogController,
             maxLines: 2,
-            style: const TextStyle(color: Colors.white, fontSize: 12.5),
+            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5),
             decoration: InputDecoration(
               labelText: "UPDATE CHANGELOG / RELEASE NOTES (FOR USERS)",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
               hintText: "Security upgrades, speed improvements and bug fixes.",
-              hintStyle: const TextStyle(color: Colors.white24),
+              hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
               filled: true,
               fillColor: AppConstants.surfaceCard,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -534,7 +534,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -585,7 +585,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
               backgroundColor: _maintStatus == 'ACTIVE' ? AppConstants.dangerRed : AppConstants.accentGreen,
               content: Text(
                 res.data['message'] ?? "✓ Maintenance & Version settings deployed live!",
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
               ),
             ),
           );

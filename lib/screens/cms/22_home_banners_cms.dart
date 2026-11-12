@@ -115,7 +115,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                         const Text(
                           "Promotional Home Banners & Sliders CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -124,9 +124,9 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+                            color: Color(0xFFA855F7).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xFFA855F7).withValues(alpha: 0.3)),
+                            border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             "$activeCount LIVE BANNERS",
@@ -150,7 +150,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -160,8 +160,8 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -188,7 +188,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
               _buildMetricCard("ACTIVE PROMO BANNERS", "$activeCount Visible", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("DISABLED / HIDDEN", "$disabledCount Inactive", AppConstants.textMuted, isDesktop),
               _buildMetricCard("TOTAL BANNERS", "${_bannersList.length} In Rotation", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("DISPLAY LOCATION", "Mobile Home Dashboard", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("DISPLAY LOCATION", "Mobile Home Dashboard", Color(0xFFA855F7), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -202,7 +202,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Title, Subtitle, Target...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -233,7 +233,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No promotional banners found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -254,7 +254,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,11 +275,11 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -290,7 +290,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -325,7 +325,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   decoration: BoxDecoration(
   color: Colors.black,
   borderRadius: BorderRadius.circular(10),
-  border: Border.all(color: Colors.white12),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(10),
@@ -334,11 +334,11 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   imgUrl,
   fit: BoxFit.cover,
   errorBuilder: (_, __, ___) => const Center(
-  child: Icon(Icons.broken_image, color: Colors.white38, size: 20),
+  child: Icon(Icons.broken_image, color: Color(0xFF94A3B8), size: 20),
   ),
   )
       : const Center(
-  child: Icon(Icons.image, color: Colors.white38, size: 20),
+  child: Icon(Icons.image, color: Color(0xFF94A3B8), size: 20),
   ),
   ),
   ),
@@ -348,7 +348,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(b['title'] ?? 'Banner Title', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(b['title'] ?? 'Banner Title', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   const SizedBox(height: 2),
   Text(b['subtitle'] ?? '-', style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
   ],
@@ -358,9 +358,9 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(
-  color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+  color: Color(0xFFA855F7).withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(8),
-  border: Border.all(color: const Color(0xFFA855F7).withValues(alpha: 0.3)),
+  border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
   ),
   child: Text(
   "Target: $target",
@@ -375,7 +375,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.surfaceCard,
-  foregroundColor: Colors.white,
+  foregroundColor: Color(0xFF0F172A),
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -418,7 +418,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? const Color(0xFFA855F7).withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? Color(0xFFA855F7).withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,7 +430,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   decoration: BoxDecoration(
   color: Colors.black,
   borderRadius: BorderRadius.circular(12),
-  border: Border.all(color: Colors.white12),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(12),
@@ -439,11 +439,11 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   imgUrl,
   fit: BoxFit.cover,
   errorBuilder: (_, __, ___) => const Center(
-  child: Icon(Icons.broken_image, color: Colors.white38),
+  child: Icon(Icons.broken_image, color: Color(0xFF94A3B8)),
   ),
   )
       : const Center(
-  child: Icon(Icons.image, color: Colors.white38),
+  child: Icon(Icons.image, color: Color(0xFF94A3B8)),
   ),
   ),
   ),
@@ -454,7 +454,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   Expanded(
   child: Text(
   b['title'] ?? 'Banner Title',
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 15),
   ),
   ),
   _buildStatusBadge(isActive),
@@ -462,14 +462,14 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   ),
   const SizedBox(height: 4),
   Text(b['subtitle'] ?? '-', style: const TextStyle(color: AppConstants.textMuted, fontSize: 12)),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
   Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(
-  color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+  color: Color(0xFFA855F7).withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(8),
   ),
   child: Text("Target: $target", style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w800, fontSize: 11)),
@@ -532,10 +532,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Banner: ${existing['title']}" : "Add Promotional Banner",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -546,7 +546,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   children: [
   TextField(
   controller: titleController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "OFFER HEADLINE / TITLE",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -559,7 +559,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   const SizedBox(height: 12),
   TextField(
   controller: subtitleController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "OFFER SUBTITLE / DETAILS",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -572,7 +572,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   const SizedBox(height: 12),
   TextField(
   controller: imageController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "BANNER BACKGROUND IMAGE URL",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -597,7 +597,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   child: DropdownButton<String>(
   value: targetScreen,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "gold", child: Text("🥇 24K Gold Vault")),
   DropdownMenuItem(value: "shop", child: Text("🛍️ Digital Shop")),
@@ -627,7 +627,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   child: DropdownButton<String>(
   value: status,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active (Shown)")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled (Hidden)")),
@@ -646,9 +646,9 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final title = titleController.text.trim();
   final subtitle = subtitleController.text.trim();
@@ -694,9 +694,9 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   title: const Text("Delete Banner?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai \"${b['title']}\" ko customer app se remove karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_bannersList);

@@ -152,7 +152,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
                         const Text(
                           "Savings Vaults & Profit Tiers CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -187,7 +187,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -197,8 +197,8 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -225,7 +225,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
               _buildMetricCard("MAX ANNUAL YIELD", "${maxRoi.toStringAsFixed(1)}% p.a.", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("ACTIVE VAULT PLANS", "$activeCount Plans Live", AppConstants.accentGold, isDesktop),
               _buildMetricCard("SHARIAH COMPLIANCE", "100% Asset-Backed", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("TOTAL TIERS REGISTERED", "${_tiersList.length} Tiers", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("TOTAL TIERS REGISTERED", "${_tiersList.length} Tiers", Color(0xFFA855F7), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -239,7 +239,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
               SizedBox(
                 width: isDesktop ? 320 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Tier Name, Shariah Badge...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -274,7 +274,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No savings vault tiers found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -295,7 +295,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,11 +316,11 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _typeFilter = key),
     );
@@ -331,14 +331,14 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.white24,
+      selectedColor: Color(0xFF94A3B8),
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? Colors.white38 : Colors.white10),
+      side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -349,7 +349,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -387,7 +387,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(t['name'] ?? 'Vault Tier', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(t['name'] ?? 'Vault Tier', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Container(
   constraints: const BoxConstraints(maxWidth: 240),
   child: Text(
@@ -432,7 +432,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   DataCell(
   Text(
   "₨ ${_currencyFormat.format(minDep)}",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13),
   ),
   ),
   DataCell(
@@ -499,7 +499,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -507,7 +507,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
-  Text(t['name'] ?? 'Plan', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(t['name'] ?? 'Plan', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
   _buildStatusBadge(isActive),
   ],
   ),
@@ -521,7 +521,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   ),
   const SizedBox(height: 4),
   Text("Lock: $duration • Payout: $payout", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -598,10 +598,10 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Plan: ${existing['name']}" : "Create Savings Vault Plan",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -612,7 +612,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   children: [
   TextField(
   controller: nameController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "VAULT PLAN NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -630,7 +630,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   child: TextField(
   controller: rateController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "ANNUAL RETURN (% p.a.)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -648,7 +648,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   child: TextField(
   controller: minDepositController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "MIN DEPOSIT (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -670,7 +670,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   child: TextField(
   controller: lockDaysController,
   keyboardType: TextInputType.number,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "LOCK DAYS (0 = FLEXIBLE)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -694,7 +694,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   Expanded(
   child: TextField(
   controller: durationLabelController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "DISPLAY DURATION LABEL",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -722,7 +722,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   child: DropdownButton<String>(
   value: payoutFrequency,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "DAILY ACCRUAL", child: Text("Daily Accrual")),
   DropdownMenuItem(value: "MONTHLY DISTRIBUTED", child: Text("Monthly Distributed")),
@@ -748,7 +748,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   child: DropdownButton<String>(
   value: status,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled")),
@@ -766,7 +766,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   // Shariah Badge
   TextField(
   controller: badgeController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "SHARIAH CERTIFICATION BADGE",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -781,7 +781,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   TextField(
   controller: descController,
   maxLines: 2,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "PORTFOLIO SUMMARY & TERMS FOR USERS",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -796,9 +796,9 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final name = nameController.text.trim();
   final rate = double.tryParse(rateController.text.trim()) ?? 0.0;
@@ -860,9 +860,9 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
   title: const Text("Delete Vault Plan?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai \"${t['name']}\" ko active savings tiers se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_tiersList);

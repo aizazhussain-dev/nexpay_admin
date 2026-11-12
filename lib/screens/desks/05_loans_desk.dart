@@ -88,7 +88,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                         Text(
                           "EasyCash Nano-Loans & Recovery Desk",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -121,7 +121,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -155,7 +155,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Customer, Mobile, Purpose...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -188,7 +188,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No loan records found matching criteria",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -209,7 +209,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,11 +230,11 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -245,7 +245,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -285,7 +285,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(l['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(l['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -300,12 +300,12 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                       Row(
                         children: [
                           Text("₨ ${_currencyFormat.format(repaid)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.bold, fontSize: 12)),
-                          const Text(" / ", style: TextStyle(color: Colors.white30)),
+                          const Text(" / ", style: TextStyle(color: Color(0xFF94A3B8))),
                           Text("₨ ${_currencyFormat.format(due)}", style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.bold, fontSize: 12)),
                         ],
                       ),
                     ),
-                    DataCell(Text(l['tenure'] ?? '30 Days', style: const TextStyle(color: Colors.white70, fontSize: 12))),
+                    DataCell(Text(l['tenure'] ?? '30 Days', style: const TextStyle(color: Color(0xFF64748B), fontSize: 12))),
                     DataCell(Text(l['purpose'] ?? 'General', style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
                     DataCell(_buildStatusBadge(status, isSettled)),
                     DataCell(
@@ -315,7 +315,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: const Color(0xFF021A13),
+                              foregroundColor: Color(0xFF021A13),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -386,7 +386,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: status == 'UNDER_REVIEW' ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: status == 'UNDER_REVIEW' ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,7 +405,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                      Text(l['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                       const SizedBox(height: 2),
                       Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
                     ],
@@ -416,7 +416,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                   ),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -435,7 +435,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -493,8 +493,8 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       text = AppConstants.accentGreen;
       label = "FULLY SETTLED";
     } else if (status == 'UNDER_REVIEW') {
-      bg = const Color(0xFFA855F7).withValues(alpha: 0.15);
-      text = const Color(0xFFA855F7);
+      bg = Color(0xFFA855F7).withValues(alpha: 0.15);
+      text = Color(0xFFA855F7);
       label = "UNDER REVIEW";
     } else if (status == 'DISBURSED') {
       bg = Colors.amber.withValues(alpha: 0.15);
@@ -519,12 +519,12 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(approved ? Icons.verified_rounded : Icons.cancel_rounded, color: approved ? AppConstants.accentGreen : AppConstants.dangerRed),
             const SizedBox(width: 8),
-            Text(approved ? "Disburse Nano-Loan" : "Reject Loan Application", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(approved ? "Disburse Nano-Loan" : "Reject Loan Application", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -534,11 +534,11 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
-              foregroundColor: approved ? const Color(0xFF021A13) : Colors.white,
+              foregroundColor: approved ? Color(0xFF021A13) : Color(0xFF0F172A),
             ),
             onPressed: () async {
               Navigator.pop(ctx);
@@ -559,7 +559,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                         backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
                         content: Text(
                           approved ? "✓ Loan approved & ₨ ${_currencyFormat.format(amount)} disbursed!" : "Loan #$id rejected.",
-                          style: TextStyle(color: approved ? const Color(0xFF021A13) : Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: approved ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
                         ),
                       ),
                     );
@@ -596,12 +596,12 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.payments_rounded, color: Colors.amber),
             SizedBox(width: 8),
-            Text("Log Loan Installment", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Log Loan Installment", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Column(
@@ -615,7 +615,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
             TextField(
               controller: controller,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
               decoration: InputDecoration(
                 labelText: "Recovered Installment (PKR)",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12),
@@ -627,7 +627,7 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.black),
             onPressed: () async {

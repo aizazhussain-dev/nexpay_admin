@@ -165,7 +165,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                         const Text(
                           "Administrator Roles & RBAC Matrix CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -200,7 +200,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -210,8 +210,8 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -237,10 +237,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
             spacing: 14,
             runSpacing: 10,
             children: [
-              _buildMetricCard("SUPER ADMINISTRATORS", "$superAdminCount Full Access", const Color(0xFFEF4444), isDesktop),
+              _buildMetricCard("SUPER ADMINISTRATORS", "$superAdminCount Full Access", Color(0xFFEF4444), isDesktop),
               _buildMetricCard("OPERATIONAL STAFF", "$operationalStaffCount Operators", AppConstants.accentBlue, isDesktop),
               _buildMetricCard("ACCESS ACTIVE", "$activeCount Online", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("SECURITY PROTOCOL", "RBAC Role-Enforced", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("SECURITY PROTOCOL", "RBAC Role-Enforced", Color(0xFFA855F7), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -254,7 +254,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
               SizedBox(
                 width: isDesktop ? 300 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Name, Email, Username, Role...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -268,10 +268,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                 ),
               ),
               _buildRoleFilterChip("ALL", "All Roles"),
-              _buildRoleFilterChip("SUPER_ADMIN", "👑 Super Admin", const Color(0xFFEF4444)),
+              _buildRoleFilterChip("SUPER_ADMIN", "👑 Super Admin", Color(0xFFEF4444)),
               _buildRoleFilterChip("TREASURY", "💰 Treasury Ops", AppConstants.accentGold),
               _buildRoleFilterChip("COMPLIANCE", "🛡️ AML / KYC", AppConstants.accentBlue),
-              _buildRoleFilterChip("SUPPORT", "🎧 Support Desk", const Color(0xFFA855F7)),
+              _buildRoleFilterChip("SUPPORT", "🎧 Support Desk", Color(0xFFA855F7)),
               const SizedBox(width: 8),
               _buildStatusFilterChip("ALL", "All Status"),
               _buildStatusFilterChip("ACTIVE", "Active"),
@@ -291,7 +291,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No staff operators found matching query",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -312,7 +312,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +339,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? color : Colors.white10),
+      side: BorderSide(color: isSelected ? color : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _roleFilter = key),
     );
@@ -350,14 +350,14 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.white24,
+      selectedColor: Color(0xFF94A3B8),
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? Colors.white38 : Colors.white10),
+      side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -368,7 +368,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -405,7 +405,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   children: [
   Row(
   children: [
-  Text(s['name'] ?? 'Staff', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(s['name'] ?? 'Staff', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   if (isRoot) ...[
   const SizedBox(width: 6),
   const Text("🛡️ ROOT", style: TextStyle(color: Color(0xFFEF4444), fontSize: 9.5, fontWeight: FontWeight.w900)),
@@ -424,7 +424,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   DataCell(
   Text(
   (s['lastLogin'] ?? 'Unknown').toString(),
-  style: const TextStyle(color: Colors.white70, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
   ),
   ),
   DataCell(_buildStatusBadge(isActive)),
@@ -489,7 +489,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -506,7 +506,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Flexible(
   child: Text(
   s['name'] ?? 'Staff',
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14.5),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5),
   overflow: TextOverflow.ellipsis,
   ),
   ),
@@ -532,12 +532,12 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
   _buildRoleBadge(role),
-  Text("Last login: ${s['lastLogin'] ?? '-'}", style: const TextStyle(color: Colors.white70, fontSize: 11)),
+  Text("Last login: ${s['lastLogin'] ?? '-'}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 11)),
   ],
   ),
   const SizedBox(height: 8),
   _buildPermissionChipsRow(perms, role),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -604,7 +604,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   String label = role;
 
   if (role == 'SUPER_ADMIN') {
-  color = const Color(0xFFEF4444);
+  color = Color(0xFFEF4444);
   label = "SUPER ADMIN";
   } else if (role == 'TREASURY') {
   color = AppConstants.accentGold;
@@ -613,7 +613,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   color = AppConstants.accentBlue;
   label = "COMPLIANCE & AML";
   } else if (role == 'SUPPORT') {
-  color = const Color(0xFFA855F7);
+  color = Color(0xFFA855F7);
   label = "SUPPORT DESK";
   }
 
@@ -633,7 +633,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(
-  color: const Color(0xFFEF4444).withValues(alpha: 0.15),
+  color: Color(0xFFEF4444).withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(6),
   ),
   child: const Text(
@@ -666,10 +666,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
   decoration: BoxDecoration(
-  color: Colors.white10,
+  color: Color(0xFFE2E8F0),
   borderRadius: BorderRadius.circular(4),
   ),
-  child: Text(p, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
+  child: Text(p, style: const TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.bold)),
   );
   }).toList(),
   );
@@ -690,7 +690,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setMatrixState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   children: [
   const Icon(Icons.rule_folder_rounded, color: AppConstants.accentBlue),
@@ -699,7 +699,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text("RBAC Privileges: ${staff['name']}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+  Text("RBAC Privileges: ${staff['name']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
   Text("Role: ${staff['role']}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
   ],
   ),
@@ -716,9 +716,9 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Container(
   padding: const EdgeInsets.all(12),
   decoration: BoxDecoration(
-  color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+  color: Color(0xFFEF4444).withValues(alpha: 0.1),
   borderRadius: BorderRadius.circular(10),
-  border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.3)),
+  border: Border.all(color: Color(0xFFEF4444).withValues(alpha: 0.3)),
   ),
   child: const Row(
   children: [
@@ -727,7 +727,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Expanded(
   child: Text(
   "Root Super Administrator has absolute unrestricted authority across all desks. Privileges cannot be revoked.",
-  style: TextStyle(color: Colors.white, fontSize: 11.5, height: 1.3),
+  style: TextStyle(color: Color(0xFF0F172A), fontSize: 11.5, height: 1.3),
   ),
   ),
   ],
@@ -741,35 +741,35 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   value: isRoot ? true : (currentPerms['canApprovePayouts'] == true),
   onChanged: isRoot ? null : (v) => setMatrixState(() => currentPerms['canApprovePayouts'] = v),
   ),
-  const Divider(color: Colors.white10, height: 16),
+  const Divider(color: Color(0xFFE2E8F0), height: 16),
   _buildPermTile(
   title: "Adjust Customer Balances",
   subtitle: "Can manually inject or debit cash, gold, and crypto wallet balances.",
   value: isRoot ? true : (currentPerms['canAdjustBalances'] == true),
   onChanged: isRoot ? null : (v) => setMatrixState(() => currentPerms['canAdjustBalances'] = v),
   ),
-  const Divider(color: Colors.white10, height: 16),
+  const Divider(color: Color(0xFFE2E8F0), height: 16),
   _buildPermTile(
   title: "Review & Verify KYC Submissions",
   subtitle: "Can inspect biometric national identity scans and approve Tier-2 status.",
   value: isRoot ? true : (currentPerms['canReviewKyc'] == true),
   onChanged: isRoot ? null : (v) => setMatrixState(() => currentPerms['canReviewKyc'] = v),
   ),
-  const Divider(color: Colors.white10, height: 16),
+  const Divider(color: Color(0xFFE2E8F0), height: 16),
   _buildPermTile(
   title: "Account Freeze & Security Lockout",
   subtitle: "Can freeze suspicious customer accounts and wipe trusted device tokens.",
   value: isRoot ? true : (currentPerms['canFreezeUsers'] == true),
   onChanged: isRoot ? null : (v) => setMatrixState(() => currentPerms['canFreezeUsers'] = v),
   ),
-  const Divider(color: Colors.white10, height: 16),
+  const Divider(color: Color(0xFFE2E8F0), height: 16),
   _buildPermTile(
   title: "Edit CMS Parameters & Live Rates",
   subtitle: "Can modify gateway settings, utility billers, banners, and crypto pegs.",
   value: isRoot ? true : (currentPerms['canEditCms'] == true),
   onChanged: isRoot ? null : (v) => setMatrixState(() => currentPerms['canEditCms'] = v),
   ),
-  const Divider(color: Colors.white10, height: 16),
+  const Divider(color: Color(0xFFE2E8F0), height: 16),
   _buildPermTile(
   title: "Purge & Clear Audit Trail Logs",
   subtitle: "Can wipe system operational logs and export financial CSV data.",
@@ -781,10 +781,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   if (!isRoot)
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = _staffList.map((e) => Map<String, dynamic>.from(e)).toList();
@@ -814,7 +814,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+  Text(title, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13)),
   const SizedBox(height: 2),
   Text(subtitle, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
   ],
@@ -847,10 +847,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Staff: ${existing['name']}" : "Register Operator Account",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -860,7 +860,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   children: [
   TextField(
   controller: nameController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "FULL LEGAL NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -876,7 +876,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Expanded(
   child: TextField(
   controller: usernameController,
-  style: const TextStyle(color: Colors.white, fontFamily: 'monospace'),
+  style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace'),
   decoration: InputDecoration(
   labelText: "OPERATOR USERNAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -891,7 +891,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Expanded(
   child: TextField(
   controller: emailController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "OFFICIAL EMAIL",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -908,7 +908,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   TextField(
   controller: passwordController,
   obscureText: true,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: isEdit ? "SET NEW PASSWORD (LEAVE BLANK TO RETAIN)" : "ACCOUNT ACCESS PASSWORD",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -932,7 +932,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   child: DropdownButton<String>(
   value: role,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "SUPER_ADMIN", child: Text("👑 Super Admin")),
   DropdownMenuItem(value: "TREASURY", child: Text("💰 Treasury Ops")),
@@ -960,7 +960,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   child: DropdownButton<String>(
   value: status,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active")),
   DropdownMenuItem(value: "SUSPENDED", child: Text("🔴 Suspended")),
@@ -981,9 +981,9 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final name = nameController.text.trim();
   final email = emailController.text.trim();
@@ -1055,9 +1055,9 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   style: const TextStyle(color: AppConstants.textMuted),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = _staffList.map((e) => Map<String, dynamic>.from(e)).toList();

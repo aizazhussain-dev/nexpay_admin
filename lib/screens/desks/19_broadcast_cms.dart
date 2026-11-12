@@ -98,7 +98,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                         const Text(
                           "Bank Broadcast Notification CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -135,7 +135,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -165,8 +165,8 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                 isDesktop,
               ),
               _buildMetricCard("TARGET AUDIENCE", "All Active Terminals", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("LAST DEPLOYED", _timestamp, const Color(0xFFA855F7), isDesktop),
-              _buildMetricCard("CHANNEL VISIBILITY", "App Banner & Alert Dialog", Colors.white70, isDesktop),
+              _buildMetricCard("LAST DEPLOYED", _timestamp, Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("CHANNEL VISIBILITY", "App Banner & Alert Dialog", Color(0xFF64748B), isDesktop),
             ],
           ),
           const SizedBox(height: 24),
@@ -217,7 +217,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Form(
         key: _formKey,
@@ -242,7 +242,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   decoration: BoxDecoration(
                     color: AppConstants.surfaceCard,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white10),
+                    border: Border.all(color: Color(0xFFE2E8F0)),
                   ),
                   child: Row(
                     children: [
@@ -257,7 +257,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                           child: Text(
                             "LIVE (ON)",
                             style: TextStyle(
-                              color: isActive ? const Color(0xFF021A13) : AppConstants.textMuted,
+                              color: isActive ? Color(0xFF021A13) : AppConstants.textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                             ),
@@ -275,7 +275,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                           child: Text(
                             "DISABLED (OFF)",
                             style: TextStyle(
-                              color: !isActive ? Colors.white : AppConstants.textMuted,
+                              color: !isActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                             ),
@@ -292,12 +292,12 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
             // Title Field
             TextFormField(
               controller: _titleController,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
               decoration: InputDecoration(
                 labelText: "BROADCAST ANNOUNCEMENT TITLE",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
                 hintText: "e.g. Scheduled Core Banking Upgrade Notice",
-                hintStyle: const TextStyle(color: Colors.white24),
+                hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                 filled: true,
                 fillColor: AppConstants.surfaceCard,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
@@ -316,12 +316,12 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
             TextFormField(
               controller: _messageController,
               maxLines: 5,
-              style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.4),
+              style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13, height: 1.4),
               decoration: InputDecoration(
                 labelText: "ANNOUNCEMENT BODY MESSAGE",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
                 hintText: "Enter the detailed message displayed to customers across the application...",
-                hintStyle: const TextStyle(color: Colors.white24),
+                hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                 filled: true,
                 fillColor: AppConstants.surfaceCard,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
@@ -342,7 +342,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
               decoration: BoxDecoration(
                 color: AppConstants.surfaceCard,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: Colors.white10),
+                border: Border.all(color: Color(0xFFE2E8F0)),
               ),
               child: const Row(
                 children: [
@@ -366,13 +366,13 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isActive ? AppConstants.accentGreen : AppConstants.surfaceCard,
-                  foregroundColor: isActive ? const Color(0xFF021A13) : Colors.white,
-                  side: isActive ? null : const BorderSide(color: Colors.white24),
+                  foregroundColor: isActive ? Color(0xFF021A13) : Color(0xFF0F172A),
+                  side: isActive ? null : const BorderSide(color: Color(0xFF94A3B8)),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
                 onPressed: _isSaving ? null : () => _saveBroadcast(admin),
                 icon: _isSaving
-                    ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Color(0xFF0F172A), strokeWidth: 2))
                     : Icon(isActive ? Icons.campaign_rounded : Icons.save_rounded, size: 20),
                 label: Text(
                   _isSaving
@@ -398,7 +398,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,7 +413,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 decoration: BoxDecoration(
-                  color: (isActive ? AppConstants.accentGreen : Colors.white10).withValues(alpha: 0.15),
+                  color: (isActive ? AppConstants.accentGreen : Color(0xFFE2E8F0)).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -435,14 +435,14 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: isActive
-                    ? [const Color(0xFF1E1B4B), const Color(0xFF0F172A)]
-                    : [const Color(0xFF1E293B).withValues(alpha: 0.5), const Color(0xFF0F172A).withValues(alpha: 0.5)],
+                    ? [Color(0xFF1E1B4B), Color(0xFF0F172A)]
+                    : [Color(0xFF1E293B).withValues(alpha: 0.5), Color(0xFF0F172A).withValues(alpha: 0.5)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isActive ? const Color(0xFFA855F7).withValues(alpha: 0.4) : Colors.white10,
+                color: isActive ? Color(0xFFA855F7).withValues(alpha: 0.4) : Color(0xFFE2E8F0),
                 width: 1.5,
               ),
             ),
@@ -454,7 +454,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFA855F7).withValues(alpha: 0.2),
+                        color: Color(0xFFA855F7).withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.campaign_rounded, color: Color(0xFFA855F7), size: 18),
@@ -463,7 +463,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                     Expanded(
                       child: Text(
                         title.isNotEmpty ? title : "Bank Announcement Title",
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13.5),
+                        style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13.5),
                       ),
                     ),
                   ],
@@ -473,7 +473,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   message.isNotEmpty
                       ? message
                       : "The full broadcast announcement text will be formatted cleanly and rendered inside the user's dashboard view.",
-                  style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.4),
+                  style: const TextStyle(color: Color(0xFF64748B), fontSize: 12, height: 1.4),
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -481,11 +481,11 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   children: [
                     Text(
                       "NexPay Treasury Bulletin",
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 10, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Color(0xFF0F172A).withValues(alpha: 0.4), fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       DateFormat("dd MMM, hh:mm a").format(DateTime.now()),
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 10),
+                      style: TextStyle(color: Color(0xFF0F172A).withValues(alpha: 0.4), fontSize: 10),
                     ),
                   ],
                 ),
@@ -515,7 +515,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

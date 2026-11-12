@@ -123,7 +123,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
                     Text(
                       "Central System & Operator Audit Trail",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Color(0xFF0F172A),
                         fontSize: isDesktop ? 22 : 18,
                         fontWeight: FontWeight.w900,
                       ),
@@ -154,7 +154,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -177,7 +177,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Action, Target, Details, Operator...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -213,7 +213,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No audit trail records found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -235,11 +235,11 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _actionFilter = key),
     );
@@ -250,7 +250,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -279,7 +279,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   children: [
   _buildActionIcon(l['action'] ?? ''),
   const SizedBox(width: 8),
-  Text(l['action'] ?? '-', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+  Text(l['action'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
   ],
   ),
   ),
@@ -287,7 +287,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   DataCell(
   Container(
   constraints: const BoxConstraints(maxWidth: 420),
-  child: Text(l['details'] ?? '-', style: const TextStyle(color: Colors.white70, fontSize: 12)),
+  child: Text(l['details'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
   ),
   ),
   DataCell(
@@ -325,7 +325,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +337,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   children: [
   _buildActionIcon(l['action'] ?? ''),
   const SizedBox(width: 8),
-  Text(l['action'] ?? '-', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(l['action'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   ],
   ),
   Container(
@@ -351,8 +351,8 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   ],
   ),
   const SizedBox(height: 10),
-  Text(l['details'] ?? '-', style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.35)),
-  const Divider(color: Colors.white10, height: 18),
+  Text(l['details'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 12, height: 1.35)),
+  const Divider(color: Color(0xFFE2E8F0), height: 18),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -397,12 +397,12 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
   SizedBox(width: 8),
-  Text("Clear Audit Trail", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Clear Audit Trail", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   ],
   ),
   content: const Text(
@@ -410,9 +410,9 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   style: TextStyle(color: AppConstants.textMuted, fontSize: 13),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () {
   Navigator.pop(ctx);
   _clearAuditLogs();
@@ -453,12 +453,12 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.table_chart_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Reconciliation Report (CSV)", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Reconciliation Report (CSV)", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   ],
   ),
   content: Column(
@@ -477,7 +477,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   decoration: BoxDecoration(
   color: Colors.black,
   borderRadius: BorderRadius.circular(12),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: SingleChildScrollView(
   child: Text(
@@ -489,9 +489,9 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   ],
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () {
   Clipboard.setData(ClipboardData(text: csvData));
   Navigator.pop(ctx);

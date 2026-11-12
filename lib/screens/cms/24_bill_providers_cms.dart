@@ -177,7 +177,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                         const Text(
                           "Utility Bill Companies & Providers CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -212,7 +212,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -222,8 +222,8 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -250,7 +250,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
               _buildMetricCard("ACTIVE BILLERS", "$activeCount Providers", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("POWER DISCOS", "$electricityCount Companies", AppConstants.accentGold, isDesktop),
               _buildMetricCard("GAS & WATER UTILITIES", "$gasWaterCount Providers", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("TOTAL BILLERS", "${_providersList.length} Integrated", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("TOTAL BILLERS", "${_providersList.length} Integrated", Color(0xFFA855F7), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -264,7 +264,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
               SizedBox(
                 width: isDesktop ? 320 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Biller, DISCO, Gas, ISP...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -301,7 +301,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No billing utility companies found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -322,7 +322,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,11 +343,11 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _categoryFilter = key),
     );
@@ -358,14 +358,14 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.white24,
+      selectedColor: Color(0xFF94A3B8),
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? Colors.white38 : Colors.white10),
+      side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -376,7 +376,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -415,7 +415,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surfaceCard,
   borderRadius: BorderRadius.circular(10),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Center(
   child: Text(icon, style: const TextStyle(fontSize: 18)),
@@ -427,7 +427,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(p['name'] ?? 'Biller Name', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(p['name'] ?? 'Biller Name', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Text("ID: ${p['id'] ?? '-'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11, fontFamily: 'monospace')),
   ],
   ),
@@ -438,7 +438,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text("$digits Digits Number", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+  Text("$digits Digits Number", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 12)),
   Text("e.g. ${p['sampleReference'] ?? '-'}", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 10.5, fontFamily: 'monospace')),
   ],
   ),
@@ -507,7 +507,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -519,7 +519,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   children: [
   Text(icon, style: const TextStyle(fontSize: 20)),
   const SizedBox(width: 8),
-  Text(p['name'] ?? 'Biller', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(p['name'] ?? 'Biller', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
   ],
   ),
   _buildStatusBadge(isActive),
@@ -536,7 +536,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   ),
   ],
   ),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -589,7 +589,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   if (cat == 'ELECTRICITY') color = Colors.amber;
   if (cat == 'GAS') color = Colors.deepOrange;
   if (cat == 'WATER') color = Colors.cyan;
-  if (cat == 'INTERNET') color = const Color(0xFFA855F7);
+  if (cat == 'INTERNET') color = Color(0xFFA855F7);
 
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
@@ -637,10 +637,10 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Biller: ${existing['name']}" : "Add Utility Billing Company",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -672,7 +672,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   Expanded(
   child: TextField(
   controller: nameController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "UTILITY COMPANY LEGAL NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -693,7 +693,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   child: TextField(
   controller: idController,
   readOnly: isEdit,
-  style: const TextStyle(color: Colors.white, fontFamily: 'monospace'),
+  style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace'),
   decoration: InputDecoration(
   labelText: "UNIQUE SLUG / ID",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -717,7 +717,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   child: DropdownButton<String>(
   value: category,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ELECTRICITY", child: Text("⚡ Electricity")),
   DropdownMenuItem(value: "GAS", child: Text("🔥 Sui Gas")),
@@ -741,7 +741,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   child: TextField(
   controller: digitsController,
   keyboardType: TextInputType.number,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "REF DIGITS LENGTH",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -758,7 +758,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   child: TextField(
   controller: feeController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "CONVENIENCE FEE (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -775,7 +775,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   // Sample Consumer Reference
   TextField(
   controller: sampleController,
-  style: const TextStyle(color: Colors.white, fontFamily: 'monospace'),
+  style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace'),
   decoration: InputDecoration(
   labelText: "SAMPLE CONSUMER REFERENCE FORMAT",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -798,7 +798,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   value: status,
   isExpanded: true,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active (Accepting Bill Payments)")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled (Cutoff / Under Maintenance)")),
@@ -814,9 +814,9 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final name = nameController.text.trim();
   final id = idController.text.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
@@ -875,9 +875,9 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   title: const Text("Delete Biller?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai ${p['name']} ko active billers list se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_providersList);

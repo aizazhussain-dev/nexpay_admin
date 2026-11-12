@@ -139,7 +139,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                         const Text(
                           "System Limits & Regulatory Quotas Manager",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -187,7 +187,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -257,7 +257,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
                         onPressed: _isSaving ? null : () => _saveLimits(admin),
@@ -409,7 +409,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,12 +454,12 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
     return TextFormField(
       controller: controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.5),
+      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14.5),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white24),
+        hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
         filled: true,
         fillColor: AppConstants.surfaceCard,
         prefixText: "₨ ",
@@ -484,7 +484,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -96,7 +96,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     Text(
     "Halal Savings Vaults & Profit Settlement Desk",
     style: TextStyle(
-    color: Colors.white,
+    color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
     fontWeight: FontWeight.w900,
     ),
@@ -112,7 +112,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: const Color(0xFF021A13),
+    foregroundColor: Color(0xFF021A13),
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -130,7 +130,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     runSpacing: 10,
     children: [
     _buildMetricCard("LOCKED CAPITAL", "₨ ${_currencyFormat.format(totalLockedCapital)}", AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("ACCRUED PROFIT", "₨ ${_currencyFormat.format(totalEstProfit)}", const Color(0xFFA855F7), isDesktop),
+    _buildMetricCard("ACCRUED PROFIT", "₨ ${_currencyFormat.format(totalEstProfit)}", Color(0xFFA855F7), isDesktop),
     _buildMetricCard("TOTAL POTS", "${potsList.length} Active Vaults", AppConstants.accentBlue, isDesktop),
     _buildMetricCard("TOTAL INVESTORS", "${usersMap.length} Accounts", AppConstants.accentGold, isDesktop),
     ],
@@ -141,7 +141,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     SizedBox(
     width: isDesktop ? 360 : double.infinity,
     child: TextField(
-    style: const TextStyle(color: Colors.white, fontSize: 13),
+    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
     decoration: InputDecoration(
     hintText: "Search Investor, Mobile, Pot ID, Plan...",
     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -167,7 +167,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     SizedBox(height: 12),
     Text(
     "No active savings vault pots found on file",
-    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
     ),
     ],
     ),
@@ -188,7 +188,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +206,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -240,7 +240,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(pt['userName'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+  Text(pt['userName'], style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
   Text(pt['userMobile'], style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
   ],
   ),
@@ -250,7 +250,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(pt['planTitle'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.5)),
+  Text(pt['planTitle'], style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5)),
   Text("#${pt['potId']} (${pt['category']})", style: const TextStyle(color: Color(0xFFA855F7), fontSize: 11, fontFamily: 'monospace')),
   ],
   ),
@@ -274,7 +274,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   DataCell(
   Text(
   pt['maturityDate'],
-  style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w700),
+  style: const TextStyle(color: Color(0xFF64748B), fontSize: 12, fontWeight: FontWeight.w700),
   ),
   ),
   DataCell(
@@ -292,7 +292,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -329,7 +329,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +337,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
-  Text(pt['planTitle'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+  Text(pt['planTitle'], style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
   Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
   decoration: BoxDecoration(
@@ -350,7 +350,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   ),
   const SizedBox(height: 6),
   Text("#${pt['potId']} • ${pt['maturityDate']}", style: const TextStyle(color: Color(0xFFA855F7), fontFamily: 'monospace', fontSize: 11)),
-  const Divider(color: Colors.white10, height: 18),
+  const Divider(color: Color(0xFFE2E8F0), height: 18),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -378,7 +378,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(vertical: 10),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
@@ -409,12 +409,12 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.monetization_on_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Disburse Matured Vault", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Disburse Matured Vault", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   ],
   ),
   content: Text(
@@ -428,9 +428,9 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _isSettling = true);

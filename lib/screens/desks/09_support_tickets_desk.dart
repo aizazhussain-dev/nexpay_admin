@@ -76,7 +76,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                         Text(
                           "Customer Support & Helpdesk Console",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -109,7 +109,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -143,7 +143,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Mobile, Name, Subject, Query...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -174,7 +174,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No support tickets found matching criteria",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -195,7 +195,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,11 +216,11 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -231,7 +231,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -271,7 +271,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -280,9 +280,9 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+                          color: Color(0xFFA855F7).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFA855F7).withValues(alpha: 0.3)),
+                          border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
                         ),
                         child: Text(
                           sub,
@@ -293,7 +293,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                     DataCell(
                       Container(
                         constraints: const BoxConstraints(maxWidth: 320),
-                        child: Text(msg, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                        child: Text(msg, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
                       ),
                     ),
                     DataCell(_buildStatusBadge(status)),
@@ -316,7 +316,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isOpen ? AppConstants.accentGreen : AppConstants.surfaceCard,
-                          foregroundColor: isOpen ? const Color(0xFF021A13) : Colors.white,
+                          foregroundColor: isOpen ? Color(0xFF021A13) : Color(0xFF0F172A),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
@@ -358,7 +358,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isOpen ? Colors.amber.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isOpen ? Colors.amber.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +373,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+                          color: Color(0xFFA855F7).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(sub, style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w900, fontSize: 11)),
@@ -384,7 +384,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              Text(msg, style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.4)),
+              Text(msg, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13, height: 1.4)),
               if (reply.isNotEmpty) ...[
                 const SizedBox(height: 10),
                 Container(
@@ -409,7 +409,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                   ),
                 ),
               ],
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -463,12 +463,12 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             const Icon(Icons.headset_mic_rounded, color: AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text("Dispatch Support Resolution #$id", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 17)),
+            Text("Dispatch Support Resolution #$id", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 17)),
           ],
         ),
         content: Container(
@@ -479,7 +479,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
             children: [
               Text("Customer: $name ($mobile)", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 12, fontWeight: FontWeight.bold)),
               const SizedBox(height: 2),
-              Text("Subject: $sub", style: const TextStyle(color: Colors.white70, fontSize: 12)),
+              Text("Subject: $sub", style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
@@ -487,11 +487,11 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                 decoration: BoxDecoration(
                   color: AppConstants.surfaceCard,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white10),
+                  border: Border.all(color: Color(0xFFE2E8F0)),
                 ),
                 child: Text(
                   msg,
-                  style: const TextStyle(color: Colors.white, fontSize: 12.5, height: 1.35),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, height: 1.35),
                 ),
               ),
               const SizedBox(height: 16),
@@ -500,10 +500,10 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
               TextField(
                 controller: replyController,
                 maxLines: 4,
-                style: const TextStyle(color: Colors.white, fontSize: 13),
+                style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                 decoration: InputDecoration(
                   hintText: "Enter official response to dispatch to customer...",
-                  hintStyle: const TextStyle(color: Colors.white24),
+                  hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                   filled: true,
                   fillColor: AppConstants.surfaceCard,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -513,11 +513,11 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppConstants.accentGreen,
-              foregroundColor: const Color(0xFF021A13),
+              foregroundColor: Color(0xFF021A13),
             ),
             onPressed: () async {
               final replyText = replyController.text.trim();

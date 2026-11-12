@@ -117,7 +117,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                         Text(
                           "Takaful Claims & Loss Settlement Desk",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -150,7 +150,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -187,7 +187,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Mobile, Case ID, Policy, Details...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -221,7 +221,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No Takaful claim requests found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -242,7 +242,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,11 +263,11 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -278,7 +278,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -317,7 +317,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(c['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(c['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -327,7 +327,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(c['plan_title'] ?? 'Takaful Plan', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12.5)),
+                          Text(c['plan_title'] ?? 'Takaful Plan', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 12.5)),
                           Text(c['policy_number'] ?? '-', style: const TextStyle(color: Color(0xFFA855F7), fontSize: 11, fontFamily: 'monospace')),
                         ],
                       ),
@@ -345,7 +345,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                           c['details'] ?? '-',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: Colors.white70, fontSize: 12),
+                          style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
                         ),
                       ),
                     ),
@@ -357,7 +357,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: const Color(0xFF021A13),
+                              foregroundColor: Color(0xFF021A13),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -418,7 +418,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isPending ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +426,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(c['plan_title'] ?? 'Takaful Plan', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                  Text(c['plan_title'] ?? 'Takaful Plan', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                   _buildStatusBadge(status),
                 ],
               ),
@@ -441,8 +441,8 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                   ),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
-              Text("Loss Details: ${c['details'] ?? '-'}", style: const TextStyle(color: Colors.white70, fontSize: 12.5, height: 1.35)),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
+              Text("Loss Details: ${c['details'] ?? '-'}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 12.5, height: 1.35)),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -460,7 +460,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -547,12 +547,12 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(isApprove ? Icons.verified_rounded : Icons.cancel_rounded, color: isApprove ? AppConstants.accentGreen : AppConstants.dangerRed),
             const SizedBox(width: 8),
-            Text(isApprove ? "Approve & Credit Claim" : "Reject Takaful Claim", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(isApprove ? "Approve & Credit Claim" : "Reject Takaful Claim", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -565,11 +565,11 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: isApprove ? AppConstants.accentGreen : AppConstants.dangerRed,
-              foregroundColor: isApprove ? const Color(0xFF021A13) : Colors.white,
+              foregroundColor: isApprove ? Color(0xFF021A13) : Color(0xFF0F172A),
             ),
             onPressed: () async {
               Navigator.pop(ctx);
@@ -595,7 +595,7 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
                         backgroundColor: isApprove ? AppConstants.accentGreen : AppConstants.dangerRed,
                         content: Text(
                           isApprove ? "✓ Claim approved! ₨ ${_currencyFormat.format(amount)} credited to $mobile." : "Claim #$claimId rejected.",
-                          style: TextStyle(color: isApprove ? const Color(0xFF021A13) : Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: isApprove ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
                         ),
                       ),
                     );

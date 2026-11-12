@@ -162,7 +162,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
                         const Text(
                           "Islamic Takaful & Insurance Plans CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -197,7 +197,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -207,8 +207,8 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -235,7 +235,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
               _buildMetricCard("MAX COVERAGE CAP", "₨ ${_currencyFormat.format(maxCoverage)}", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("ACTIVE PROTECTION PLANS", "$activeCount Policies Live", AppConstants.accentGold, isDesktop),
               _buildMetricCard("SHARIAH CERTIFICATION", "Mudarabah / Waqf", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("TOTAL CATALOG PLANS", "${_plansList.length} Registered", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("TOTAL CATALOG PLANS", "${_plansList.length} Registered", Color(0xFFA855F7), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -249,7 +249,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
               SizedBox(
                 width: isDesktop ? 300 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Policy, Underwriter, Benefits...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -287,7 +287,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No Takaful insurance policies found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -308,7 +308,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,11 +329,11 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _categoryFilter = key),
     );
@@ -344,14 +344,14 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.white24,
+      selectedColor: Color(0xFF94A3B8),
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? Colors.white38 : Colors.white10),
+      side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -362,7 +362,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -402,7 +402,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surfaceCard,
   borderRadius: BorderRadius.circular(10),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Center(
   child: Text(icon, style: const TextStyle(fontSize: 18)),
@@ -414,7 +414,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(p['name'] ?? 'Policy Title', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(p['name'] ?? 'Policy Title', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Text(p['underwriter'] ?? 'Islamic Underwriter', style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
   ],
   ),
@@ -496,7 +496,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,7 +508,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   children: [
   Text(icon, style: const TextStyle(fontSize: 20)),
   const SizedBox(width: 8),
-  Text(p['name'] ?? 'Policy', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(p['name'] ?? 'Policy', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
   ],
   ),
   _buildStatusBadge(isActive),
@@ -524,7 +524,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   ),
   const SizedBox(height: 4),
   Text("Premium: ₨ ${_currencyFormat.format(monthly)}/Month • By: ${p['underwriter'] ?? 'Takaful'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -566,11 +566,11 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
 
   Widget _buildCategoryBadge(String cat) {
   Color color = AppConstants.accentGreen;
-  if (cat == 'HEALTH') color = const Color(0xFFEF4444);
-  if (cat == 'LIFE') color = const Color(0xFFA855F7);
-  if (cat == 'MOTOR') color = const Color(0xFF38BDF8);
-  if (cat == 'DEVICE') color = const Color(0xFFFBBF24);
-  if (cat == 'TRAVEL') color = const Color(0xFF22C55E);
+  if (cat == 'HEALTH') color = Color(0xFFEF4444);
+  if (cat == 'LIFE') color = Color(0xFFA855F7);
+  if (cat == 'MOTOR') color = Color(0xFF38BDF8);
+  if (cat == 'DEVICE') color = Color(0xFFFBBF24);
+  if (cat == 'TRAVEL') color = Color(0xFF22C55E);
 
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
@@ -619,10 +619,10 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Policy: ${existing['name']}" : "Create Islamic Takaful Policy",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 540),
@@ -654,7 +654,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   Expanded(
   child: TextField(
   controller: nameController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "POLICY TITLE / MARKETING NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -682,7 +682,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   child: DropdownButton<String>(
   value: category,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "HEALTH", child: Text("🏥 Health Care")),
   DropdownMenuItem(value: "LIFE", child: Text("🛡️ Accidental Life")),
@@ -711,7 +711,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   value: status,
   isExpanded: true,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled")),
@@ -733,7 +733,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   child: TextField(
   controller: coverageController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "MAX COVERAGE LIMIT (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -750,7 +750,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   Expanded(
   child: TextField(
   controller: underwriterController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "UNDERWRITER PARTNER",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -771,7 +771,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   child: TextField(
   controller: monthlyController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "MONTHLY PREMIUM (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -789,7 +789,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   child: TextField(
   controller: annualController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "ANNUAL PREMIUM (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -808,7 +808,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   TextField(
   controller: benefitsController,
   maxLines: 2,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "POLICY BENEFITS & COVERAGE SUMMARY",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -823,9 +823,9 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final name = nameController.text.trim();
   final coverage = double.tryParse(coverageController.text.trim()) ?? 0.0;
@@ -887,9 +887,9 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
   title: const Text("Delete Policy?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai \"${p['name']}\" ko active Takaful catalog se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_plansList);

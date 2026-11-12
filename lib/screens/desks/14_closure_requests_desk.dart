@@ -110,7 +110,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                         Text(
                           "Account Closures & Deletion Audit Desk",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -143,7 +143,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -164,7 +164,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
             runSpacing: 10,
             children: [
               _buildMetricCard("PENDING AUDIT", "$pendingCount Requests", pendingCount > 0 ? AppConstants.dangerRed : AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("PERMANENTLY TERMINATED", "$terminatedCount Accounts", Colors.white70, isDesktop),
+              _buildMetricCard("PERMANENTLY TERMINATED", "$terminatedCount Accounts", Color(0xFF64748B), isDesktop),
               _buildMetricCard("REJECTED REQUESTS", "$rejectedCount Retained", AppConstants.accentBlue, isDesktop),
               _buildMetricCard("TOTAL REQUESTS LOGGED", "${_closureRequests.length} Total", AppConstants.accentGold, isDesktop),
             ],
@@ -180,7 +180,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Mobile, Name, CNIC, Reason...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -214,7 +214,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No account closure requests found matching criteria",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -235,7 +235,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,11 +256,11 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -271,7 +271,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -316,12 +316,12 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
                     ),
-                    DataCell(Text(r['cnic'] ?? '-', style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontSize: 12))),
+                    DataCell(Text(r['cnic'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 12))),
                     DataCell(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,13 +343,13 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                     DataCell(
                       Container(
                         constraints: const BoxConstraints(maxWidth: 180),
-                        child: Text(r['reason'] ?? 'Not specified', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
+                        child: Text(r['reason'] ?? 'Not specified', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12)),
                       ),
                     ),
                     DataCell(
                       Container(
                         constraints: const BoxConstraints(maxWidth: 240),
-                        child: Text(r['feedback'] ?? '-', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white70, fontSize: 11.5)),
+                        child: Text(r['feedback'] ?? '-', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5)),
                       ),
                     ),
                     DataCell(_buildStatusBadge(status)),
@@ -360,7 +360,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.dangerRed,
-                              foregroundColor: Colors.white,
+                              foregroundColor: Color(0xFF0F172A),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -372,8 +372,8 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                           const SizedBox(width: 8),
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.white70,
-                              side: const BorderSide(color: Colors.white24),
+                              foregroundColor: Color(0xFF64748B),
+                              side: const BorderSide(color: Color(0xFF94A3B8)),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -425,7 +425,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? AppConstants.dangerRed.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isPending ? AppConstants.dangerRed.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,13 +433,13 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Case #$id • $name", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                  Text("Case #$id • $name", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                   _buildStatusBadge(status),
                 ],
               ),
               const SizedBox(height: 2),
               Text("Mobile: $mobile • CNIC: ${r['cnic'] ?? '-'}", style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11)),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -447,7 +447,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("Reason for Leaving", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text(r['reason'] ?? 'Not specified', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      Text(r['reason'] ?? 'Not specified', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 12.5)),
                     ],
                   ),
                   Column(
@@ -468,7 +468,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
               ),
               if (r['feedback'] != null && r['feedback'].toString().isNotEmpty) ...[
                 const SizedBox(height: 10),
-                Text("Feedback: ${r['feedback']}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                Text("Feedback: ${r['feedback']}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
               ],
               const SizedBox(height: 10),
               Text("Requested at: $dateStr", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
@@ -481,7 +481,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.dangerRed,
-                          foregroundColor: Colors.white,
+                          foregroundColor: Color(0xFF0F172A),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -496,8 +496,8 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white70,
-                          side: const BorderSide(color: Colors.white24),
+                          foregroundColor: Color(0xFF64748B),
+                          side: const BorderSide(color: Color(0xFF94A3B8)),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -569,12 +569,12 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(isApprove ? Icons.delete_forever_rounded : Icons.cancel_rounded, color: isApprove ? AppConstants.dangerRed : AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text(isApprove ? "PERMANENT TERMINATION" : "Reject Closure Request", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(isApprove ? "PERMANENT TERMINATION" : "Reject Closure Request", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Column(
@@ -613,11 +613,11 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: isApprove ? AppConstants.dangerRed : AppConstants.accentGreen,
-              foregroundColor: isApprove ? Colors.white : const Color(0xFF021A13),
+              foregroundColor: isApprove ? Color(0xFF0F172A) : Color(0xFF021A13),
             ),
             onPressed: () async {
               Navigator.pop(ctx);
@@ -644,7 +644,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                         backgroundColor: isApprove ? AppConstants.dangerRed : AppConstants.accentGreen,
                         content: Text(
                           isApprove ? "✓ Customer $mobile has been permanently terminated." : "✓ Closure request rejected. Account retained.",
-                          style: TextStyle(color: isApprove ? Colors.white : const Color(0xFF021A13), fontWeight: FontWeight.bold),
+                          style: TextStyle(color: isApprove ? Color(0xFF0F172A) : Color(0xFF021A13), fontWeight: FontWeight.bold),
                         ),
                       ),
                     );

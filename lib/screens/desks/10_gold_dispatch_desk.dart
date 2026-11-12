@@ -141,7 +141,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     Text(
     "Physical 24K Gold Ingot Dispatch & Tracking",
     style: TextStyle(
-    color: Colors.white,
+    color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
     fontWeight: FontWeight.w900,
     ),
@@ -174,7 +174,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: const Color(0xFF021A13),
+    foregroundColor: Color(0xFF021A13),
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -193,7 +193,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     children: [
     _buildMetricCard("PENDING DISPATCH", "$pendingCount Ingot Orders", pendingCount > 0 ? AppConstants.accentGold : AppConstants.accentGreen, isDesktop),
     _buildMetricCard("SHIPPED VIA COURIER", "$dispatchedCount Handover Completed", AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("TOTAL GOLD MINTED", "${totalGramsOrdered.toStringAsFixed(2)} g 24K", const Color(0xFFFBBF24), isDesktop),
+    _buildMetricCard("TOTAL GOLD MINTED", "${totalGramsOrdered.toStringAsFixed(2)} g 24K", Color(0xFFFBBF24), isDesktop),
     _buildMetricCard("TOTAL DELIVERY ORDERS", "${orders.length} Logged", AppConstants.accentBlue, isDesktop),
     ],
     ),
@@ -208,7 +208,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     SizedBox(
     width: isDesktop ? 340 : double.infinity,
     child: TextField(
-    style: const TextStyle(color: Colors.white, fontSize: 13),
+    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
     decoration: InputDecoration(
     hintText: "Search Customer, Mobile, Address, TID...",
     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -240,7 +240,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     SizedBox(height: 12),
     Text(
     "No gold ingot delivery orders found",
-    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
     ),
     ],
     ),
@@ -261,7 +261,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,11 +282,11 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -297,7 +297,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -340,7 +340,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(o['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+  Text(o['name'], style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
   Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
   ],
   ),
@@ -364,12 +364,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   "📍 ${o['address']}",
   maxLines: 2,
   overflow: TextOverflow.ellipsis,
-  style: const TextStyle(color: Colors.white70, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
   ),
   ),
   ),
   DataCell(Text("₨ ${_currencyFormat.format(fee)}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
-  DataCell(Text(tid, style: const TextStyle(color: Colors.white60, fontSize: 11, fontFamily: 'monospace'))),
+  DataCell(Text(tid, style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
   DataCell(
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,7 +390,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -452,7 +452,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isPending ? const Color(0xFFFBBF24).withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isPending ? Color(0xFFFBBF24).withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,12 +471,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ],
   ),
   const SizedBox(height: 10),
-  Text("📍 ${o['address']}", style: const TextStyle(color: Colors.white, fontSize: 12.5, height: 1.35)),
+  Text("📍 ${o['address']}", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, height: 1.35)),
   if (isDispatched) ...[
   const SizedBox(height: 6),
   Text(dest, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 11, fontFamily: 'monospace')),
   ],
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -485,7 +485,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ],
   ),
   const SizedBox(height: 4),
-  Text("Order TID: $tid", style: const TextStyle(color: Colors.white54, fontSize: 10.5, fontFamily: 'monospace')),
+  Text("Order TID: $tid", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
 
   if (isPending) ...[
   const SizedBox(height: 14),
@@ -495,7 +495,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(vertical: 10),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
@@ -533,8 +533,8 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   String label;
 
   if (isPending) {
-  bg = const Color(0xFFFBBF24).withValues(alpha: 0.15);
-  text = const Color(0xFFFBBF24);
+  bg = Color(0xFFFBBF24).withValues(alpha: 0.15);
+  text = Color(0xFFFBBF24);
   label = "PENDING DISPATCH";
   } else if (isDispatched) {
   bg = AppConstants.accentGreen.withValues(alpha: 0.15);
@@ -574,12 +574,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.local_shipping_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Dispatch 24K Bullion", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Dispatch 24K Bullion", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   ],
   ),
   content: Column(
@@ -596,10 +596,10 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   const SizedBox(height: 6),
   TextField(
   controller: trackingController,
-  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'monospace'),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'monospace'),
   decoration: InputDecoration(
   hintText: "e.g. TCS-77298102 or LPD-992102",
-  hintStyle: const TextStyle(color: Colors.white24, fontSize: 12),
+  hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
   filled: true,
   fillColor: AppConstants.surfaceCard,
   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
@@ -608,9 +608,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ],
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final tracking = trackingController.text.trim();
   if (tracking.isEmpty) return;
@@ -674,12 +674,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
   SizedBox(width: 8),
-  Text("Reject Bullion Order", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Reject Bullion Order", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   ],
   ),
   content: Text(
@@ -690,9 +690,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _isActionBusy = true);

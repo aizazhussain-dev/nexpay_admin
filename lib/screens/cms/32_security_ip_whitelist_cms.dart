@@ -140,7 +140,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                         const Text(
                           "System Security, 2FA & IP Whitelist CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -181,7 +181,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -191,8 +191,8 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -237,7 +237,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
               _buildMetricCard(
                 "SESSION INACTIVITY TIMEOUT",
                 "${_sessionTimeoutController.text} Minutes",
-                const Color(0xFFA855F7),
+                Color(0xFFA855F7),
                 isDesktop,
               ),
             ],
@@ -291,7 +291,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(20),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Form(
   key: _formKey,
@@ -323,7 +323,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   activeColor: AppConstants.accentGreen,
   onChanged: (v) => setState(() => _enforce2Fa = v),
   ),
-  const Divider(color: Colors.white10, height: 22),
+  const Divider(color: Color(0xFFE2E8F0), height: 22),
 
   // IP Whitelist Strict Mode Switch
   _buildSwitchTile(
@@ -333,13 +333,13 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   activeColor: AppConstants.dangerRed,
   onChanged: (v) => setState(() => _enforceIpWhitelist = v),
   ),
-  const Divider(color: Colors.white10, height: 22),
+  const Divider(color: Color(0xFFE2E8F0), height: 22),
 
   // Session Timeout
   TextFormField(
   controller: _sessionTimeoutController,
   keyboardType: TextInputType.number,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
   decoration: InputDecoration(
   labelText: "INACTIVITY AUTO-LOGOUT (MINUTES)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -364,7 +364,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   child: TextFormField(
   controller: _maxFailedAttemptsController,
   keyboardType: TextInputType.number,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
   decoration: InputDecoration(
   labelText: "MAX FAILED LOGINS",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -382,7 +382,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   child: TextFormField(
   controller: _lockoutDurationController,
   keyboardType: TextInputType.number,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
   decoration: InputDecoration(
   labelText: "LOCKOUT DURATION",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -406,7 +406,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
   onPressed: _isSaving ? null : () => _saveSecurityPolicy(admin),
@@ -432,7 +432,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(20),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +462,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
 
   // Search Field
   TextField(
-  style: const TextStyle(color: Colors.white, fontSize: 12.5),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5),
   decoration: InputDecoration(
   hintText: "Search IP Address or Location Label...",
   hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
@@ -502,7 +502,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   color: AppConstants.surfaceCard,
   borderRadius: BorderRadius.circular(12),
   border: Border.all(
-  color: isActive ? AppConstants.accentBlue.withValues(alpha: 0.25) : Colors.white10,
+  color: isActive ? AppConstants.accentBlue.withValues(alpha: 0.25) : Color(0xFFE2E8F0),
   ),
   ),
   child: Row(
@@ -520,7 +520,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   Text(
   item['ipAddress'] ?? '0.0.0.0',
   style: const TextStyle(
-  color: Colors.white,
+  color: Color(0xFF0F172A),
   fontFamily: 'monospace',
   fontWeight: FontWeight.w900,
   fontSize: 13,
@@ -571,7 +571,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+  Text(title, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13)),
   const SizedBox(height: 2),
   Text(subtitle, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
   ],
@@ -593,7 +593,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(16),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -615,14 +615,14 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
-  title: const Text("Authorize IP / Subnet", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  title: const Text("Authorize IP / Subnet", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   content: Column(
   mainAxisSize: MainAxisSize.min,
   children: [
   TextField(
   controller: ipController,
-  style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "IP ADDRESS OR CIDR BLOCK",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -635,7 +635,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   const SizedBox(height: 12),
   TextField(
   controller: labelController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "IDENTIFIER / LOCATION LABEL",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -648,9 +648,9 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   ],
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final ip = ipController.text.trim();
   final label = labelController.text.trim();
@@ -698,9 +698,9 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   title: const Text("Remove Authorized IP?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai node ${item['ipAddress']} (${item['label']}) ki console access revoke karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updated = List.from(_whitelistedIps)

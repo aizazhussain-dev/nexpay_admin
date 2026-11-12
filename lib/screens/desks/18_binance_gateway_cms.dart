@@ -91,7 +91,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         const Text(
                           "Binance Gateway & USDT Peg CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -100,9 +100,9 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF3BA2F).withValues(alpha: 0.15),
+                            color: Color(0xFFF3BA2F).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xFFF3BA2F).withValues(alpha: 0.3)),
+                            border: Border.all(color: Color(0xFFF3BA2F).withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             "BINANCE PAY & TRC-20",
@@ -122,7 +122,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -146,9 +146,9 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
             runSpacing: 10,
             children: [
               _buildMetricCard("DEPOSIT RATE (PKR)", "₨ ${depRate.toStringAsFixed(2)}", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("WITHDRAWAL RATE (PKR)", "₨ ${wthRate.toStringAsFixed(2)}", const Color(0xFFF3BA2F), isDesktop),
+              _buildMetricCard("WITHDRAWAL RATE (PKR)", "₨ ${wthRate.toStringAsFixed(2)}", Color(0xFFF3BA2F), isDesktop),
               _buildMetricCard("HOUSE SPREAD MARGIN", "₨ ${spreadMargin.toStringAsFixed(2)} / USDT", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("SETTLEMENT PROTOCOL", "TRC-20 / Binance Pay", Colors.white70, isDesktop),
+              _buildMetricCard("SETTLEMENT PROTOCOL", "TRC-20 / Binance Pay", Color(0xFF64748B), isDesktop),
             ],
           ),
           const SizedBox(height: 24),
@@ -164,7 +164,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                   decoration: BoxDecoration(
                     color: AppConstants.surface,
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: Colors.white10),
+                    border: Border.all(color: Color(0xFFE2E8F0)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,12 +179,12 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                       // Binance Pay ID
                       TextFormField(
                         controller: _payIdController,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                        style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
                         decoration: InputDecoration(
                           labelText: "OFFICIAL BINANCE PAY ID",
                           labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
                           hintText: "e.g. 281920381",
-                          hintStyle: const TextStyle(color: Colors.white24),
+                          hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                           filled: true,
                           fillColor: AppConstants.surfaceCard,
                           suffixIcon: IconButton(
@@ -206,12 +206,12 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                       // USDT TRC-20 Address
                       TextFormField(
                         controller: _trc20Controller,
-                        style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 13.5),
+                        style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 13.5),
                         decoration: InputDecoration(
                           labelText: "OFFICIAL USDT TRC-20 WALLET ADDRESS",
                           labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
                           hintText: "e.g. TYD192aKms91kL891mNzq92Xz10A1",
-                          hintStyle: const TextStyle(color: Colors.white24),
+                          hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                           filled: true,
                           fillColor: AppConstants.surfaceCard,
                           suffixIcon: IconButton(
@@ -250,7 +250,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                             child: TextFormField(
                               controller: _depRateController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
                               decoration: InputDecoration(
                                 labelText: "DEPOSIT RATE (BUYING FROM USER)",
                                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -275,7 +275,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                             child: TextFormField(
                               controller: _wthRateController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
                               decoration: InputDecoration(
                                 labelText: "WITHDRAWAL RATE (SELLING TO USER)",
                                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -303,7 +303,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         decoration: BoxDecoration(
                           color: AppConstants.surfaceCard,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.white10),
+                          border: Border.all(color: Color(0xFFE2E8F0)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,7 +316,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                                 children: [
                                   const Text(
                                     "P2P Gateway Execution Architecture",
-                                    style: TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w800),
+                                    style: TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.w800),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -338,7 +338,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppConstants.accentGreen,
-                            foregroundColor: const Color(0xFF021A13),
+                            foregroundColor: Color(0xFF021A13),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
                           onPressed: _isSaving ? null : () => _saveBinanceSettings(admin),
@@ -369,7 +369,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

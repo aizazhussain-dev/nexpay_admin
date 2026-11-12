@@ -89,7 +89,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
     Text(
     "Master User Directory & Security Controller",
     style: TextStyle(
-    color: Colors.white,
+    color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
     fontWeight: FontWeight.w900,
     ),
@@ -105,7 +105,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: const Color(0xFF021A13),
+    foregroundColor: Color(0xFF021A13),
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -139,7 +139,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
     SizedBox(
     width: isDesktop ? 340 : double.infinity,
     child: TextField(
-    style: const TextStyle(color: Colors.white, fontSize: 13),
+    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
     decoration: InputDecoration(
     hintText: "Search Mobile, Name, CNIC, Email...",
     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -171,7 +171,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
     SizedBox(height: 12),
     Text(
     "No customer accounts found matching criteria",
-    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
     ),
     ],
     ),
@@ -192,7 +192,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,11 +213,11 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _riskFilter = key),
     );
@@ -228,7 +228,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -270,14 +270,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
   if (email.isNotEmpty)
   Text(email, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w600)),
   ],
   ),
   ),
-  DataCell(Text(cnic, style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontSize: 12))),
+  DataCell(Text(cnic, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 12))),
   DataCell(_buildRiskTierBadge(isKyc, isFrozen)),
   DataCell(
   Text(
@@ -301,7 +301,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -343,7 +343,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isFrozen ? AppConstants.dangerRed.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isFrozen ? AppConstants.dangerRed.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,7 +354,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
   Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11.5)),
   ],
   ),
@@ -365,7 +365,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   const SizedBox(height: 2),
   Text(email, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 11)),
   ],
-  const Divider(color: Colors.white10, height: 18),
+  const Divider(color: Color(0xFFE2E8F0), height: 18),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -397,7 +397,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: const Color(0xFF021A13),
+  foregroundColor: Color(0xFF021A13),
   padding: const EdgeInsets.symmetric(vertical: 9),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -457,14 +457,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setModalState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text("${user['name'] ?? 'Customer'}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("${user['name'] ?? 'Customer'}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
   const SizedBox(height: 2),
   Text("IBAN: $iban • Mobile: $mobile", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11, fontFamily: 'monospace')),
   ],
@@ -484,7 +484,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   Expanded(
   child: Container(
   padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Colors.white10)),
+  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
@@ -499,7 +499,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   Expanded(
   child: Container(
   padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Colors.white10)),
+  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
@@ -514,7 +514,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   Expanded(
   child: Container(
   padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Colors.white10)),
+  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
@@ -550,7 +550,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   ElevatedButton(
   style: ElevatedButton.styleFrom(
   backgroundColor: isFrozen ? AppConstants.accentGreen : AppConstants.dangerRed,
-  foregroundColor: isFrozen ? const Color(0xFF021A13) : Colors.white,
+  foregroundColor: isFrozen ? Color(0xFF021A13) : Color(0xFF0F172A),
   ),
   onPressed: () => _toggleFreezeUser(ctx, mobile, isFrozen, user, admin),
   child: Text(isFrozen ? "🔓 Unfreeze Account" : "🔒 Freeze Account", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
@@ -572,14 +572,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
 
   // Override MPIN
   OutlinedButton(
-  style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
+  style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF0F172A)),
   onPressed: () => _promptOverrideMpin(ctx, mobile, user, admin),
   child: const Text("🔑 Reset 4-Digit MPIN", style: TextStyle(fontSize: 11.5)),
   ),
 
   // Update Gmail
   OutlinedButton(
-  style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
+  style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF0F172A)),
   onPressed: () => _promptUpdateEmail(ctx, mobile, user, admin),
   child: const Text("📧 Update Gmail", style: TextStyle(fontSize: 11.5)),
   ),
@@ -593,14 +593,14 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
 
   // Adjust Crypto Balance
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: const Color(0xFFF3BA2F)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: Color(0xFFF3BA2F)),
   onPressed: () => _promptAdjustBalance(ctx, mobile, 'crypto', crypto, admin),
   child: const Text("± Edit USDT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
   ),
 
   // Adjust Gold Balance
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: const Color(0xFFFBBF24)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: Color(0xFFFBBF24)),
   onPressed: () => _promptAdjustBalance(ctx, mobile, 'gold', gold, admin),
   child: const Text("± Edit Gold", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
   ),
@@ -612,16 +612,16 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   const SizedBox(height: 18),
 
   // Live Passbook & Transactions Ledger
-  const Text("📜 LIVE ACCOUNT PASSBOOK & LEDGER (WITH 1-CLICK DISPUTE RECALL)", style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900)),
+  const Text("📜 LIVE ACCOUNT PASSBOOK & LEDGER (WITH 1-CLICK DISPUTE RECALL)", style: TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.w900)),
   const SizedBox(height: 8),
   Container(
   height: 220,
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Colors.white10)),
+  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
   child: txs.isEmpty
   ? const Center(child: Text("No transaction history recorded for this account.", style: TextStyle(color: AppConstants.textMuted, fontSize: 12)))
       : ListView.separated(
   itemCount: txs.length,
-  separatorBuilder: (_, __) => const Divider(color: Colors.white10, height: 1),
+  separatorBuilder: (_, __) => const Divider(color: Color(0xFFE2E8F0), height: 1),
   itemBuilder: (c, idx) {
   final t = txs[idx];
   final amt = double.tryParse(t['amount']?.toString() ?? '0') ?? 0.0;
@@ -630,7 +630,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
 
   return ListTile(
   dense: true,
-  title: Text(t['title'] ?? 'Transaction', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+  title: Text(t['title'] ?? 'Transaction', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 12)),
   subtitle: Text("${t['date'] ?? '-'} • TID: $tid • ${t['dest'] ?? '-'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
   trailing: Row(
   mainAxisSize: MainAxisSize.min,
@@ -663,7 +663,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
   ],
   ),
   ),
@@ -749,12 +749,12 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   context: context,
   builder: (dCtx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: Text("Override 4-Digit MPIN ($mobile)", style: const TextStyle(color: Colors.white, fontSize: 16)),
+  title: Text("Override 4-Digit MPIN ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
   content: TextField(
   controller: controller,
   keyboardType: TextInputType.number,
   maxLength: 4,
-  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 6),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 6),
   decoration: InputDecoration(
   hintText: "••••",
   filled: true,
@@ -765,7 +765,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final pin = controller.text.trim();
   if (pin.length != 4) return;
@@ -799,10 +799,10 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   context: context,
   builder: (dCtx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: Text("Update Linked Gmail ($mobile)", style: const TextStyle(color: Colors.white, fontSize: 16)),
+  title: Text("Update Linked Gmail ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
   content: TextField(
   controller: controller,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   hintText: "customer@gmail.com",
   filled: true,
@@ -813,7 +813,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final email = controller.text.trim();
   if (!email.contains('@')) return;
@@ -847,7 +847,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   context: context,
   builder: (dCtx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: Text("Adjust ${type.toUpperCase()} ($mobile)", style: const TextStyle(color: Colors.white, fontSize: 16)),
+  title: Text("Adjust ${type.toUpperCase()} ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
   content: Column(
   mainAxisSize: MainAxisSize.min,
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -857,7 +857,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   TextField(
   controller: controller,
   keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   hintText: "e.g. 500 or -200",
   filled: true,
@@ -870,7 +870,7 @@ class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final delta = double.tryParse(controller.text) ?? 0.0;
   if (delta == 0.0) return;

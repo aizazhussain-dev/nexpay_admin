@@ -85,7 +85,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                         Text(
                           "Wall Street US Stocks & Equities Console",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -116,7 +116,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -135,7 +135,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             children: [
               _buildMetricCard("CATALOG STOCKS", "${_stocksList.length} Active Equities", AppConstants.accentBlue, isDesktop),
               _buildMetricCard("TOTAL EXECUTED TRADES", "${_tradesList.length} Orders", AppConstants.accentGold, isDesktop),
-              _buildMetricCard("USD / PKR BENCHMARK", "₨ ${_usdPkrRate.toStringAsFixed(2)}", Colors.white, isDesktop),
+              _buildMetricCard("USD / PKR BENCHMARK", "₨ ${_usdPkrRate.toStringAsFixed(2)}", Color(0xFF0F172A), isDesktop),
               _buildMetricCard("FEED TELEMETRY", _isMarketOpen ? "Active Spot Streaming" : "After-Hours Feed", _isMarketOpen ? AppConstants.accentGreen : AppConstants.textMuted, isDesktop),
             ],
           ),
@@ -170,9 +170,9 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected ? AppConstants.accentGreen : AppConstants.surface,
-        foregroundColor: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        foregroundColor: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         elevation: 0,
-        side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+        side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
@@ -188,7 +188,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,12 +228,12 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
           children: [
             const Text(
               "Active Wall Street Stocks in App Catalog",
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+              style: TextStyle(color: Color(0xFF0F172A), fontSize: 14, fontWeight: FontWeight.w800),
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppConstants.surfaceCard,
-                foregroundColor: Colors.white,
+                foregroundColor: Color(0xFF0F172A),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () => _openAddEditStockModal(context, null),
@@ -248,7 +248,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             decoration: BoxDecoration(
               color: AppConstants.surface,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Color(0xFFE2E8F0)),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
@@ -284,7 +284,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               width: 32,
                               height: 32,
                               padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: Color(0xFF0F172A), borderRadius: BorderRadius.circular(8)),
                               child: logoUrl.isNotEmpty
                                   ? Image.network(logoUrl, fit: BoxFit.contain, errorBuilder: (_, __, ___) => const Icon(Icons.trending_up, color: Colors.black54, size: 18))
                                   : const Icon(Icons.trending_up, color: Colors.black54, size: 18),
@@ -296,17 +296,17 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(s['name'] ?? '-', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                                Text(s['name'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                                 Text(s['category'] ?? 'Technology', style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
                               ],
                             ),
                           ),
                           DataCell(Text("\$ ${priceUsd.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 14))),
-                          DataCell(Text("₨ ${_currencyFormat.format(pricePkr)}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13))),
+                          DataCell(Text("₨ ${_currencyFormat.format(pricePkr)}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13))),
                           DataCell(
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(color: const Color(0xFFA855F7).withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: Color(0xFFA855F7).withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
                               child: Text("+${s['spread_percent'] ?? 1.0}% Spread", style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.bold, fontSize: 11)),
                             ),
                           ),
@@ -375,7 +375,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
           children: [
             Expanded(
               child: TextField(
-                style: const TextStyle(color: Colors.white, fontSize: 13),
+                style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                 decoration: InputDecoration(
                   hintText: "Search Trades: Mobile, Customer, Symbol, TID...",
                   hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12),
@@ -402,7 +402,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             decoration: BoxDecoration(
               color: AppConstants.surface,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Color(0xFFE2E8F0)),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
@@ -450,7 +450,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(t['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                                Text(t['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                                 Text(t['user_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                               ],
                             ),
@@ -470,10 +470,10 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: Colors.white10,
+                                    color: Color(0xFFE2E8F0),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: Text(isLimit ? "LIMIT" : "MARKET", style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
+                                  child: Text(isLimit ? "LIMIT" : "MARKET", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.bold)),
                                 ),
                               ],
                             ),
@@ -488,7 +488,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               ],
                             ),
                           ),
-                          DataCell(Text("${shares.toStringAsFixed(4)} Sh", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13))),
+                          DataCell(Text("${shares.toStringAsFixed(4)} Sh", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13))),
                           DataCell(Text("\$ ${execPriceUsd.toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold))),
                           DataCell(
                             Row(
@@ -508,7 +508,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                               style: TextStyle(color: isBuy ? AppConstants.dangerRed : AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 13.5),
                             ),
                           ),
-                          DataCell(Text(t['trade_tid'] ?? '-', style: const TextStyle(color: Colors.white60, fontSize: 11, fontFamily: 'monospace'))),
+                          DataCell(Text(t['trade_tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
                         ],
                       );
                     }).toList(),
@@ -530,11 +530,11 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11.5,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _tradeTypeFilter = key),
     );
@@ -595,7 +595,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
     decoration: BoxDecoration(
     color: AppConstants.surface,
     borderRadius: BorderRadius.circular(18),
-    border: Border.all(color: Colors.white10),
+    border: Border.all(color: Color(0xFFE2E8F0)),
     ),
     child: ClipRRect(
     borderRadius: BorderRadius.circular(18),
@@ -623,13 +623,13 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-    Text(h['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+    Text(h['name'], style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
     Text(h['mobile'], style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
     ],
     ),
     ),
     DataCell(Text(h['symbol'], style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 14))),
-    DataCell(Text("${(h['shares'] as double).toStringAsFixed(4)} Sh", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13))),
+    DataCell(Text("${(h['shares'] as double).toStringAsFixed(4)} Sh", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13))),
     DataCell(Text("\$ ${(h['valUsd'] as double).toStringAsFixed(2)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.bold))),
     DataCell(Text("₨ ${_currencyFormat.format(h['valPkr'])}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 13.5))),
     ],
@@ -663,7 +663,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
         decoration: BoxDecoration(
           color: AppConstants.surface,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white10),
+          border: Border.all(color: Color(0xFFE2E8F0)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -671,7 +671,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
           children: [
             const Text(
               "Institutional Trading Volume & House Margin Analytics",
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+              style: TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.w900),
             ),
             const SizedBox(height: 6),
             const Text(
@@ -685,7 +685,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                 const SizedBox(width: 14),
                 Expanded(child: _buildMetricCard("TRANSACTED SHARES", "${totalShares.toStringAsFixed(4)} Sh", AppConstants.accentBlue, true)),
                 const SizedBox(width: 14),
-                Expanded(child: _buildMetricCard("BROKER SPREAD GAIN", "₨ ${_currencyFormat.format(houseMargin)}", const Color(0xFFFBBF24), true)),
+                Expanded(child: _buildMetricCard("BROKER SPREAD GAIN", "₨ ${_currencyFormat.format(houseMargin)}", Color(0xFFFBBF24), true)),
               ],
             ),
           ],
@@ -710,8 +710,8 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: AppConstants.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
-          title: Text(isEdit ? "Edit Stock: ${existing['symbol']}" : "Add Wall Street Stock", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+          title: Text(isEdit ? "Edit Stock: ${existing['symbol']}" : "Add Wall Street Stock", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           content: Container(
             constraints: const BoxConstraints(maxWidth: 480),
             child: SingleChildScrollView(
@@ -721,7 +721,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                   TextField(
                     controller: symbolController,
                     readOnly: isEdit,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       labelText: "TICKER SYMBOL (e.g. AAPL, NVDA, TSLA)",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -733,7 +733,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: nameController,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Color(0xFF0F172A)),
                     decoration: InputDecoration(
                       labelText: "COMPANY LEGAL NAME",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -749,7 +749,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                         child: TextField(
                           controller: priceController,
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xFF0F172A)),
                           decoration: InputDecoration(
                             labelText: "PRICE (USD)",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -764,7 +764,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                         child: TextField(
                           controller: spreadController,
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xFF0F172A)),
                           decoration: InputDecoration(
                             labelText: "SPREAD %",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -779,7 +779,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: logoController,
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
                     decoration: InputDecoration(
                       labelText: "LOGO IMAGE URL (PNG / SVG)",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -793,9 +793,9 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+              style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
               onPressed: () async {
                 Navigator.pop(ctx);
                 try {
@@ -839,7 +839,7 @@ class _StocksTradingDeskScreenState extends State<StocksTradingDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        title: Text("Delete ${stock['symbol']}?", style: const TextStyle(color: Colors.white)),
+        title: Text("Delete ${stock['symbol']}?", style: const TextStyle(color: Color(0xFF0F172A))),
         content: Text("Kya aap waqai ${stock['symbol']} ko catalog se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel")),

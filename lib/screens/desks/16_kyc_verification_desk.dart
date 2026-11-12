@@ -91,7 +91,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     Text(
     "Biometric KYC & National Identity Center",
     style: TextStyle(
-    color: Colors.white,
+    color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
     fontWeight: FontWeight.w900,
     ),
@@ -124,7 +124,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: const Color(0xFF021A13),
+    foregroundColor: Color(0xFF021A13),
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -158,7 +158,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     SizedBox(
     width: isDesktop ? 340 : double.infinity,
     child: TextField(
-    style: const TextStyle(color: Colors.white, fontSize: 13),
+    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
     decoration: InputDecoration(
     hintText: "Search Mobile, Name, CNIC, Email...",
     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -191,7 +191,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     SizedBox(height: 12),
     Text(
     "No customer KYC dossiers found in this filter",
-    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
     ),
     ],
     ),
@@ -212,7 +212,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,11 +233,11 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -248,7 +248,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -284,12 +284,12 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
   ],
   ),
   ),
-  DataCell(Text(cnic, style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12.5))),
+  DataCell(Text(cnic, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12.5))),
   DataCell(
   Container(
   constraints: const BoxConstraints(maxWidth: 240),
@@ -297,7 +297,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   address,
   maxLines: 2,
   overflow: TextOverflow.ellipsis,
-  style: const TextStyle(color: Colors.white70, fontSize: 11.5),
+  style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5),
   ),
   ),
   ),
@@ -316,7 +316,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: status == 'PENDING' ? AppConstants.accentGreen : AppConstants.surfaceCard,
-  foregroundColor: status == 'PENDING' ? const Color(0xFF021A13) : Colors.white,
+  foregroundColor: status == 'PENDING' ? Color(0xFF021A13) : Color(0xFF0F172A),
   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -355,7 +355,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: status == 'PENDING' ? AppConstants.dangerRed.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: status == 'PENDING' ? AppConstants.dangerRed.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +366,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
   Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11.5)),
   ],
   ),
@@ -377,18 +377,18 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   Row(
   children: [
   const Text("CNIC: ", style: TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  Text(cnic, style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
+  Text(cnic, style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
   ],
   ),
   const SizedBox(height: 4),
   Text("Quota: ${isVerified ? 'Tier-2 (₨ 10 Lakh)' : 'Tier-1 (₨ 50k)'}", style: TextStyle(color: isVerified ? AppConstants.accentGreen : Colors.amber, fontSize: 11.5, fontWeight: FontWeight.bold)),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   SizedBox(
   width: double.infinity,
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: status == 'PENDING' ? AppConstants.accentGreen : AppConstants.surfaceCard,
-  foregroundColor: status == 'PENDING' ? const Color(0xFF021A13) : Colors.white,
+  foregroundColor: status == 'PENDING' ? Color(0xFF021A13) : Color(0xFF0F172A),
   padding: const EdgeInsets.symmetric(vertical: 9),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -421,7 +421,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   bg = AppConstants.dangerRed.withValues(alpha: 0.15);
   text = AppConstants.dangerRed;
   } else {
-  bg = Colors.white10;
+  bg = Color(0xFFE2E8F0);
   text = AppConstants.textMuted;
   }
 
@@ -511,7 +511,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
     return Dialog(
       backgroundColor: AppConstants.surface,
       insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Colors.white12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Color(0xFFE2E8F0))),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 780, maxHeight: 850),
         padding: const EdgeInsets.all(22),
@@ -524,18 +524,18 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Identity Dossier: $name", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+                    Text("Identity Dossier: $name", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
                     const SizedBox(height: 2),
                     Text("Mobile: ${widget.mobile} • CNIC: $cnic", style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, color: Colors.white70),
+                  icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
-            const Divider(color: Colors.white10, height: 20),
+            const Divider(color: Color(0xFFE2E8F0), height: 20),
 
             // Dossier Body
             Expanded(
@@ -565,12 +565,12 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                       decoration: BoxDecoration(
                         color: AppConstants.surfaceCard,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white10),
+                        border: Border.all(color: Color(0xFFE2E8F0)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("NATIONAL IDENTITY REGULATORY ATTRIBUTES", style: TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w900)),
+                          const Text("NATIONAL IDENTITY REGULATORY ATTRIBUTES", style: TextStyle(color: Color(0xFF0F172A), fontSize: 11.5, fontWeight: FontWeight.w900)),
                           const SizedBox(height: 12),
                           Row(
                             children: [
@@ -579,7 +579,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                               Expanded(child: _buildInfoTile("CNIC EXPIRY DATE", cnicExpiry)),
                             ],
                           ),
-                          const Divider(color: Colors.white10, height: 18),
+                          const Divider(color: Color(0xFFE2E8F0), height: 18),
                           _buildInfoTile("RESIDENTIAL / HOUSE LOCATION", address),
                         ],
                       ),
@@ -598,7 +598,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -645,7 +645,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
       decoration: BoxDecoration(
         color: AppConstants.surfaceCard,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         children: [
@@ -657,12 +657,12 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white12),
+              border: Border.all(color: Color(0xFFE2E8F0)),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: (imgData == null || imgData.toString().isEmpty)
-                  ? const Center(child: Text("Not Attached", style: TextStyle(color: Colors.white38, fontSize: 11)))
+                  ? const Center(child: Text("Not Attached", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)))
                   : _renderImage(imgData.toString()),
             ),
           ),
@@ -676,7 +676,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
       return Image.network(
         data,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.white38)),
+        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Color(0xFF94A3B8))),
       );
     }
     try {
@@ -686,10 +686,10 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
       return Image.memory(
         bytes,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.white38)),
+        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Color(0xFF94A3B8))),
       );
     } catch (_) {
-      return const Center(child: Text("Corrupted Scan", style: TextStyle(color: Colors.white38, fontSize: 10)));
+      return const Center(child: Text("Corrupted Scan", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10)));
     }
   }
 
@@ -699,7 +699,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
       children: [
         Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.bold)),
         const SizedBox(height: 3),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold)),
+        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -732,7 +732,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                 backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
                 content: Text(
                   approved ? "✓ KYC Approved! Customer upgraded to Tier-2 VIP." : "✕ KYC Dossier marked as Rejected.",
-                  style: TextStyle(color: approved ? const Color(0xFF021A13) : Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: approved ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
                 ),
               ),
             );

@@ -110,7 +110,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                         const Text(
                           "Referral Rewards & Affiliate Program CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -149,7 +149,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -193,7 +193,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               _buildMetricCard(
                 "SETTLEMENT TYPE",
                 _autoCreditOnSpend ? "Instant Wallet Credit" : "Manual Review",
-                const Color(0xFFA855F7),
+                Color(0xFFA855F7),
                 isDesktop,
               ),
             ],
@@ -246,7 +246,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Form(
         key: _formKey,
@@ -271,7 +271,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                   decoration: BoxDecoration(
                     color: AppConstants.surfaceCard,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white10),
+                    border: Border.all(color: Color(0xFFE2E8F0)),
                   ),
                   child: Row(
                     children: [
@@ -286,7 +286,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                           child: Text(
                             "ACTIVE (ON)",
                             style: TextStyle(
-                              color: isActive ? const Color(0xFF021A13) : AppConstants.textMuted,
+                              color: isActive ? Color(0xFF021A13) : AppConstants.textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                             ),
@@ -304,7 +304,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                           child: Text(
                             "PAUSED (OFF)",
                             style: TextStyle(
-                              color: !isActive ? Colors.white : AppConstants.textMuted,
+                              color: !isActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                             ),
@@ -325,7 +325,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                   child: TextFormField(
                     controller: _inviterRewardController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
                     decoration: InputDecoration(
                       labelText: "INVITER REWARD (PKR)",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -348,7 +348,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                   child: TextFormField(
                     controller: _inviteeBonusController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
                     decoration: InputDecoration(
                       labelText: "NEW USER WELCOME BONUS (PKR)",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -374,7 +374,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
             TextFormField(
               controller: _minSpendController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
               decoration: InputDecoration(
                 labelText: "MINIMUM QUALIFYING FIRST TRANSACTION / SPEND (PKR)",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -399,7 +399,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               decoration: BoxDecoration(
                 color: AppConstants.surfaceCard,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white10),
+                border: Border.all(color: Color(0xFFE2E8F0)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -409,7 +409,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                     children: [
                       Text(
                         "Instant Wallet Auto-Credit on Target Spend",
-                        style: TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -442,7 +442,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
 
             TextFormField(
               controller: _campaignTitleController,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.5),
+              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13.5),
               decoration: InputDecoration(
                 labelText: "BANNER TITLE",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -459,7 +459,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
             TextFormField(
               controller: _campaignSubtitleController,
               maxLines: 3,
-              style: const TextStyle(color: Colors.white, fontSize: 12.5, height: 1.4),
+              style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, height: 1.4),
               decoration: InputDecoration(
                 labelText: "PROMO EXPLANATION & TERMS (FOR USERS)",
                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -479,7 +479,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
                 onPressed: _isSaving ? null : () => _saveReferralProgram(admin),
@@ -510,7 +510,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,14 +547,14 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: isActive
-                    ? [const Color(0xFF064E3B), const Color(0xFF022C22)]
-                    : [const Color(0xFF1E293B), const Color(0xFF0F172A)],
+                    ? [Color(0xFF064E3B), Color(0xFF022C22)]
+                    : [Color(0xFF1E293B), Color(0xFF0F172A)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.4) : Colors.white10,
+                color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.4) : Color(0xFFE2E8F0),
                 width: 1.5,
               ),
             ),
@@ -581,16 +581,16 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                 const SizedBox(height: 12),
                 Text(
                   title.isNotEmpty ? title : "Invite Friends & Family",
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 15),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   subtitle.isNotEmpty
                       ? subtitle
                       : "Share your referral code. Friend gets ₨ $inviteeBonus and you receive ₨ $inviterReward.",
-                  style: const TextStyle(color: Colors.white70, fontSize: 11.5, height: 1.4),
+                  style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5, height: 1.4),
                 ),
-                const Divider(color: Colors.white10, height: 22),
+                const Divider(color: Color(0xFFE2E8F0), height: 22),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -599,14 +599,14 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                       decoration: BoxDecoration(
                         color: Colors.black45,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white12),
+                        border: Border.all(color: Color(0xFFE2E8F0)),
                       ),
-                      child: const Text("CODE: NEXPAY786", style: TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11)),
+                      child: const Text("CODE: NEXPAY786", style: TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11)),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.accentGreen,
-                        foregroundColor: const Color(0xFF021A13),
+                        foregroundColor: Color(0xFF021A13),
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         visualDensity: VisualDensity.compact,
                       ),
@@ -641,7 +641,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

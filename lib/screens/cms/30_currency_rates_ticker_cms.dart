@@ -149,7 +149,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                         const Text(
                           "Currency Exchange & Gold Spot Ticker CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -188,7 +188,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -214,7 +214,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               _buildMetricCard(
                 "GOLD 24K (PER TOLA)",
                 "₨ ${_currencyFormat.format(tolaRate)}",
-                const Color(0xFFFBBF24),
+                Color(0xFFFBBF24),
                 isDesktop,
               ),
               _buildMetricCard(
@@ -232,7 +232,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               _buildMetricCard(
                 "BROKERAGE MARGIN",
                 "+${_goldSpreadController.text}% Spread",
-                const Color(0xFFA855F7),
+                Color(0xFFA855F7),
                 isDesktop,
               ),
             ],
@@ -268,7 +268,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
                         onPressed: _isSaving ? null : () => _saveRatesAndTicker(admin),
@@ -296,10 +296,10 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F172A),
+        color: Color(0xFF0F172A),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isTickerLive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10,
+          color: isTickerLive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0),
         ),
       ),
       child: Row(
@@ -352,7 +352,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       children: [
         Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5, fontWeight: FontWeight.bold)),
         const SizedBox(width: 6),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace')),
+        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace')),
       ],
     );
   }
@@ -360,7 +360,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
   Widget _tickerDivider() {
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
-      child: Text("•", style: TextStyle(color: Colors.white24, fontSize: 14)),
+      child: Text("•", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
     );
   }
 
@@ -371,7 +371,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFBBF24).withValues(alpha: 0.3)),
+        border: Border.all(color: Color(0xFFFBBF24).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,7 +400,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 decoration: BoxDecoration(
                   color: AppConstants.surfaceCard,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white10),
+                  border: Border.all(color: Color(0xFFE2E8F0)),
                 ),
                 child: Row(
                   children: [
@@ -415,7 +415,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                         child: Text(
                           "Ticker ON",
                           style: TextStyle(
-                            color: _tickerStatus == "ACTIVE" ? const Color(0xFF021A13) : AppConstants.textMuted,
+                            color: _tickerStatus == "ACTIVE" ? Color(0xFF021A13) : AppConstants.textMuted,
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                           ),
@@ -433,7 +433,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                         child: Text(
                           "Ticker OFF",
                           style: TextStyle(
-                            color: _tickerStatus == "DISABLED" ? Colors.white : AppConstants.textMuted,
+                            color: _tickerStatus == "DISABLED" ? Color(0xFF0F172A) : AppConstants.textMuted,
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                           ),
@@ -456,7 +456,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 child: TextFormField(
                   controller: _goldGramController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
                   decoration: InputDecoration(
                     labelText: "24K PURE GOLD SPOT (PER GRAM PKR)",
                     labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -482,7 +482,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 child: TextFormField(
                   controller: _goldSpreadController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
                   decoration: InputDecoration(
                     labelText: "BROKER SPREAD / MARGIN (%)",
                     labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -510,15 +510,15 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             decoration: BoxDecoration(
               color: AppConstants.surfaceCard,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Color(0xFFE2E8F0)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildDerivedTile("10 GRAMS 24K", "₨ ${_currencyFormat.format(tenGramsRate)}"),
-                Container(width: 1, height: 36, color: Colors.white10),
+                Container(width: 1, height: 36, color: Color(0xFFE2E8F0)),
                 _buildDerivedTile("1 TOLA 24K (11.664g)", "₨ ${_currencyFormat.format(tolaRate)}"),
-                Container(width: 1, height: 36, color: Colors.white10),
+                Container(width: 1, height: 36, color: Color(0xFFE2E8F0)),
                 _buildDerivedTile("BUY SPREAD (COMMISSION)", "₨ ${_currencyFormat.format(gramRate * (double.tryParse(_goldSpreadController.text) ?? 1.5) / 100)} / g"),
               ],
             ),
@@ -533,7 +533,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       children: [
         Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
+        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
       ],
     );
   }
@@ -545,7 +545,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,7 +575,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             buyController: _usdBuyController,
             sellController: _usdSellController,
           ),
-          const Divider(color: Colors.white10, height: 20),
+          const Divider(color: Color(0xFFE2E8F0), height: 20),
 
           // SAR
           _buildForexRow(
@@ -585,7 +585,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             buyController: _sarBuyController,
             sellController: _sarSellController,
           ),
-          const Divider(color: Colors.white10, height: 20),
+          const Divider(color: Color(0xFFE2E8F0), height: 20),
 
           // AED
           _buildForexRow(
@@ -595,7 +595,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             buyController: _aedBuyController,
             sellController: _aedSellController,
           ),
-          const Divider(color: Colors.white10, height: 20),
+          const Divider(color: Color(0xFFE2E8F0), height: 20),
 
           // GBP
           _buildForexRow(
@@ -605,7 +605,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
             buyController: _gbpBuyController,
             sellController: _gbpSellController,
           ),
-          const Divider(color: Colors.white10, height: 20),
+          const Divider(color: Color(0xFFE2E8F0), height: 20),
 
           // EUR
           _buildForexRow(
@@ -639,7 +639,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(code, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
+                  Text(code, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
                   Text(name, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
                 ],
               ),
@@ -653,7 +653,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
           child: TextFormField(
             controller: buyController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.5),
+            style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13.5),
             decoration: InputDecoration(
               labelText: "BUYING RATE (PKR)",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -674,7 +674,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
           child: TextFormField(
             controller: sellController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.5),
+            style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13.5),
             decoration: InputDecoration(
               labelText: "SELLING RATE (PKR)",
               labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -699,7 +699,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

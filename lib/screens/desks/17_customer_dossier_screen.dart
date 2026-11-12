@@ -108,7 +108,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                     Text(
                       "Master Customer Dossier & Address Registry",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Color(0xFF0F172A),
                         fontSize: isDesktop ? 22 : 18,
                         fontWeight: FontWeight.w900,
                       ),
@@ -124,7 +124,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -147,7 +147,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
               _buildMetricCard("REGISTERED DOSSIERS", "${_dossiersList.length} Customer Profiles", AppConstants.accentBlue, isDesktop),
               _buildMetricCard("RESIDENTIAL ADDRESSES", "$recordedAddressesCount Locations On-File", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("TIER-2 BIOMETRIC VIP", "$verifiedCount Verified", AppConstants.accentGold, isDesktop),
-              _buildMetricCard("TOTAL HELD CAPITAL", "₨ ${_currencyFormat.format(totalCapitalInDossiers)}", Colors.white, isDesktop),
+              _buildMetricCard("TOTAL HELD CAPITAL", "₨ ${_currencyFormat.format(totalCapitalInDossiers)}", Color(0xFF0F172A), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -161,7 +161,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Name, Phone, CNIC, Address...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -195,7 +195,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No customer dossiers found matching query",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -216,7 +216,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,11 +237,11 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _tierFilter = key),
     );
@@ -252,7 +252,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -314,7 +314,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+                          Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
                           Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                           if (email.isNotEmpty)
                             Text(email, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w600)),
@@ -326,7 +326,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(cnic, style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12.5)),
+                          Text(cnic, style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12.5)),
                           const SizedBox(height: 3),
                           Row(
                             children: [
@@ -346,7 +346,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: address != 'Not Recorded' ? Colors.white70 : Colors.amber,
+                            color: address != 'Not Recorded' ? Color(0xFF64748B) : Colors.amber,
                             fontSize: 11.5,
                             fontStyle: address == 'Not Recorded' ? FontStyle.italic : FontStyle.normal,
                           ),
@@ -368,7 +368,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.surfaceCard,
-                          foregroundColor: Colors.white,
+                          foregroundColor: Color(0xFF0F172A),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
@@ -410,7 +410,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.white10),
+            border: Border.all(color: Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +438,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                          Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                           Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11.5)),
                         ],
                       ),
@@ -447,18 +447,18 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                   _buildRiskTierBadge(isVerified, isFrozen),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("CNIC: $cnic", style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontSize: 12)),
+                  Text("CNIC: $cnic", style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 12)),
                   Text("₨ ${_currencyFormat.format(bal)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 14)),
                 ],
               ),
               const SizedBox(height: 6),
               Text(
                 address != 'Not Recorded' ? "📍 $address" : "⚠️ No residential address recorded",
-                style: TextStyle(color: address != 'Not Recorded' ? Colors.white70 : Colors.amber, fontSize: 12),
+                style: TextStyle(color: address != 'Not Recorded' ? Color(0xFF64748B) : Colors.amber, fontSize: 12),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -466,7 +466,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppConstants.surfaceCard,
-                    foregroundColor: Colors.white,
+                    foregroundColor: Color(0xFF0F172A),
                     padding: const EdgeInsets.symmetric(vertical: 9),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
@@ -528,7 +528,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       return Image.network(
         data,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Colors.white38),
+        errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Color(0xFF94A3B8)),
       );
     }
     try {
@@ -538,10 +538,10 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       return Image.memory(
         bytes,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Colors.white38),
+        errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Color(0xFF94A3B8)),
       );
     } catch (_) {
-      return const Icon(Icons.person, color: Colors.white38);
+      return const Icon(Icons.person, color: Color(0xFF94A3B8));
     }
   }
 
@@ -567,13 +567,13 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => AlertDialog(
           backgroundColor: AppConstants.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
           title: Row(
             children: [
               const Icon(Icons.edit_document, color: AppConstants.accentGreen),
               const SizedBox(width: 8),
               Expanded(
-                child: Text("Edit Dossier: ${user['name']}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 17)),
+                child: Text("Edit Dossier: ${user['name']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 17)),
               ),
             ],
           ),
@@ -591,7 +591,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: nameController,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xFF0F172A)),
                           decoration: InputDecoration(
                             labelText: "FULL LEGAL NAME",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -605,7 +605,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: mobileController,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xFF0F172A)),
                           decoration: InputDecoration(
                             labelText: "MOBILE (LOGIN ID)",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -623,7 +623,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: emailController,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xFF0F172A)),
                           decoration: InputDecoration(
                             labelText: "GMAIL / EMAIL",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -637,7 +637,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: cnicController,
-                          style: const TextStyle(color: Colors.white, fontFamily: 'monospace'),
+                          style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace'),
                           decoration: InputDecoration(
                             labelText: "13-DIGIT CNIC",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -653,7 +653,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                   TextField(
                     controller: addressController,
                     maxLines: 2,
-                    style: const TextStyle(color: Colors.white, fontSize: 12.5),
+                    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5),
                     decoration: InputDecoration(
                       labelText: "RESIDENTIAL HOUSE LOCATION / ADDRESS",
                       labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -670,7 +670,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: motherController,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
                           decoration: InputDecoration(
                             labelText: "MOTHER'S NAME",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10),
@@ -684,7 +684,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: birthCityController,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
                           decoration: InputDecoration(
                             labelText: "CITY OF BIRTH",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10),
@@ -698,7 +698,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                       Expanded(
                         child: TextField(
                           controller: cnicExpiryController,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
                           decoration: InputDecoration(
                             labelText: "CNIC EXPIRY",
                             labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10),
@@ -721,7 +721,7 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
                             child: DropdownButton<String>(
                               value: kycStatus,
                               dropdownColor: AppConstants.surfaceCard,
-                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
                               items: const [
                                 DropdownMenuItem(value: "APPROVED", child: Text("🟢 APPROVED (Tier-2)")),
                                 DropdownMenuItem(value: "PENDING", child: Text("🟡 PENDING")),
@@ -758,9 +758,9 @@ class _CustomerDossierDeskScreenState extends State<CustomerDossierDeskScreen> {
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+              style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
               onPressed: _isSavingProfile
                   ? null
                   : () async {

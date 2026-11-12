@@ -184,7 +184,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                         const Text(
                           "System Audit Logs & Financial Activity Trail",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -219,7 +219,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -266,7 +266,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
               SizedBox(
                 width: isDesktop ? 320 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Operator, Action, Target, IP...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -307,7 +307,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No audit trail events matching search criteria",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -328,7 +328,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,11 +349,11 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _categoryFilter = key),
     );
@@ -361,7 +361,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
 
   Widget _buildSeverityChip(String key, String label, [Color? color]) {
     final isSelected = _severityFilter == key;
-    final activeColor = color ?? Colors.white;
+    final activeColor = color ?? Color(0xFF0F172A);
 
     return ChoiceChip(
       label: Text(label),
@@ -373,7 +373,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? activeColor : Colors.white10),
+      side: BorderSide(color: isSelected ? activeColor : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _severityFilter = key),
     );
@@ -384,7 +384,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -423,13 +423,13 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
 
   return DataRow(
   cells: [
-  DataCell(Text(formattedDate, style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontSize: 11.5))),
+  DataCell(Text(formattedDate, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 11.5))),
   DataCell(
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text("@$op", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13)),
   Text(role, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10)),
   ],
   ),
@@ -438,10 +438,10 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(
-  color: Colors.white10,
+  color: Color(0xFFE2E8F0),
   borderRadius: BorderRadius.circular(6),
   ),
-  child: Text(action, style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11)),
+  child: Text(action, style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11)),
   ),
   ),
   DataCell(
@@ -450,13 +450,13 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   child: Text(target, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 12)),
   ),
   ),
-  DataCell(Text(ip, style: const TextStyle(color: Colors.white60, fontFamily: 'monospace', fontSize: 11.5))),
+  DataCell(Text(ip, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 11.5))),
   DataCell(_buildSeverityBadge(sev)),
   DataCell(
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.surfaceCard,
-  foregroundColor: Colors.white,
+  foregroundColor: Color(0xFF0F172A),
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -499,7 +499,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -507,7 +507,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
-  Text("@$op", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
+  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
   _buildSeverityBadge(sev),
   ],
   ),
@@ -515,11 +515,11 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   Text(action, style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
   const SizedBox(height: 4),
   Text("Target: $target", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  const Divider(color: Colors.white10, height: 18),
+  const Divider(color: Color(0xFFE2E8F0), height: 18),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
-  Text(formattedDate, style: const TextStyle(color: Colors.white60, fontSize: 10.5, fontFamily: 'monospace')),
+  Text(formattedDate, style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
   TextButton.icon(
   style: TextButton.styleFrom(foregroundColor: AppConstants.accentBlue),
   onPressed: () => _openLogDetailsModal(context, log),
@@ -562,13 +562,13 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   children: [
   const Icon(Icons.data_object_rounded, color: AppConstants.accentGreen),
   const SizedBox(width: 8),
   Expanded(
-  child: Text("Audit Payload: ${log['action']}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+  child: Text("Audit Payload: ${log['action']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
   ),
   ],
   ),
@@ -582,7 +582,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
   Text("Operator: @${log['operator']}", style: const TextStyle(color: AppConstants.accentBlue, fontWeight: FontWeight.bold, fontSize: 12)),
-  Text("IP: ${log['ipAddress']}", style: const TextStyle(color: Colors.white70, fontFamily: 'monospace', fontSize: 12)),
+  Text("IP: ${log['ipAddress']}", style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 12)),
   ],
   ),
   const SizedBox(height: 10),
@@ -592,7 +592,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   decoration: BoxDecoration(
   color: Colors.black,
   borderRadius: BorderRadius.circular(12),
-  border: Border.all(color: Colors.white12),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: SelectableText(
   prettyJson,
@@ -616,7 +616,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   icon: const Icon(Icons.copy_rounded, size: 16),
   label: const Text("Copy JSON"),
   ),
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
   ],
   ),
   );
@@ -654,9 +654,9 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   style: TextStyle(color: AppConstants.textMuted, height: 1.4),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _logsList = []);

@@ -62,7 +62,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                         Text(
                           "Add Money & Deposits Desk",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -95,7 +95,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -116,7 +116,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
               SizedBox(
                 width: isDesktop ? 360 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Mobile, Customer, Channel, ID...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -148,7 +148,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                   const SizedBox(height: 12),
                   const Text(
                     "No deposits found in this category",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -175,11 +175,11 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -190,7 +190,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -228,7 +228,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(d['user_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -257,7 +257,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.surfaceCard,
-                          foregroundColor: Colors.white,
+                          foregroundColor: Color(0xFF0F172A),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
@@ -275,7 +275,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: const Color(0xFF021A13),
+                              foregroundColor: Color(0xFF021A13),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -331,7 +331,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? AppConstants.accentGold.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isPending ? AppConstants.accentGold.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +366,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                      Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                       const SizedBox(height: 2),
                       Text(d['user_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
                     ],
@@ -377,7 +377,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                   ),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -401,7 +401,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -470,12 +470,12 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(approved ? Icons.verified_rounded : Icons.cancel_rounded, color: approved ? AppConstants.accentGreen : AppConstants.dangerRed),
             const SizedBox(width: 8),
-            Text(approved ? "Approve Deposit" : "Reject Deposit", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(approved ? "Approve Deposit" : "Reject Deposit", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -485,11 +485,11 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
-              foregroundColor: approved ? const Color(0xFF021A13) : Colors.white,
+              foregroundColor: approved ? Color(0xFF021A13) : Color(0xFF0F172A),
             ),
             onPressed: () async {
               Navigator.pop(ctx);
@@ -502,7 +502,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                       success
                           ? (approved ? "Deposit #$id approved! Balance credited." : "Deposit #$id rejected.")
                           : "Process failed. Please try again.",
-                      style: TextStyle(color: success ? const Color(0xFF021A13) : Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: success ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
                     ),
                   ),
                 );
@@ -583,7 +583,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
     return Dialog(
       backgroundColor: AppConstants.surface,
       insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Colors.white12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Color(0xFFE2E8F0))),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 680, maxHeight: 800),
         padding: const EdgeInsets.all(20),
@@ -596,7 +596,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Payment Receipt Proof #${widget.depositId}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                    Text("Payment Receipt Proof #${widget.depositId}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
                     const SizedBox(height: 2),
                     Text("${widget.customerName} • ₨ ${widget.amount.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGreen, fontSize: 12, fontWeight: FontWeight.bold)),
                   ],
@@ -614,14 +614,14 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
                       onPressed: () => setState(() => _rotationQuarterTurns = (_rotationQuarterTurns + 1) % 4),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close_rounded, color: Colors.white70),
+                      icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 ),
               ],
             ),
-            const Divider(color: Colors.white10, height: 20),
+            const Divider(color: Color(0xFFE2E8F0), height: 20),
 
             // Image Container with Interactive Pan & Zoom
             Expanded(
@@ -633,7 +633,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
                       : _error != null
                       ? Text(_error!, style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.bold))
                       : (_screenshotData == null || _screenshotData!.isEmpty)
-                      ? const Text("No screenshot attached by customer", style: TextStyle(color: Colors.white54))
+                      ? const Text("No screenshot attached by customer", style: TextStyle(color: Color(0xFF64748B)))
                       : RotatedBox(
                     quarterTurns: _rotationQuarterTurns,
                     child: InteractiveViewer(
@@ -662,7 +662,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
       return Image.network(
         data,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Text("Image link broken or unreachable", style: TextStyle(color: Colors.white54)),
+        errorBuilder: (_, __, ___) => const Text("Image link broken or unreachable", style: TextStyle(color: Color(0xFF64748B))),
       );
     }
 
@@ -675,10 +675,10 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
       return Image.memory(
         bytes,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Text("Unable to render Base64 image", style: TextStyle(color: Colors.white54)),
+        errorBuilder: (_, __, ___) => const Text("Unable to render Base64 image", style: TextStyle(color: Color(0xFF64748B))),
       );
     } catch (_) {
-      return const Text("Corrupted screenshot data", style: TextStyle(color: Colors.white54));
+      return const Text("Corrupted screenshot data", style: TextStyle(color: Color(0xFF64748B)));
     }
   }
 }

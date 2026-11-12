@@ -44,7 +44,7 @@ class DashboardDeskScreen extends StatelessWidget {
                   Text(
                     "Treasury & Analytics Command",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF0F172A),
                       fontSize: isDesktop ? 22 : 18,
                       fontWeight: FontWeight.w900,
                     ),
@@ -59,7 +59,7 @@ class DashboardDeskScreen extends StatelessWidget {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -81,7 +81,7 @@ class DashboardDeskScreen extends StatelessWidget {
               _buildKpiCard("Pending Payouts", "$pendingPayouts", Icons.send_and_archive_rounded, AppConstants.dangerRed, isDesktop),
               _buildKpiCard("Active Loans", "${admin.loans.length}", Icons.electric_bolt_rounded, AppConstants.accentGreen, isDesktop),
               _buildKpiCard("Open Tickets", "$openTickets", Icons.headset_mic_rounded, Colors.orange, isDesktop),
-              _buildKpiCard("Active Kametis", "${admin.kametiPools.length}", Icons.groups_rounded, const Color(0xFFA855F7), isDesktop),
+              _buildKpiCard("Active Kametis", "${admin.kametiPools.length}", Icons.groups_rounded, Color(0xFFA855F7), isDesktop),
               _buildKpiCard("Pending Closures", "0", Icons.cancel_outlined, AppConstants.dangerRed, isDesktop),
             ],
           ),
@@ -93,7 +93,7 @@ class DashboardDeskScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppConstants.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Color(0xFFE2E8F0)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class DashboardDeskScreen extends StatelessWidget {
                   children: [
                     const Text(
                       "Treasury Inflow vs Outflow Ratio",
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800),
+                      style: TextStyle(color: Color(0xFF0F172A), fontSize: 16, fontWeight: FontWeight.w800),
                     ),
                     Text(
                       "Total Volume: ₨ ${totalVolume.toStringAsFixed(2)}",
@@ -170,7 +170,7 @@ class DashboardDeskScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

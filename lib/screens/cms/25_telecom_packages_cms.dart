@@ -198,7 +198,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
                         const Text(
                           "Telecom Bundles & Mobile Packages CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -233,7 +233,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -243,8 +243,8 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -268,10 +268,10 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
             spacing: 14,
             runSpacing: 10,
             children: [
-              _buildMetricCard("JAZZ BUNDLES", "$jazzCount Packages", const Color(0xFFEF4444), isDesktop),
-              _buildMetricCard("ZONG 4G BUNDLES", "$zongCount Packages", const Color(0xFFEC4899), isDesktop),
-              _buildMetricCard("TELENOR BUNDLES", "$telenorCount Packages", const Color(0xFF38BDF8), isDesktop),
-              _buildMetricCard("UFONE 4G BUNDLES", "$ufoneCount Packages", const Color(0xFFF97316), isDesktop),
+              _buildMetricCard("JAZZ BUNDLES", "$jazzCount Packages", Color(0xFFEF4444), isDesktop),
+              _buildMetricCard("ZONG 4G BUNDLES", "$zongCount Packages", Color(0xFFEC4899), isDesktop),
+              _buildMetricCard("TELENOR BUNDLES", "$telenorCount Packages", Color(0xFF38BDF8), isDesktop),
+              _buildMetricCard("UFONE 4G BUNDLES", "$ufoneCount Packages", Color(0xFFF97316), isDesktop),
             ],
           ),
           const SizedBox(height: 20),
@@ -285,7 +285,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
               SizedBox(
                 width: isDesktop ? 300 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Package, Quota, Network...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -299,10 +299,10 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
                 ),
               ),
               _buildNetworkFilterChip("ALL", "All Networks"),
-              _buildNetworkFilterChip("JAZZ", "🔴 Jazz", const Color(0xFFEF4444)),
-              _buildNetworkFilterChip("ZONG", "🌸 Zong", const Color(0xFFEC4899)),
-              _buildNetworkFilterChip("TELENOR", "🔵 Telenor", const Color(0xFF38BDF8)),
-              _buildNetworkFilterChip("UFONE", "🟠 Ufone", const Color(0xFFF97316)),
+              _buildNetworkFilterChip("JAZZ", "🔴 Jazz", Color(0xFFEF4444)),
+              _buildNetworkFilterChip("ZONG", "🌸 Zong", Color(0xFFEC4899)),
+              _buildNetworkFilterChip("TELENOR", "🔵 Telenor", Color(0xFF38BDF8)),
+              _buildNetworkFilterChip("UFONE", "🟠 Ufone", Color(0xFFF97316)),
               const SizedBox(width: 8),
               _buildValidityFilterChip("ALL", "All Validity"),
               _buildValidityFilterChip("DAILY", "Daily"),
@@ -323,7 +323,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No telecom packages found matching query",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -344,7 +344,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,7 +371,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? color : Colors.white10),
+      side: BorderSide(color: isSelected ? color : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _networkFilter = key),
     );
@@ -382,14 +382,14 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.white24,
+      selectedColor: Color(0xFF94A3B8),
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 11,
       ),
-      side: BorderSide(color: isSelected ? Colors.white38 : Colors.white10),
+      side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onSelected: (_) => setState(() => _validityFilter = key),
     );
@@ -400,7 +400,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -438,7 +438,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text(p['name'] ?? 'Bundle Name', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.5)),
+  Text(p['name'] ?? 'Bundle Name', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   Text("ID: ${p['id'] ?? '-'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11, fontFamily: 'monospace')),
   ],
   ),
@@ -447,10 +447,10 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(
-  color: Colors.white10,
+  color: Color(0xFFE2E8F0),
   borderRadius: BorderRadius.circular(8),
   ),
-  child: Text(val, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 11)),
+  child: Text(val, style: const TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold, fontSize: 11)),
   ),
   ),
   DataCell(
@@ -470,7 +470,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text("📞 ${p['onNet'] ?? '0'} On-Net • ${p['offNet'] ?? '0'} Off-Net", style: const TextStyle(color: Colors.white70, fontSize: 11.5)),
+  Text("📞 ${p['onNet'] ?? '0'} On-Net • ${p['offNet'] ?? '0'} Off-Net", style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5)),
   Text("💬 ${p['sms'] ?? '0'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
   ],
   ),
@@ -534,7 +534,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,7 +546,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   children: [
   _buildNetworkBadge(net),
   const SizedBox(width: 8),
-  Text(p['name'] ?? 'Bundle', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(p['name'] ?? 'Bundle', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
   ],
   ),
   _buildStatusBadge(isActive),
@@ -562,7 +562,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   ),
   const SizedBox(height: 4),
   Text("Validity: $val • Calls: ${p['onNet'] ?? '0'} On-Net / ${p['offNet'] ?? '0'} Off-Net", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -603,10 +603,10 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   }
 
   Widget _buildNetworkBadge(String net) {
-  Color color = const Color(0xFFEF4444);
-  if (net == 'ZONG') color = const Color(0xFFEC4899);
-  if (net == 'TELENOR') color = const Color(0xFF38BDF8);
-  if (net == 'UFONE') color = const Color(0xFFF97316);
+  Color color = Color(0xFFEF4444);
+  if (net == 'ZONG') color = Color(0xFFEC4899);
+  if (net == 'TELENOR') color = Color(0xFF38BDF8);
+  if (net == 'UFONE') color = Color(0xFFF97316);
 
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -657,10 +657,10 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Bundle: ${existing['name']}" : "Add Telecom Package",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -683,7 +683,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   child: DropdownButton<String>(
   value: network,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "JAZZ", child: Text("🔴 Jazz")),
   DropdownMenuItem(value: "ZONG", child: Text("🌸 Zong")),
@@ -710,7 +710,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   child: DropdownButton<String>(
   value: validity,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "DAILY", child: Text("Daily (24 Hours)")),
   DropdownMenuItem(value: "WEEKLY", child: Text("Weekly (7 Days)")),
@@ -728,7 +728,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   const SizedBox(height: 12),
   TextField(
   controller: nameController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "PACKAGE TITLE / MARKETING NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -746,7 +746,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   child: TextField(
   controller: priceController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "PRICE (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -763,7 +763,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   Expanded(
   child: TextField(
   controller: dataController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "INTERNET DATA",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -783,7 +783,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   Expanded(
   child: TextField(
   controller: onNetController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "SAME-NET MINS",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -799,7 +799,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   Expanded(
   child: TextField(
   controller: offNetController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "OTHER-NET MINS",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -819,7 +819,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   Expanded(
   child: TextField(
   controller: smsController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "SMS ALLOCATION",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -844,7 +844,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   value: status,
   isExpanded: true,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled")),
@@ -863,9 +863,9 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final name = nameController.text.trim();
   final price = double.tryParse(priceController.text.trim()) ?? 0.0;
@@ -926,9 +926,9 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
   title: const Text("Delete Package?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai ${p['network']} - ${p['name']} ko packages catalog se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_packagesList);

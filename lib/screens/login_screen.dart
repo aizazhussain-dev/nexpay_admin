@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: BoxDecoration(
               color: AppConstants.surface,
               borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.6),
@@ -85,11 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(width: 12),
                     RichText(
                       text: const TextSpan(
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
                         children: [
                           TextSpan(text: "Nex"),
                           TextSpan(text: "Pay", style: TextStyle(color: AppConstants.accentGreen)),
-                          TextSpan(text: " Core", style: TextStyle(fontSize: 18, color: Colors.white70)),
+                          TextSpan(text: " Core", style: TextStyle(fontSize: 18, color: Color(0xFF64748B))),
                         ],
                       ),
                     ),
@@ -116,10 +116,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 6),
                 TextField(
                   controller: _userController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xFF0F172A)),
                   decoration: InputDecoration(
                     hintText: "admin",
-                    hintStyle: const TextStyle(color: Colors.white24),
+                    hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                     filled: true,
                     fillColor: AppConstants.surfaceCard,
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
@@ -131,10 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: _passController,
                   obscureText: true,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xFF0F172A)),
                   decoration: InputDecoration(
                     hintText: "••••••••••••",
-                    hintStyle: const TextStyle(color: Colors.white24),
+                    hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
                     filled: true,
                     fillColor: AppConstants.surfaceCard,
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF022C22),
+                      foregroundColor: Color(0xFF022C22),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
                     onPressed: _isBusy ? null : _handleLogin,

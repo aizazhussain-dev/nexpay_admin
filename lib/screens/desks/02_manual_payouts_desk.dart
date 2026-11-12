@@ -62,7 +62,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                         Text(
                           "Manual Transfers & Payouts Desk",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -95,7 +95,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: const Color(0xFF021A13),
+                  foregroundColor: Color(0xFF021A13),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -117,7 +117,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
               SizedBox(
                 width: isDesktop ? 360 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search TID, Mobile, Bank, Account...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -151,7 +151,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                   const SizedBox(height: 12),
                   const Text(
                     "No payout transfers found matching criteria",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -178,11 +178,11 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -194,7 +194,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
@@ -233,7 +233,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(p['sender_name'] ?? 'Customer', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                          Text(p['sender_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
                           Text(p['sender_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
                         ],
                       ),
@@ -242,9 +242,9 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+                          color: Color(0xFFA855F7).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFA855F7).withValues(alpha: 0.3)),
+                          border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
                         ),
                         child: Text(
                           p['target_bank'] ?? 'Bank',
@@ -252,7 +252,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                         ),
                       ),
                     ),
-                    DataCell(Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.5))),
+                    DataCell(Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5))),
                     DataCell(
                       Text(
                         p['beneficiary_account'] ?? '-',
@@ -265,7 +265,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                         style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900, fontSize: 14),
                       ),
                     ),
-                    DataCell(Text(p['tid'] ?? '-', style: const TextStyle(color: Colors.white60, fontSize: 11, fontFamily: 'monospace'))),
+                    DataCell(Text(p['tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
                     DataCell(_buildStatusBadge(status)),
                     DataCell(
                       isPending
@@ -274,7 +274,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: const Color(0xFF021A13),
+                              foregroundColor: Color(0xFF021A13),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
@@ -332,7 +332,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
           decoration: BoxDecoration(
             color: AppConstants.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Colors.white10),
+            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,7 +343,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFA855F7).withValues(alpha: 0.15),
+                      color: Color(0xFFA855F7).withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -361,7 +361,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                      Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                       const SizedBox(height: 2),
                       Text(p['beneficiary_account'] ?? '-', style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 13)),
                     ],
@@ -372,7 +372,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                   ),
                 ],
               ),
-              const Divider(color: Colors.white10, height: 20),
+              const Divider(color: Color(0xFFE2E8F0), height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -381,7 +381,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-              Text("TID: ${p['tid']}", style: const TextStyle(color: Colors.white54, fontSize: 10.5, fontFamily: 'monospace')),
+              Text("TID: ${p['tid']}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
 
               if (isPending) ...[
                 const SizedBox(height: 14),
@@ -391,7 +391,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: const Color(0xFF021A13),
+                          foregroundColor: Color(0xFF021A13),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -469,12 +469,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.check_circle_rounded, color: AppConstants.accentGreen),
             SizedBox(width: 8),
-            Text("Complete Transfer", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Complete Transfer", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -482,9 +482,9 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
             onPressed: () async {
               Navigator.pop(ctx);
               final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
@@ -496,7 +496,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                     backgroundColor: success ? AppConstants.accentGreen : AppConstants.dangerRed,
                     content: Text(
                       success ? "Payout #$tid marked as Completed!" : "Failed to update payout.",
-                      style: TextStyle(color: success ? const Color(0xFF021A13) : Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: success ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
                     ),
                   ),
                 );
@@ -518,12 +518,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.white12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
             SizedBox(width: 8),
-            Text("Reject & Auto-Refund", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Reject & Auto-Refund", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -531,9 +531,9 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
           style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
             onPressed: () async {
               Navigator.pop(ctx);
               final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
@@ -545,7 +545,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                     backgroundColor: success ? AppConstants.accentGreen : AppConstants.dangerRed,
                     content: Text(
                       success ? "Payout rejected. ₨ ${_currencyFormat.format(amount)} refunded to $senderMobile!" : "Failed to refund payout.",
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
                     ),
                   ),
                 );

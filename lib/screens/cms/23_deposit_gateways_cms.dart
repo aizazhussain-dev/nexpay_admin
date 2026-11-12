@@ -125,7 +125,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
                         const Text(
                           "Deposit Gateways & Receiving Accounts CMS",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF0F172A),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                           ),
@@ -160,7 +160,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: const Color(0xFF021A13),
+                      foregroundColor: Color(0xFF021A13),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -170,8 +170,8 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
+                      foregroundColor: Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -197,7 +197,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
             children: [
               _buildMetricCard("ACTIVE CHANNELS", "$activeCount Gateways", AppConstants.accentGreen, isDesktop),
               _buildMetricCard("DISABLED CHANNELS", "$disabledCount Inactive", disabledCount > 0 ? AppConstants.dangerRed : AppConstants.textMuted, isDesktop),
-              _buildMetricCard("QR CODE ATTACHED", "$qrAttachedCount QR Codes", const Color(0xFFA855F7), isDesktop),
+              _buildMetricCard("QR CODE ATTACHED", "$qrAttachedCount QR Codes", Color(0xFFA855F7), isDesktop),
               _buildMetricCard("TOTAL METHODS", "${_gatewaysList.length} Receiving Accounts", AppConstants.accentBlue, isDesktop),
             ],
           ),
@@ -212,7 +212,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
               SizedBox(
                 width: isDesktop ? 340 : double.infinity,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
                   decoration: InputDecoration(
                     hintText: "Search Bank, Method, Account, IBAN...",
                     hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
@@ -243,7 +243,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
                   SizedBox(height: 12),
                   Text(
                     "No deposit gateways found",
-                    style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -264,7 +264,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,11 +285,11 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
       selectedColor: AppConstants.accentGreen,
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF021A13) : AppConstants.textMuted,
+        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Colors.white10),
+      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (_) => setState(() => _statusFilter = key),
     );
@@ -300,7 +300,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Colors.white10),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(18),
@@ -336,9 +336,9 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   width: 38,
   height: 38,
   decoration: BoxDecoration(
-  color: Colors.white,
+  color: Color(0xFF0F172A),
   borderRadius: BorderRadius.circular(8),
-  border: Border.all(color: Colors.white12),
+  border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: ClipRRect(
   borderRadius: BorderRadius.circular(8),
@@ -359,13 +359,13 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   DataCell(
   Text(
   gw['method'] ?? 'Payment Method',
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14),
   ),
   ),
   DataCell(
   Text(
   gw['title'] ?? '-',
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.5),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5),
   ),
   ),
   DataCell(
@@ -460,7 +460,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   decoration: BoxDecoration(
   color: AppConstants.surface,
   borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Colors.white10),
+  border: Border.all(color: isActive ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
   ),
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -474,7 +474,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   width: 32,
   height: 32,
   decoration: BoxDecoration(
-  color: Colors.white,
+  color: Color(0xFF0F172A),
   borderRadius: BorderRadius.circular(6),
   ),
   child: ClipRRect(
@@ -485,7 +485,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   ),
   ),
   const SizedBox(width: 8),
-  Text(gw['method'] ?? 'Channel', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15)),
+  Text(gw['method'] ?? 'Channel', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 15)),
   ],
   ),
   _buildStatusBadge(isActive),
@@ -498,7 +498,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(gw['title'] ?? '-', style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 13)),
+  Text(gw['title'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold, fontSize: 13)),
   const SizedBox(height: 3),
   Text(accNumber, style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 14)),
   ],
@@ -510,7 +510,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   const SizedBox(height: 8),
   Text("Note: ${gw['note']}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
   ],
-  const Divider(color: Colors.white10, height: 20),
+  const Divider(color: Color(0xFFE2E8F0), height: 20),
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -584,10 +584,10 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Colors.white12)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Channel: ${existing['method']}" : "Add Deposit Channel",
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -601,7 +601,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   Expanded(
   child: TextField(
   controller: methodController,
-  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "BANK / WALLET NAME",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -616,7 +616,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   Expanded(
   child: TextField(
   controller: titleController,
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "ACCOUNT TITLE",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -632,7 +632,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   const SizedBox(height: 12),
   TextField(
   controller: numberController,
-  style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold),
   decoration: InputDecoration(
   labelText: "ACCOUNT NUMBER / IBAN",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -649,7 +649,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   child: TextField(
   controller: minAmountController,
   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  style: const TextStyle(color: Colors.white),
+  style: const TextStyle(color: Color(0xFF0F172A)),
   decoration: InputDecoration(
   labelText: "MIN DEPOSIT (PKR)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -672,7 +672,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   child: DropdownButton<String>(
   value: status,
   dropdownColor: AppConstants.surfaceCard,
-  style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold),
   items: const [
   DropdownMenuItem(value: "ACTIVE", child: Text("🟢 Active (Visible)")),
   DropdownMenuItem(value: "DISABLED", child: Text("🔴 Disabled (Hidden)")),
@@ -689,7 +689,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   const SizedBox(height: 12),
   TextField(
   controller: qrController,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "QR CODE IMAGE (DIRECT URL - OPTIONAL)",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -703,7 +703,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   TextField(
   controller: noteController,
   maxLines: 2,
-  style: const TextStyle(color: Colors.white, fontSize: 12),
+  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12),
   decoration: InputDecoration(
   labelText: "INSTRUCTIONS / NOTE FOR CUSTOMER",
   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -718,9 +718,9 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   ),
   ),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: const Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
   onPressed: () async {
   final method = methodController.text.trim();
   final title = titleController.text.trim();
@@ -780,9 +780,9 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   title: const Text("Delete Channel?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
   content: Text("Kya aap waqai ${gw['method']} (${gw['number']}) ko receiving channels se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Colors.white54))),
+  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_bannersListFromState);
