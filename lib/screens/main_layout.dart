@@ -4,14 +4,30 @@ import 'package:provider/provider.dart';
 import '../core/constants.dart';
 import '../providers/admin_provider.dart';
 import '../providers/auth_provider.dart';
-import 'login_screen.dart';
 
-// --- System CMS Screens 18 to 20 (Desks Folder) ---
+// --- Operations & Financial Desks (01 to 17) ---
+import 'desks/01_dashboard_desk.dart';
+import 'desks/02_manual_payouts_desk.dart';
+import 'desks/03_deposits_desk.dart';
+import 'desks/04_outward_ledger_desk.dart';
+import 'desks/05_loans_desk.dart';
+import 'desks/06_gaming_orders_desk.dart';
+import 'desks/07_mature_vaults_desk.dart';
+import 'desks/08_audit_trail_desk.dart';
+import 'desks/09_support_tickets_desk.dart';
+import 'desks/10_gold_dispatch_desk.dart';
+import 'desks/11_stocks_trading_desk.dart';
+import 'desks/12_takaful_claims_desk.dart';
+import 'desks/13_digital_kameti_desk.dart';
+import 'desks/14_closure_requests_desk.dart';
+import 'desks/15_users_directory_screen.dart';
+import 'desks/16_kyc_verification_desk.dart';
+import 'desks/17_customer_dossier_screen.dart';
+
+// --- System CMS Screens (18 to 20 in desks, 21 to 33 in cms) ---
 import 'desks/18_binance_gateway_cms.dart';
 import 'desks/19_broadcast_cms.dart';
 import 'desks/20_system_limits_cms.dart';
-
-// --- System CMS Screens 21 to 33 (CMS Folder) ---
 import 'cms/21_maintenance_update_cms.dart';
 import 'cms/22_home_banners_cms.dart';
 import 'cms/23_deposit_gateways_cms.dart';
@@ -26,6 +42,29 @@ import 'cms/31_admin_roles_cms.dart';
 import 'cms/32_security_ip_whitelist_cms.dart';
 import 'cms/33_audit_logs_cms.dart';
 
+class _NavItem {
+  final int index;
+  final String title;
+  final String category;
+  final IconData icon;
+  final String? badgeKey;
+
+  const _NavItem({
+    required this.index,
+    required this.title,
+    required this.category,
+    required this.icon,
+    this.badgeKey,
+  });
+}
+
+class _NavGroup {
+  final String groupTitle;
+  final List<_NavItem> items;
+
+  const _NavGroup({required this.groupTitle, required this.items});
+}
+
 class MainAdminLayout extends StatefulWidget {
   const MainAdminLayout({super.key});
 
@@ -35,10 +74,81 @@ class MainAdminLayout extends StatefulWidget {
 
 class _MainAdminLayoutState extends State<MainAdminLayout> {
   int _selectedIndex = 0;
-  String _globalSearchQuery = "";
   bool _isSidebarCollapsed = false;
   DateTime _lastSyncTime = DateTime.now();
-  final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  final NumberFormat _compactCurrency = NumberFormat.compact(locale: 'en_US');
+  final NumberFormat _fullCurrency = NumberFormat('#,##0', 'en_US');
+
+  static const Color _sidebarBg = Color(0xFF0F172A);
+  static const Color _sidebarSurface = Color(0xFF1E293B);
+  static const Color _sidebarBorder = Color(0xFF1E293B);
+
+  final List<_NavGroup> _navGroups = const [
+    _NavGroup(
+      groupTitle: 'COMMAND & TREASURY',
+      items: [
+        _NavItem(index: 0, title: 'Executive Dashboard', category: 'Command Center', icon: Icons.space_dashboard_rounded),
+        _NavItem(index: 1, title: 'Manual Payouts Desk', category: 'Treasury', icon: Icons.outbox_rounded, badgeKey: 'payouts'),
+        _NavItem(index: 2, title: 'Deposits Clearing', category: 'Treasury', icon: Icons.move_to_inbox_rounded, badgeKey: 'deposits'),
+        _NavItem(index: 3, title: 'Outward Ledger', category: 'Treasury', icon: Icons.receipt_long_rounded),
+      ],
+    ),
+    _NavGroup(
+      groupTitle: 'CUSTOMERS & COMPLIANCE',
+      items: [
+        _NavItem(index: 4, title: 'Users Directory', category: 'Customers', icon: Icons.people_alt_rounded, badgeKey: 'users'),
+        _NavItem(index: 5, title: 'Biometric KYC Desk', category: 'Compliance', icon: Icons.verified_user_rounded, badgeKey: 'kyc'),
+        _NavItem(index: 6, title: 'Customer 360° Dossiers', category: 'Customers', icon: Icons.folder_shared_rounded),
+        _NavItem(index: 7, title: 'Closure Requests', category: 'Compliance', icon: Icons.person_off_rounded),
+        _NavItem(index: 8, title: 'Support Helpdesk', category: 'Operations', icon: Icons.support_agent_rounded, badgeKey: 'tickets'),
+      ],
+    ),
+    _NavGroup(
+      groupTitle: 'CREDIT, ROSCA & VAULTS',
+      items: [
+        _NavItem(index: 9, title: 'EasyCash Loans Desk', category: 'Credit', icon: Icons.account_balance_rounded, badgeKey: 'loans'),
+        _NavItem(index: 10, title: 'Digital Kameti ROSCA', category: 'ROSCA', icon: Icons.groups_rounded),
+        _NavItem(index: 11, title: 'Matured Savings Vaults', category: 'Vaults', icon: Icons.lock_clock_rounded),
+        _NavItem(index: 12, title: 'Takaful Claims Desk', category: 'Insurance', icon: Icons.health_and_safety_rounded),
+      ],
+    ),
+    _NavGroup(
+      groupTitle: 'MARKETS, BULLION & SHOP',
+      items: [
+        _NavItem(index: 13, title: 'US Stocks Brokerage', category: 'Equities', icon: Icons.candlestick_chart_rounded),
+        _NavItem(index: 14, title: '24K Gold Mint Dispatch', category: 'Bullion', icon: Icons.diamond_rounded),
+        _NavItem(index: 15, title: 'Gaming Vouchers Desk', category: 'Digital Fulfillment', icon: Icons.sports_esports_rounded, badgeKey: 'vouchers'),
+        _NavItem(index: 16, title: 'Forensic Audit Trail', category: 'Risk & Security', icon: Icons.policy_rounded),
+      ],
+    ),
+    _NavGroup(
+      groupTitle: 'SYSTEM CMS & GATEWAYS',
+      items: [
+        _NavItem(index: 17, title: 'Binance P2P Gateway', category: 'CMS', icon: Icons.currency_bitcoin_rounded),
+        _NavItem(index: 18, title: 'Bank Broadcast Notice', category: 'CMS', icon: Icons.campaign_rounded),
+        _NavItem(index: 19, title: 'Limits & SBP Compliance', category: 'CMS', icon: Icons.tune_rounded),
+        _NavItem(index: 20, title: 'Maintenance & Versioning', category: 'CMS', icon: Icons.system_security_update_rounded),
+        _NavItem(index: 21, title: 'Home Promo Banners', category: 'CMS', icon: Icons.view_carousel_rounded),
+        _NavItem(index: 22, title: 'Deposit Gateways (Banks)', category: 'CMS', icon: Icons.account_balance_wallet_rounded),
+        _NavItem(index: 23, title: 'Utility Biller Companies', category: 'CMS', icon: Icons.bolt_rounded),
+        _NavItem(index: 24, title: 'Telecom Packages Catalog', category: 'CMS', icon: Icons.signal_cellular_alt_rounded),
+        _NavItem(index: 25, title: 'Digital Shop Inventory', category: 'CMS', icon: Icons.vpn_key_rounded),
+        _NavItem(index: 26, title: 'Savings Tiers & Halal ROI', category: 'CMS', icon: Icons.savings_rounded),
+        _NavItem(index: 27, title: 'Takaful Plans & Policies', category: 'CMS', icon: Icons.shield_rounded),
+        _NavItem(index: 28, title: 'Referral Affiliate Engine', category: 'CMS', icon: Icons.share_rounded),
+        _NavItem(index: 29, title: 'Forex & 24K Gold Ticker', category: 'CMS', icon: Icons.currency_exchange_rounded),
+        _NavItem(index: 30, title: 'Admin Staff & RBAC Matrix', category: 'CMS', icon: Icons.admin_panel_settings_rounded),
+        _NavItem(index: 31, title: 'Security, 2FA & IP Shield', category: 'CMS', icon: Icons.security_rounded),
+        _NavItem(index: 32, title: 'System Audit Logs', category: 'CMS', icon: Icons.history_edu_rounded),
+      ],
+    ),
+  ];
+
+  List<_NavItem> get _allNavItems =>
+      _navGroups.expand((group) => group.items).toList();
 
   @override
   void initState() {
@@ -48,6 +158,12 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
     });
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Future<void> _refreshLiveLedger() async {
     await context.read<AdminProvider>().fetchAllData();
     if (mounted) {
@@ -55,126 +171,192 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
     }
   }
 
-  // Master Navigation Directory (All 22 Connected Desks & CMS Screens)
-  final List _navigationDirectory = [
-  // --- Section 1: Financial & Core Operations ---
-      {
-  'group': 'BANKING OPERATIONS',
-  'items': [
-  {'id': 0, 'title': 'Executive Dashboard', 'icon': Icons.space_dashboard_rounded, 'badge': 'LIVE'},
-  {'id': 1, 'title': 'Manual Payouts Desk', 'icon': Icons.send_and_archive, 'badge': 'PAYOUTS'},
-  {'id': 2, 'title': 'Users & KYC Directory', 'icon': Icons.people_alt_rounded, 'badge': 'USERS'},
-  {'id': 3, 'title': 'Deposits Clearing Queue', 'icon': Icons.move_to_inbox, 'badge': 'DEPOSITS'},
-  {'id': 4, 'title': 'Digital Kameti ROSCA', 'icon': Icons.groups_rounded, 'badge': 'KAMETI'},
-  {'id': 5, 'title': 'US Stocks Trading Desk', 'icon': Icons.trending_up, 'badge': 'MARKETS'},
-  ]
-  },
-  // --- Section 2: Platform Engine CMS ---
-      {
-  'group': 'CMS CONFIGURATIONS & GATEWAYS',
-  'items': [
-  {'id': 6, 'title': '18. Binance P2P Gateway', 'icon': Icons.toll_rounded, 'badge': 'CRYPTO'},
-  {'id': 7, 'title': '19. Bank Broadcast Notice', 'icon': Icons.campaign_rounded, 'badge': 'PUSH'},
-  {'id': 8, 'title': '20. Limits & SBP Compliance', 'icon': Icons.tune_rounded, 'badge': 'SBP'},
-  {'id': 9, 'title': '21. Maintenance & Versioning', 'icon': Icons.system_security_update_rounded, 'badge': 'SYSTEM'},
-  {'id': 10, 'title': '22. Home Promo Banners', 'icon': Icons.view_carousel_rounded, 'badge': 'UI'},
-  {'id': 11, 'title': '23. Deposit Gateways (Banks)', 'icon': Icons.account_balance_wallet_rounded, 'badge': 'BANK'},
-  {'id': 12, 'title': '24. Utility Biller Companies', 'icon': Icons.bolt_rounded, 'badge': 'BILLER'},
-  {'id': 13, 'title': '25. Telecom Packages Catalog', 'icon': Icons.signal_cellular_alt_rounded, 'badge': 'TELCO'},
-  {'id': 14, 'title': '26. Digital Shop Keys Vault', 'icon': Icons.vpn_key_rounded, 'badge': 'SHOP'},
-  {'id': 15, 'title': '27. Savings Plans & Halal ROI', 'icon': Icons.savings_rounded, 'badge': 'PLANS'},
-  {'id': 16, 'title': '28. Takaful Policies Desk', 'icon': Icons.health_and_safety_rounded, 'badge': 'INSURE'},
-  {'id': 17, 'title': '29. Referral Rewards Program', 'icon': Icons.share_rounded, 'badge': 'AFFILIATE'},
-  {'id': 18, 'title': '30. Currency & 24K Gold Ticker', 'icon': Icons.currency_exchange_rounded, 'badge': 'FOREX'},
-  {'id': 19, 'title': '31. Admin Staff & RBAC Matrix', 'icon': Icons.admin_panel_settings_rounded, 'badge': 'ROLES'},
-  {'id': 20, 'title': '32. Security, 2FA & IP Shield', 'icon': Icons.security_rounded, 'badge': 'FIREWALL'},
-  {'id': 21, 'title': '33. Forensic Audit Logs Trail', 'icon': Icons.history_edu_rounded, 'badge': 'AUDIT'},
-  ]
-  },
-  ];
+  Widget _buildActiveScreen(int index) {
+    switch (index) {
+      case 0:
+        return const DashboardDeskScreen();
+      case 1:
+        return const ManualPayoutsDeskScreen();
+      case 2:
+        return const DepositsDeskScreen();
+      case 3:
+        return const OutwardLedgerDeskScreen();
+      case 4:
+        return const UsersDirectoryDeskScreen();
+      case 5:
+        return const KycVerificationDeskScreen();
+      case 6:
+        return const CustomerDossierDeskScreen();
+      case 7:
+        return const ClosureRequestsDeskScreen();
+      case 8:
+        return const SupportTicketsDeskScreen();
+      case 9:
+        return const LoansDeskScreen();
+      case 10:
+        return const DigitalKametiDeskScreen();
+      case 11:
+        return const MaturedVaultsDeskScreen();
+      case 12:
+        return const TakafulClaimsDeskScreen();
+      case 13:
+        return const StocksTradingDeskScreen();
+      case 14:
+        return const GoldDispatchDeskScreen();
+      case 15:
+        return const GamingOrdersDeskScreen();
+      case 16:
+        return const AuditTrailDeskScreen();
+      case 17:
+        return const BinanceGatewayCmsScreen();
+      case 18:
+        return const BroadcastCmsScreen();
+      case 19:
+        return const SystemLimitsCmsScreen();
+      case 20:
+        return const MaintenanceUpdateCmsScreen();
+      case 21:
+        return const HomeBannersCmsScreen();
+      case 22:
+        return const DepositGatewaysCmsScreen();
+      case 23:
+        return const BillProvidersCmsScreen();
+      case 24:
+        return const TelecomPackagesCmsScreen();
+      case 25:
+        return const DigitalShopInventoryCmsScreen();
+      case 26:
+        return const SavingsTiersCmsScreen();
+      case 27:
+        return const TakafulPlansCmsScreen();
+      case 28:
+        return const ReferralsAffiliateCmsScreen();
+      case 29:
+        return const CurrencyRatesTickerCmsScreen();
+      case 30:
+        return const AdminRolesCmsScreen();
+      case 31:
+        return const SecurityIpWhitelistCmsScreen();
+      case 32:
+        return const AuditLogsCmsScreen();
+      default:
+        return const DashboardDeskScreen();
+    }
+  }
+
+  int _getBadgeCount(AdminProvider admin, String? badgeKey) {
+    if (badgeKey == null) return 0;
+    switch (badgeKey) {
+      case 'payouts':
+        return admin.payouts.where((p) => (p['status'] ?? '').toString().toUpperCase() == 'PENDING').length;
+      case 'deposits':
+        return admin.deposits.where((d) => (d['status'] ?? '').toString().toUpperCase() == 'PENDING').length;
+      case 'loans':
+        return admin.loans.where((l) => (l['status'] ?? '').toString().toUpperCase() == 'UNDER_REVIEW').length;
+      case 'tickets':
+        return admin.tickets.where((t) => (t['status'] ?? '').toString().toUpperCase() == 'OPEN').length;
+      case 'vouchers':
+        return admin.voucherOrders.where((v) => (v['status'] ?? '').toString().toUpperCase() == 'PENDING').length;
+      case 'kyc':
+        return admin.users.values
+            .where((u) => u is Map && (u['kycStatus'] ?? '').toString().toUpperCase() == 'PENDING' && u['isKycVerified'] != true)
+            .length;
+      case 'users':
+        return admin.users.length;
+      default:
+        return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 1100;
     final admin = context.watch<AdminProvider>();
+    final currentNav = _allNavItems.firstWhere(
+          (item) => item.index == _selectedIndex,
+      orElse: () => _allNavItems.first,
+    );
 
-    // Live Database Aggregations
-    final pendingPayouts = admin.payouts.where((p) => p['status'] == 'PENDING').toList();
-    final pendingDeposits = admin.deposits.where((d) => d['status'] == 'PENDING').toList();
-    final totalPendingPayoutAmount = pendingPayouts.fold<double>(
+    // Live Financial Aggregations
+    final pendingPayouts = admin.payouts
+        .where((p) => (p['status'] ?? '').toString().toUpperCase() == 'PENDING')
+        .toList();
+    final pendingDeposits = admin.deposits
+        .where((d) => (d['status'] ?? '').toString().toUpperCase() == 'PENDING')
+        .toList();
+    final pendingLoans = admin.loans
+        .where((l) => (l['status'] ?? '').toString().toUpperCase() == 'UNDER_REVIEW')
+        .toList();
+
+    final totalPendingPayoutAmt = pendingPayouts.fold<double>(
       0.0,
           (sum, item) => sum + (double.tryParse(item['amount']?.toString() ?? '0') ?? 0.0),
     );
-    final totalPendingDepositAmount = pendingDeposits.fold<double>(
+    final totalPendingDepositAmt = pendingDeposits.fold<double>(
       0.0,
           (sum, item) => sum + (double.tryParse(item['amount']?.toString() ?? '0') ?? 0.0),
     );
 
-    // Dynamic Pages Stack
-    final List<Widget> pages = [
-      _buildLiveOperationsDashboard(admin, pendingPayouts.length, pendingDeposits.length, totalPendingPayoutAmount, totalPendingDepositAmount),
-      _buildPlaceholderDesk("Manual Payouts Clearance Desk", Icons.send_and_archive, "${pendingPayouts.length} Withdrawal Requests Pending", AppConstants.dangerRed, admin),
-      _buildPlaceholderDesk("Users & Biometric KYC Directory", Icons.people_alt_rounded, "${admin.users.length} Registered Accounts In Ledger", AppConstants.accentBlue, admin),
-      _buildPlaceholderDesk("Deposits Settlement Desk", Icons.move_to_inbox, "${pendingDeposits.length} Payment Receipts Awaiting Clearance", AppConstants.accentGreen, admin),
-      _buildPlaceholderDesk("Digital Kameti ROSCA Ledger", Icons.groups_rounded, "Automated Monthly Pools Engine", AppConstants.accentGold, admin),
-      _buildPlaceholderDesk("Global US Stocks Brokerage Desk", Icons.trending_up, "Real-time Wall Street Settlement Bridge", AppConstants.accentBlue, admin),
-
-      // Integrated CMS Screens
-      const BinanceGatewayCmsScreen(),
-      const BroadcastCmsScreen(),
-      const SystemLimitsCmsScreen(),
-      const MaintenanceUpdateCmsScreen(),
-      const HomeBannersCmsScreen(),
-      const DepositGatewaysCmsScreen(),
-      const BillProvidersCmsScreen(),
-      const TelecomPackagesCmsScreen(),
-      const DigitalShopInventoryCmsScreen(),
-      const SavingsTiersCmsScreen(),
-      const TakafulPlansCmsScreen(),
-      const ReferralsAffiliateCmsScreen(),
-      const CurrencyRatesTickerCmsScreen(),
-      const AdminRolesCmsScreen(),
-      const SecurityIpWhitelistCmsScreen(),
-      const AuditLogsCmsScreen(),
-    ];
+    double totalSystemFloat = 0.0;
+    int verifiedUsersCount = 0;
+    admin.users.forEach((_, val) {
+      if (val is Map) {
+        totalSystemFloat += double.tryParse(val['balance']?.toString() ?? '0') ?? 0.0;
+        if (val['isKycVerified'] == true) verifiedUsersCount++;
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppConstants.background,
-      drawer: isDesktop ? null : Drawer(child: _buildSidebarContent(admin, pendingPayouts.length, pendingDeposits.length)),
+      drawer: isDesktop
+          ? null
+          : Drawer(
+        backgroundColor: _sidebarBg,
+        child: _buildSidebar(admin, isDrawer: true),
+      ),
       body: Row(
         children: [
-          // Collapsible Left Navigation Drawer (Desktop)
           if (isDesktop)
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: _isSidebarCollapsed ? 82 : 280,
-              decoration: BoxDecoration(
-                color: AppConstants.surface,
-                border: const Border(right: BorderSide(color: AppConstants.borderColor)),
-                boxShadow: AppConstants.cardShadow,
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              width: _isSidebarCollapsed ? 78 : 276,
+              decoration: const BoxDecoration(
+                color: _sidebarBg,
+                border: Border(right: BorderSide(color: _sidebarBorder)),
               ),
-              child: _buildSidebarContent(admin, pendingPayouts.length, pendingDeposits.length),
+              child: _buildSidebar(admin, isDrawer: false),
             ),
-
-          // Main Viewport
           Expanded(
-            child: Column(
+            child: Stack(
               children: [
-                // Top Light Navigation Bar with Global Search & Database Latency
-                _buildTopHeaderBar(context, admin, isDesktop),
-
-                // Live Financial Ticker Ribbon
-                _buildFinancialMetricRibbon(admin, pendingPayouts.length, pendingDeposits.length, totalPendingPayoutAmount, totalPendingDepositAmount),
-
-                // Active Workspace Screen
-                Expanded(
-                  child: Container(
-                    color: AppConstants.background,
-                    child: admin.isLoading
-                        ? const Center(child: CircularProgressIndicator(color: AppConstants.accentGreen))
-                        : pages[_selectedIndex],
-                  ),
+                Column(
+                  children: [
+                    _buildTopCommandBar(context, admin, currentNav, isDesktop),
+                    _buildExecutiveTickerBar(
+                      totalUsers: admin.users.length,
+                      verifiedUsers: verifiedUsersCount,
+                      totalFloat: totalSystemFloat,
+                      pendingPayoutsCount: pendingPayouts.length,
+                      pendingPayoutsAmt: totalPendingPayoutAmt,
+                      pendingDepositsCount: pendingDeposits.length,
+                      pendingDepositsAmt: totalPendingDepositAmt,
+                      pendingLoansCount: pendingLoans.length,
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: AppConstants.background,
+                        child: _buildActiveScreen(_selectedIndex),
+                      ),
+                    ),
+                  ],
                 ),
+                if (_searchQuery.isNotEmpty)
+                  Positioned(
+                    top: 66,
+                    left: isDesktop ? 24 : 16,
+                    child: _buildOmniSearchOverlay(admin),
+                  ),
               ],
             ),
           ),
@@ -183,14 +365,262 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
     );
   }
 
-  // Top Light Navigation Header
-  Widget _buildTopHeaderBar(BuildContext context, AdminProvider admin, bool isDesktop) {
+  Widget _buildSidebar(AdminProvider admin, {required bool isDrawer}) {
+    final collapsed = !isDrawer && _isSidebarCollapsed;
+
+    return Column(
+      children: [
+        // Brand Header
+        Container(
+          height: 68,
+          padding: EdgeInsets.symmetric(horizontal: collapsed ? 14 : 20),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: _sidebarBorder)),
+          ),
+          child: Row(
+            mainAxisAlignment: collapsed ? MainAxisAlignment.center : MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF10B981).withValues(alpha: 0.35),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: const Text(
+                  'N',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              if (!collapsed) ...[
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'NexPay Core',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'EXECUTIVE CONSOLE',
+                        style: TextStyle(
+                          color: Color(0xFF10B981),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // Navigation Tree
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+            itemCount: _navGroups.length,
+            itemBuilder: (context, gIndex) {
+              final group = _navGroups[gIndex];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!collapsed)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(12, gIndex == 0 ? 4 : 18, 12, 8),
+                      child: Text(
+                        group.groupTitle,
+                        style: const TextStyle(
+                          color: Color(0xFF64748B),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                    )
+                  else if (gIndex > 0)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      child: Divider(color: _sidebarSurface, height: 1),
+                    ),
+                  ...group.items.map((item) {
+                    final isSelected = _selectedIndex == item.index;
+                    final count = _getBadgeCount(admin, item.badgeKey);
+                    final isAlertBadge = item.badgeKey != null && item.badgeKey != 'users' && count > 0;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 3),
+                      child: Tooltip(
+                        message: collapsed ? item.title : '',
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = item.index;
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                            if (isDrawer) Navigator.of(context).pop();
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 160),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: collapsed ? 0 : 12,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? const Color(0xFF10B981).withValues(alpha: 0.16)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: isSelected
+                                    ? const Color(0xFF10B981).withValues(alpha: 0.45)
+                                    : Colors.transparent,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: collapsed
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  item.icon,
+                                  size: 19,
+                                  color: isSelected
+                                      ? const Color(0xFF34D399)
+                                      : const Color(0xFF94A3B8),
+                                ),
+                                if (!collapsed) ...[
+                                  const SizedBox(width: 11),
+                                  Expanded(
+                                    child: Text(
+                                      item.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : const Color(0xFFCBD5E1),
+                                        fontSize: 12.5,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  if (count > 0)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: isAlertBadge
+                                            ? const Color(0xFFEF4444)
+                                            : _sidebarSurface,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        '$count',
+                                        style: TextStyle(
+                                          color: isAlertBadge
+                                              ? Colors.white
+                                              : const Color(0xFF94A3B8),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              );
+            },
+          ),
+        ),
+
+        // Bottom Server Footer
+        Container(
+          padding: EdgeInsets.all(collapsed ? 10 : 14),
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: _sidebarBorder)),
+          ),
+          child: Row(
+            mainAxisAlignment: collapsed ? MainAxisAlignment.center : MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF10B981),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              if (!collapsed) ...[
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'smartvest.tech • SSL Active',
+                    style: TextStyle(
+                      color: Color(0xFF94A3B8),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTopCommandBar(
+      BuildContext context,
+      AdminProvider admin,
+      _NavItem currentNav,
+      bool isDesktop,
+      ) {
+    final formattedTime = DateFormat('hh:mm:ss a').format(_lastSyncTime);
+
     return Container(
-      height: 70,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
+      height: 68,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: const BoxDecoration(
         color: AppConstants.surface,
-        border: const Border(bottom: BorderSide(color: AppConstants.borderColor)),
+        border: Border(bottom: BorderSide(color: AppConstants.borderColor)),
       ),
       child: Row(
         children: [
@@ -206,83 +636,146 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
               icon: Icon(
                 _isSidebarCollapsed ? Icons.menu_open_rounded : Icons.menu_rounded,
                 color: AppConstants.textPrimary,
-                size: 22,
+                size: 21,
               ),
-              tooltip: _isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar",
+              tooltip: _isSidebarCollapsed ? 'Expand Navigation' : 'Collapse Navigation',
               onPressed: () => setState(() => _isSidebarCollapsed = !_isSidebarCollapsed),
             ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
+
+          // Active Module Breadcrumb
+          if (isDesktop) ...[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  currentNav.category.toUpperCase(),
+                  style: const TextStyle(
+                    color: AppConstants.accentGreen,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.9,
+                  ),
+                ),
+                Text(
+                  currentNav.title,
+                  style: const TextStyle(
+                    color: AppConstants.textPrimary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 24),
+          ],
 
           // Omni-Search Bar
           Expanded(
             child: Container(
-              height: 42,
-              constraints: const BoxConstraints(maxWidth: 480),
+              height: 40,
+              constraints: const BoxConstraints(maxWidth: 420),
               child: TextField(
-                style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
+                controller: _searchController,
+                style: const TextStyle(
+                  color: AppConstants.textPrimary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
                 decoration: InputDecoration(
-                  hintText: "Omni Search: Desks, Screens, User CNIC, TRX IDs...",
-                  hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-                  prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-                  suffixIcon: _globalSearchQuery.isNotEmpty
+                  hintText: 'Jump to any Desk, CMS, Customer Mobile or CNIC...',
+                  hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12),
+                  prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 19),
+                  suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
-                    icon: const Icon(Icons.clear, size: 16, color: AppConstants.textMuted),
-                    onPressed: () => setState(() => _globalSearchQuery = ""),
+                    icon: const Icon(Icons.close_rounded, size: 16, color: AppConstants.textMuted),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _searchQuery = '');
+                    },
                   )
                       : null,
                   filled: true,
                   fillColor: AppConstants.surfaceCard,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppConstants.accentGreen, width: 1.5)),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: AppConstants.borderColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: AppConstants.accentGreen, width: 1.5),
+                  ),
                 ),
-                onChanged: (val) => setState(() => _globalSearchQuery = val.trim().toLowerCase()),
+                onChanged: (val) => setState(() => _searchQuery = val.trim().toLowerCase()),
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
 
-          // Real-time Database Health Badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppConstants.accentGreenLight,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
+          // Live DB Status Pill
+          if (isDesktop)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: AppConstants.accentGreenLight,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: AppConstants.accentGreen,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                  Text(
+                    'LIVE DB • $formattedTime',
+                    style: const TextStyle(
+                      color: AppConstants.accentGreen,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Row(
-              children: [
-                const Text("●", style: TextStyle(color: AppConstants.accentGreen, fontSize: 12)),
-                const SizedBox(width: 6),
-                Text(
-                  "LIVE DB • ${DateFormat('hh:mm:ss a').format(_lastSyncTime)}",
-                  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 11),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
 
           // Sync Ledger Button
           OutlinedButton.icon(
+            onPressed: admin.isLoading ? null : _refreshLiveLedger,
             style: OutlinedButton.styleFrom(
               foregroundColor: AppConstants.textPrimary,
               side: const BorderSide(color: AppConstants.borderColor),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-            onPressed: _refreshLiveLedger,
-            icon: const Icon(Icons.sync_rounded, size: 16, color: AppConstants.accentGreen),
-            label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+            icon: admin.isLoading
+                ? const SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(strokeWidth: 2, color: AppConstants.accentGreen),
+            )
+                : const Icon(Icons.sync_rounded, size: 17, color: AppConstants.accentGreen),
+            label: Text(
+              admin.isLoading ? 'Syncing...' : 'Sync Ledger',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+            ),
           ),
           const SizedBox(width: 12),
 
-          // Operator Profile & Logout
+          // Logged-in Executive Profile Chip
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: AppConstants.surfaceCard,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppConstants.borderColor),
             ),
             child: Row(
@@ -290,28 +783,47 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
                 CircleAvatar(
                   radius: 14,
                   backgroundColor: AppConstants.accentGreen,
-                  child: const Text("A", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+                  child: Text(
+                    AppConstants.defaultAdminUser.substring(0, 1).toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                 ),
-                if (isDesktop && !_isSidebarCollapsed) ...[
-                  const SizedBox(width: 8),
-                  const Column(
+                if (isDesktop) ...[
+                  const SizedBox(width: 9),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("root_admin", style: TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.bold, fontSize: 12)),
-                      Text("Super Administrator", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5)),
+                      Text(
+                        AppConstants.defaultAdminUser,
+                        style: const TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const Text(
+                        'Executive Owner',
+                        style: TextStyle(
+                          color: AppConstants.textMuted,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ],
+                const SizedBox(width: 6),
                 IconButton(
-                  icon: const Icon(Icons.logout_rounded, size: 18, color: AppConstants.dangerRed),
-                  tooltip: "Sign Out",
-                  onPressed: () async {
-                    await context.read<AuthProvider>().logout();
-                    if (context.mounted) {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
-                    }
-                  },
+                  icon: const Icon(Icons.logout_rounded, size: 17, color: AppConstants.dangerRed),
+                  tooltip: 'Lock & Sign Out',
+                  constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
+                  padding: EdgeInsets.zero,
+                  onPressed: () => context.read<AuthProvider>().logout(),
                 ),
               ],
             ),
@@ -321,374 +833,260 @@ class _MainAdminLayoutState extends State<MainAdminLayout> {
     );
   }
 
-  // Live Financial Metric Ribbon
-  Widget _buildFinancialMetricRibbon(AdminProvider admin, int pendingPayoutsCount, int pendingDepositsCount, double pendingPayoutsVol, double pendingDepositsVol) {
+  Widget _buildExecutiveTickerBar({
+    required int totalUsers,
+    required int verifiedUsers,
+    required double totalFloat,
+    required int pendingPayoutsCount,
+    required double pendingPayoutsAmt,
+    required int pendingDepositsCount,
+    required double pendingDepositsAmt,
+    required int pendingLoansCount,
+  }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: const BoxDecoration(
         color: AppConstants.surface,
-        border: const Border(bottom: BorderSide(color: AppConstants.borderColor)),
+        border: Border(bottom: BorderSide(color: AppConstants.borderColor)),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            _buildMetricTile("TOTAL VERIFIED USERS", "${admin.users.length} Accounts", Icons.people_alt_rounded, AppConstants.accentBlue, AppConstants.accentBlueLight),
-            _buildMetricDivider(),
-            _buildMetricTile("PENDING PAYOUTS", "₨ ${_currencyFormat.format(pendingPayoutsVol)} ($pendingPayoutsCount Req)", Icons.output_rounded, AppConstants.dangerRed, AppConstants.dangerRedLight),
-            _buildMetricDivider(),
-            _buildMetricTile("DEPOSIT CLEARANCES", "₨ ${_currencyFormat.format(pendingDepositsVol)} ($pendingDepositsCount Req)", Icons.input_rounded, AppConstants.accentGreen, AppConstants.accentGreenLight),
-            _buildMetricDivider(),
-            _buildMetricTile("GATEWAY STATUS", "24/24 Operational", Icons.verified_rounded, AppConstants.accentGold, AppConstants.accentGoldLight),
+            _buildKpiChip(
+              icon: Icons.account_balance_wallet_rounded,
+              color: AppConstants.accentGreen,
+              bgColor: AppConstants.accentGreenLight,
+              label: 'TOTAL WALLET FLOAT',
+              value: 'Rs ${_fullCurrency.format(totalFloat)}',
+              onTap: () => setState(() => _selectedIndex = 0),
+            ),
+            const SizedBox(width: 12),
+            _buildKpiChip(
+              icon: Icons.people_alt_rounded,
+              color: AppConstants.accentBlue,
+              bgColor: AppConstants.accentBlueLight,
+              label: 'CUSTOMERS (KYC)',
+              value: '$totalUsers Total ($verifiedUsers Verified)',
+              onTap: () => setState(() => _selectedIndex = 4),
+            ),
+            const SizedBox(width: 12),
+            _buildKpiChip(
+              icon: Icons.outbox_rounded,
+              color: AppConstants.dangerRed,
+              bgColor: AppConstants.dangerRedLight,
+              label: 'PENDING PAYOUTS',
+              value: 'Rs ${_compactCurrency.format(pendingPayoutsAmt)} ($pendingPayoutsCount Req)',
+              onTap: () => setState(() => _selectedIndex = 1),
+            ),
+            const SizedBox(width: 12),
+            _buildKpiChip(
+              icon: Icons.move_to_inbox_rounded,
+              color: AppConstants.accentGreen,
+              bgColor: AppConstants.accentGreenLight,
+              label: 'DEPOSIT QUEUE',
+              value: 'Rs ${_compactCurrency.format(pendingDepositsAmt)} ($pendingDepositsCount Req)',
+              onTap: () => setState(() => _selectedIndex = 2),
+            ),
+            const SizedBox(width: 12),
+            _buildKpiChip(
+              icon: Icons.request_quote_rounded,
+              color: AppConstants.accentGold,
+              bgColor: AppConstants.accentGoldLight,
+              label: 'LOAN APPLICATIONS',
+              value: '$pendingLoansCount Under Review',
+              onTap: () => setState(() => _selectedIndex = 9),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMetricTile(String label, String value, IconData icon, Color color, Color bgColor) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
-          child: Icon(icon, size: 18, color: color),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(value, style: TextStyle(color: color, fontSize: 13.5, fontWeight: FontWeight.w900)),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMetricDivider() {
-    return Container(margin: const EdgeInsets.symmetric(horizontal: 20), width: 1, height: 28, color: AppConstants.borderColor);
-  }
-
-  // Light Sidebar Content
-  Widget _buildSidebarContent(AdminProvider admin, int pendingPayouts, int pendingDeposits) {
-    return Column(
-      children: [
-        // Brand Header
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppConstants.borderColor))),
-          child: Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFF059669), Color(0xFF10B981)]),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(color: const Color(0xFF059669).withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4)),
-                  ],
-                ),
-                child: const Center(child: Text("N", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 20))),
-              ),
-              if (!_isSidebarCollapsed) ...[
-                const SizedBox(width: 12),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("NexPay Admin", style: TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.w900, fontSize: 16)),
-                    Text("Fintech Console v2.5", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w600)),
-                  ],
-                ),
-              ],
-            ],
-          ),
-        ),
-
-        // Navigation Items Tree
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            children: _navigationDirectory.map((group) {
-              final items = (group['items'] as List).where((it) {
-                if (_globalSearchQuery.isEmpty) return true;
-                return it['title'].toString().toLowerCase().contains(_globalSearchQuery);
-              }).toList();
-
-              if (items.isEmpty) return const SizedBox.shrink();
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!_isSidebarCollapsed)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
-                      child: Text(
-                        group['group'],
-                        style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 0.6),
-                      ),
-                    ),
-                  ...items.map((item) {
-                    final int id = item['id'];
-                    final bool isSelected = _selectedIndex == id;
-
-                    // Counter badge calculation
-                    int badgeCount = 0;
-                    if (id == 1) badgeCount = pendingPayouts;
-                    if (id == 3) badgeCount = pendingDeposits;
-
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppConstants.accentGreenLight : Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: isSelected ? AppConstants.accentGreen.withValues(alpha: 0.4) : Colors.transparent),
-                      ),
-                      child: ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: _isSidebarCollapsed ? 12 : 12, vertical: 2),
-                        leading: Icon(
-                          item['icon'],
-                          size: 20,
-                          color: isSelected ? AppConstants.accentGreen : AppConstants.textMuted,
-                        ),
-                        title: _isSidebarCollapsed
-                            ? null
-                            : Text(
-                          item['title'],
-                          style: TextStyle(
-                            color: isSelected ? AppConstants.accentGreen : AppConstants.textPrimary,
-                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                            fontSize: 12.5,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: (!_isSidebarCollapsed && badgeCount > 0)
-                            ? Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: AppConstants.dangerRed,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text("$badgeCount", style: const TextStyle(color: Colors.white, fontSize: 10.5, fontWeight: FontWeight.bold)),
-                        )
-                            : null,
-                        onTap: () {
-                          setState(() => _selectedIndex = id);
-                          if (MediaQuery.of(context).size.width < 1100) {
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                    );
-                  }),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Screen 0: Executive Dashboard Desk
-  Widget _buildLiveOperationsDashboard(AdminProvider admin, int pendingPayouts, int pendingDeposits, double payoutsVol, double depositsVol) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Executive Operations Overview", style: TextStyle(color: AppConstants.textPrimary, fontSize: 22, fontWeight: FontWeight.w900)),
-                  SizedBox(height: 4),
-                  Text("Real-time telemetry showing live customer activities, pending clearances, and financial liquidity", style: TextStyle(color: AppConstants.textMuted, fontSize: 12.5)),
-                ],
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                onPressed: _refreshLiveLedger,
-                icon: const Icon(Icons.bolt_rounded, size: 18),
-                label: const Text("Run Ledger Audit", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Big Feature Cards
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionInsightCard(
-                  "Withdrawals Queue",
-                  "₨ ${_currencyFormat.format(payoutsVol)}",
-                  "$pendingPayouts requests waiting for treasury dispatch",
-                  Icons.send_and_archive,
-                  AppConstants.dangerRed,
-                  AppConstants.dangerRedLight,
-                      () => setState(() => _selectedIndex = 1),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildActionInsightCard(
-                  "Manual Deposits Clearance",
-                  "₨ ${_currencyFormat.format(depositsVol)}",
-                  "$pendingDeposits bank slips submitted by customers",
-                  Icons.move_to_inbox,
-                  AppConstants.accentGreen,
-                  AppConstants.accentGreenLight,
-                      () => setState(() => _selectedIndex = 3),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildActionInsightCard(
-                  "Registered User Base",
-                  "${admin.users.length} Verified Users",
-                  "Active Tier-1 & Tier-2 customer accounts",
-                  Icons.people_alt_rounded,
-                  AppConstants.accentBlue,
-                  AppConstants.accentBlueLight,
-                      () => setState(() => _selectedIndex = 2),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Operational Activity Feed
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: AppConstants.surface,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: AppConstants.borderColor),
-              boxShadow: AppConstants.cardShadow,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Latest Pending Withdrawals (Action Required)", style: TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.w900, fontSize: 15)),
-                    TextButton(onPressed: () => setState(() => _selectedIndex = 1), child: const Text("View All Payouts →", style: TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.bold))),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                if (admin.payouts.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Center(child: Text("All transactions cleared. Zero pending requests in queue.", style: TextStyle(color: AppConstants.textMuted, fontSize: 13))),
-                  )
-                else
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: admin.payouts.take(5).length,
-                    separatorBuilder: (_, __) => const Divider(color: AppConstants.borderColor, height: 16),
-                    itemBuilder: (ctx, idx) {
-                      final item = admin.payouts[idx];
-                      return Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(color: AppConstants.dangerRedLight, borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(Icons.arrow_upward_rounded, color: AppConstants.dangerRed, size: 18),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Customer: ${item['phone'] ?? item['userId'] ?? 'Account'}", style: const TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.w900, fontSize: 13.5)),
-                                Text("Channel: ${item['method'] ?? 'Bank Transfer'} • ${item['accountNumber'] ?? '-'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                              ],
-                            ),
-                          ),
-                          Text("₨ ${_currencyFormat.format(double.tryParse(item['amount']?.toString() ?? '0') ?? 0)}", style: const TextStyle(color: AppConstants.textPrimary, fontWeight: FontWeight.w900, fontSize: 15)),
-                        ],
-                      );
-                    },
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionInsightCard(String title, String mainValue, String subtitle, IconData icon, Color color, Color bgColor, VoidCallback onTap) {
+  Widget _buildKpiChip({
+    required IconData icon,
+    required Color color,
+    required Color bgColor,
+    required String label,
+    required String value,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: AppConstants.surface,
-          borderRadius: BorderRadius.circular(18),
+          color: AppConstants.background,
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppConstants.borderColor),
-          boxShadow: AppConstants.cardShadow,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 16, color: color),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5, fontWeight: FontWeight.w800)),
-                Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)), child: Icon(icon, size: 18, color: color)),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: AppConstants.textMuted,
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: color == AppConstants.dangerRed
+                        ? AppConstants.dangerRed
+                        : AppConstants.textPrimary,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 12),
-            Text(mainValue, style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.w900)),
-            const SizedBox(height: 6),
-            Text(subtitle, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPlaceholderDesk(String title, IconData icon, String subtitle, Color themeColor, AdminProvider admin) {
-    return Center(
+  Widget _buildOmniSearchOverlay(AdminProvider admin) {
+    final matchingModules = _allNavItems
+        .where((m) =>
+    m.title.toLowerCase().contains(_searchQuery) ||
+        m.category.toLowerCase().contains(_searchQuery))
+        .take(6)
+        .toList();
+
+    final matchingUsers = admin.users.entries.where((entry) {
+      final u = entry.value;
+      if (u is! Map) return false;
+      final name = (u['name'] ?? '').toString().toLowerCase();
+      final mobile = (u['mobile'] ?? entry.key).toString().toLowerCase();
+      final cnic = (u['cnic'] ?? '').toString().toLowerCase();
+      return name.contains(_searchQuery) ||
+          mobile.contains(_searchQuery) ||
+          cnic.contains(_searchQuery);
+    }).take(5).toList();
+
+    return Material(
+      elevation: 14,
+      borderRadius: BorderRadius.circular(14),
+      color: AppConstants.surface,
       child: Container(
-        padding: const EdgeInsets.all(32),
-        constraints: const BoxConstraints(maxWidth: 480),
+        width: 440,
+        constraints: const BoxConstraints(maxHeight: 420),
         decoration: BoxDecoration(
           color: AppConstants.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(color: AppConstants.borderColor),
-          boxShadow: AppConstants.cardShadow,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(12),
           children: [
-            Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: themeColor.withValues(alpha: 0.1), shape: BoxShape.circle), child: Icon(icon, size: 48, color: themeColor)),
-            const SizedBox(height: 18),
-            Text(title, textAlign: TextAlign.center, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 18, fontWeight: FontWeight.w900)),
-            const SizedBox(height: 6),
-            Text(subtitle, textAlign: TextAlign.center, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5)),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: themeColor, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-              onPressed: _refreshLiveLedger,
-              icon: const Icon(Icons.sync, size: 16),
-              label: const Text("Sync Live Records"),
-            ),
+            if (matchingModules.isNotEmpty) ...[
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Text(
+                  'MODULES & DESKS',
+                  style: TextStyle(
+                    color: AppConstants.textMuted,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              ...matchingModules.map((m) => ListTile(
+                dense: true,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                leading: Icon(m.icon, size: 18, color: AppConstants.accentGreen),
+                title: Text(
+                  m.title,
+                  style: const TextStyle(
+                    color: AppConstants.textPrimary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                subtitle: Text(
+                  m.category,
+                  style: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
+                ),
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = m.index;
+                    _searchQuery = '';
+                    _searchController.clear();
+                  });
+                },
+              )),
+            ],
+            if (matchingUsers.isNotEmpty) ...[
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Text(
+                  'MATCHING CUSTOMERS',
+                  style: TextStyle(
+                    color: AppConstants.textMuted,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              ...matchingUsers.map((entry) {
+                final u = entry.value as Map;
+                return ListTile(
+                  dense: true,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  leading: const Icon(Icons.person_rounded, size: 18, color: AppConstants.accentBlue),
+                  title: Text(
+                    '${u['name'] ?? 'User'} (${u['mobile'] ?? entry.key})',
+                    style: const TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Balance: Rs ${u['balance'] ?? 0} • CNIC: ${u['cnic'] ?? 'N/A'}',
+                    style: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 4; // Open Users Directory
+                      _searchQuery = '';
+                      _searchController.clear();
+                    });
+                  },
+                );
+              }),
+            ],
+            if (matchingModules.isEmpty && matchingUsers.isEmpty)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text(
+                    'No matching desk or customer found.',
+                    style: TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
