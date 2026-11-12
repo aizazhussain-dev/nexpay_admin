@@ -125,7 +125,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
                       style: TextStyle(
                         color: Color(0xFF0F172A),
                         fontSize: isDesktop ? 22 : 18,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -154,13 +154,13 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _showExportCsvDialog(context, admin),
                     icon: const Icon(Icons.download_rounded, size: 18),
-                    label: const Text("Export CSV Report", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Export CSV Report", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                 ],
               ),
@@ -236,7 +236,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -397,12 +397,12 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
   SizedBox(width: 8),
-  Text("Clear Audit Trail", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Clear Audit Trail", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: const Text(
@@ -412,12 +412,12 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () {
   Navigator.pop(ctx);
   _clearAuditLogs();
   },
-  child: const Text("Yes, Clear Logs", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Yes, Clear Logs", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -453,12 +453,12 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.table_chart_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Reconciliation Report (CSV)", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Reconciliation Report (CSV)", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: Column(
@@ -491,7 +491,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () {
   Clipboard.setData(ClipboardData(text: csvData));
   Navigator.pop(ctx);
@@ -503,7 +503,7 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
   );
   },
   icon: const Icon(Icons.copy_rounded, size: 16),
-  label: const Text("Copy CSV Data", style: TextStyle(fontWeight: FontWeight.w900)),
+  label: const Text("Copy CSV Data", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),

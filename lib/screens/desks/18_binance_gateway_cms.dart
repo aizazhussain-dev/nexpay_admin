@@ -93,7 +93,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -101,12 +101,12 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: Color(0xFFF3BA2F).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFF3BA2F).withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             "BINANCE PAY & TRC-20",
-                            style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 10, fontWeight: FontWeight.w900),
+                            style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -122,7 +122,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -134,7 +134,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                   );
                 },
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -163,7 +163,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: AppConstants.surface,
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Color(0xFFE2E8F0)),
                   ),
                   child: Column(
@@ -172,7 +172,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                       // Section 1: Depository Credentials
                       const Text(
                         "OFFICIAL CRYPTO RECEIVING DESTINATIONS",
-                        style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 11.5, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                        style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
                       ),
                       const SizedBox(height: 14),
 
@@ -239,7 +239,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                       // Section 2: Exchange Rates
                       const Text(
                         "SETTLEMENT PEG EXCHANGE RATES (PKR / USDT)",
-                        style: TextStyle(color: AppConstants.accentGreen, fontSize: 11.5, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                        style: TextStyle(color: AppConstants.accentGreen, fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
                       ),
                       const SizedBox(height: 14),
 
@@ -250,7 +250,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                             child: TextFormField(
                               controller: _depRateController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
+                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
                               decoration: InputDecoration(
                                 labelText: "DEPOSIT RATE (BUYING FROM USER)",
                                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -275,7 +275,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                             child: TextFormField(
                               controller: _wthRateController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
+                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
                               decoration: InputDecoration(
                                 labelText: "WITHDRAWAL RATE (SELLING TO USER)",
                                 labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -338,7 +338,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppConstants.accentGreen,
-                            foregroundColor: Color(0xFF021A13),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
                           onPressed: _isSaving ? null : () => _saveBinanceSettings(admin),
@@ -347,7 +347,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
                               : const Icon(Icons.save_rounded, size: 20),
                           label: Text(
                             _isSaving ? "Synchronizing Live Database..." : "Save & Enforce Binance Settings",
-                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                           ),
                         ),
                       ),
@@ -376,7 +376,7 @@ class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 17, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 17, fontWeight: FontWeight.w700)),
         ],
       ),
     );

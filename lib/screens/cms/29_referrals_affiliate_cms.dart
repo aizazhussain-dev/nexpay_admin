@@ -112,7 +112,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -121,7 +121,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                           decoration: BoxDecoration(
                             color: (isActive ? AppConstants.accentGreen : AppConstants.dangerRed)
                                 .withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (isActive ? AppConstants.accentGreen : AppConstants.dangerRed)
                                   .withValues(alpha: 0.3),
@@ -132,7 +132,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                             style: TextStyle(
                               color: isActive ? AppConstants.accentGreen : AppConstants.dangerRed,
                               fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -149,7 +149,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -161,7 +161,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                   );
                 },
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -245,7 +245,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Form(
@@ -261,7 +261,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                   style: TextStyle(
                     color: AppConstants.accentGreen,
                     fontSize: 12,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -288,7 +288,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                             style: TextStyle(
                               color: isActive ? Color(0xFF021A13) : AppConstants.textMuted,
                               fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -306,7 +306,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                             style: TextStyle(
                               color: !isActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                               fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -434,7 +434,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               style: TextStyle(
                 color: Color(0xFFA855F7),
                 fontSize: 11.5,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
                 letterSpacing: 0.8,
               ),
             ),
@@ -479,7 +479,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
                 onPressed: _isSaving ? null : () => _saveReferralProgram(admin),
@@ -488,7 +488,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                     : const Icon(Icons.save_rounded, size: 20),
                 label: Text(
                   _isSaving ? "Deploying Referral Program..." : "Save & Enforce Referral Program Live",
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ),
             ),
@@ -509,7 +509,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
@@ -520,7 +520,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
             children: [
               const Text(
                 "USER IN-APP PREVIEW",
-                style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
@@ -574,14 +574,14 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                     ),
                     Text(
                       "Earn ₨ ${_currencyFormat.format(inviterReward)}",
-                      style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 15),
+                      style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 15),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
                   title.isNotEmpty ? title : "Invite Friends & Family",
-                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 15),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 15),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -606,7 +606,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.accentGreen,
-                        foregroundColor: Color(0xFF021A13),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         visualDensity: VisualDensity.compact,
                       ),
@@ -648,7 +648,7 @@ class _ReferralsAffiliateCmsScreenState extends State<ReferralsAffiliateCmsScree
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );

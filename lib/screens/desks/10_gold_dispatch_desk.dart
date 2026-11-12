@@ -143,7 +143,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     style: TextStyle(
     color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w900,
+    fontWeight: FontWeight.w700,
     ),
     ),
     if (pendingCount > 0) ...[
@@ -152,12 +152,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
     decoration: BoxDecoration(
     color: AppConstants.accentGold.withValues(alpha: 0.15),
-    borderRadius: BorderRadius.circular(20),
+    borderRadius: BorderRadius.circular(12),
     border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
     ),
     child: Text(
     "$pendingCount TO SHIP",
-    style: const TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w900),
+    style: const TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w700),
     ),
     ),
     ],
@@ -174,13 +174,13 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Color(0xFF021A13),
+    foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
     onPressed: () => admin.fetchAllData(),
     icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
     ),
     ],
     ),
@@ -268,7 +268,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -283,7 +283,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -352,7 +352,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   const SizedBox(width: 4),
   Text(
   "${grams.toStringAsFixed(2)} g 24K",
-  style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 13.5),
+  style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 13.5),
   ),
   ],
   ),
@@ -390,13 +390,13 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
   onPressed: _isActionBusy ? null : () => _openDispatchDialog(context, o, admin),
   icon: const Icon(Icons.local_shipping_rounded, size: 14),
-  label: const Text("Dispatch", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5)),
+  label: const Text("Dispatch", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
   ),
   const SizedBox(width: 8),
   OutlinedButton.icon(
@@ -464,7 +464,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   children: [
   const Icon(Icons.workspace_premium_rounded, size: 16, color: Color(0xFFFBBF24)),
   const SizedBox(width: 4),
-  Text("${grams.toStringAsFixed(2)} g 24K Gold Ingot", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 14)),
+  Text("${grams.toStringAsFixed(2)} g 24K Gold Ingot", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 14)),
   ],
   ),
   _buildStatusBadge(isPending, isDispatched, isRejected),
@@ -495,13 +495,13 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(vertical: 10),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
   onPressed: _isActionBusy ? null : () => _openDispatchDialog(context, o, admin),
   icon: const Icon(Icons.local_shipping_rounded, size: 16),
-  label: const Text("Assign Courier Tracking", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12)),
+  label: const Text("Assign Courier Tracking", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
   ),
   ),
   const SizedBox(width: 8),
@@ -549,7 +549,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-  child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+  child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -574,12 +574,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.local_shipping_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Dispatch 24K Bullion", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Dispatch 24K Bullion", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: Column(
@@ -610,7 +610,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final tracking = trackingController.text.trim();
   if (tracking.isEmpty) return;
@@ -656,7 +656,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   if (mounted) setState(() => _isActionBusy = false);
   }
   },
-  child: const Text("Dispatch & Send Tracking", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Dispatch & Send Tracking", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -674,12 +674,12 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
   SizedBox(width: 8),
-  Text("Reject Bullion Order", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Reject Bullion Order", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: Text(
@@ -692,7 +692,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _isActionBusy = true);
@@ -736,7 +736,7 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
   if (mounted) setState(() => _isActionBusy = false);
   }
   },
-  child: const Text("Reject & Refund Funds", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Reject & Refund Funds", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),

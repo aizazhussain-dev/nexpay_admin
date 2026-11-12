@@ -142,7 +142,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -150,7 +150,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: (_enforceIpWhitelist ? AppConstants.dangerRed : AppConstants.accentGreen).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (_enforceIpWhitelist ? AppConstants.dangerRed : AppConstants.accentGreen).withValues(alpha: 0.3),
                             ),
@@ -160,7 +160,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                             style: TextStyle(
                               color: _enforceIpWhitelist ? AppConstants.dangerRed : AppConstants.accentGreen,
                               fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -181,17 +181,17 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openAddEditIpDialog(context, null, admin),
                     icon: const Icon(Icons.add_moderator_rounded, size: 18),
-                    label: const Text("Authorize New IP", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Authorize New IP", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -290,7 +290,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   padding: const EdgeInsets.all(22),
   decoration: BoxDecoration(
   color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(20),
+  borderRadius: BorderRadius.circular(12),
   border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Form(
@@ -307,7 +307,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   style: TextStyle(
   color: AppConstants.accentGreen,
   fontSize: 12.5,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   letterSpacing: 0.8,
   ),
   ),
@@ -406,7 +406,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
   onPressed: _isSaving ? null : () => _saveSecurityPolicy(admin),
@@ -415,7 +415,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
       : const Icon(Icons.shield_rounded, size: 20),
   label: Text(
   _isSaving ? "Deploying Security Rules..." : "Save & Enforce Security Policy",
-  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13.5),
+  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5),
   ),
   ),
   ),
@@ -431,7 +431,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   padding: const EdgeInsets.all(22),
   decoration: BoxDecoration(
   color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(20),
+  borderRadius: BorderRadius.circular(12),
   border: Border.all(color: Color(0xFFE2E8F0)),
   ),
   child: Column(
@@ -449,7 +449,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   style: TextStyle(
   color: AppConstants.accentBlue,
   fontSize: 12.5,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   letterSpacing: 0.8,
   ),
   ),
@@ -522,7 +522,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   style: const TextStyle(
   color: Color(0xFF0F172A),
   fontFamily: 'monospace',
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   fontSize: 13,
   ),
   ),
@@ -600,7 +600,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   children: [
   Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
   const SizedBox(height: 6),
-  Text(value, style: TextStyle(color: color, fontSize: 15.5, fontWeight: FontWeight.w900)),
+  Text(value, style: TextStyle(color: color, fontSize: 15.5, fontWeight: FontWeight.w700)),
   ],
   ),
   );
@@ -615,8 +615,8 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
-  title: const Text("Authorize IP / Subnet", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  title: const Text("Authorize IP / Subnet", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   content: Column(
   mainAxisSize: MainAxisSize.min,
   children: [
@@ -650,7 +650,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final ip = ipController.text.trim();
   final label = labelController.text.trim();
@@ -669,7 +669,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   final updated = List.from(_whitelistedIps)..add(newEntry);
   await _saveIpsList(updated, admin);
   },
-  child: const Text("Authorize Node", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Authorize Node", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -695,12 +695,12 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Remove Authorized IP?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Remove Authorized IP?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: Text("Kya aap waqai node ${item['ipAddress']} (${item['label']}) ki console access revoke karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updated = List.from(_whitelistedIps)

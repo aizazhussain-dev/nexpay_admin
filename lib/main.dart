@@ -22,42 +22,144 @@ class NexPayAdminApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AdminProvider()..fetchAllData()),
       ],
       child: MaterialApp(
-        title: 'NexPay Executive Console',
+        title: 'NexPay Core — Institutional Admin Console',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          useMaterial3: true,
           brightness: Brightness.light,
           scaffoldBackgroundColor: AppConstants.background,
           primaryColor: AppConstants.accentGreen,
-          fontFamily: 'Inter',
+          fontFamily: 'Segoe UI',
+          colorScheme: const ColorScheme.light(
+            primary: AppConstants.accentGreen,
+            onPrimary: Colors.white,
+            secondary: AppConstants.accentBlue,
+            onSecondary: Colors.white,
+            surface: AppConstants.surface,
+            onSurface: AppConstants.textPrimary,
+            error: AppConstants.dangerRed,
+          ),
           appBarTheme: const AppBarTheme(
             backgroundColor: AppConstants.surface,
             elevation: 0,
-            iconTheme: IconThemeData(color: AppConstants.textPrimary),
+            scrolledUnderElevation: 0,
+            iconTheme: IconThemeData(color: AppConstants.textPrimary, size: 20),
             titleTextStyle: TextStyle(
               color: AppConstants.textPrimary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
               fontSize: 16,
+              letterSpacing: -0.2,
             ),
           ),
           cardTheme: CardThemeData(
             color: AppConstants.surface,
             elevation: 0,
+            margin: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppConstants.borderColor),
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppConstants.borderColor, width: 1),
             ),
           ),
-          colorScheme: const ColorScheme.light(
-            primary: AppConstants.accentGreen,
-            surface: AppConstants.surface,
-            onSurface: AppConstants.textPrimary,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppConstants.accentGreen,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.1,
+              ),
+            ),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.textPrimary,
+              backgroundColor: AppConstants.surface,
+              side: const BorderSide(color: AppConstants.borderStrong, width: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: AppConstants.surface,
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            labelStyle: const TextStyle(
+              color: AppConstants.textMuted,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+            hintStyle: const TextStyle(
+              color: AppConstants.textLight,
+              fontSize: 13,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppConstants.borderStrong),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppConstants.borderStrong),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppConstants.accentGreen, width: 1.5),
+            ),
+          ),
+          dataTableTheme: DataTableThemeData(
+            headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
+            dataRowColor: WidgetStateProperty.all(AppConstants.surface),
+            dividerThickness: 1,
+            headingTextStyle: const TextStyle(
+              color: AppConstants.textSecondary,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+            dataTextStyle: const TextStyle(
+              color: AppConstants.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          dialogTheme: DialogThemeData(
+            backgroundColor: AppConstants.surface,
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: const BorderSide(color: AppConstants.borderColor),
+            ),
+            titleTextStyle: const TextStyle(
+              color: AppConstants.textPrimary,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          dividerTheme: const DividerThemeData(
+            color: AppConstants.borderColor,
+            thickness: 1,
+            space: 1,
           ),
         ),
         home: Consumer<AuthProvider>(
           builder: (context, auth, _) {
             if (auth.isLoading) {
               return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
+                body: Center(
+                  child: CircularProgressIndicator(color: AppConstants.accentGreen),
+                ),
               );
             }
             if (auth.isAuthenticated) {

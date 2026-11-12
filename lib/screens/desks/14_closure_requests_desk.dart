@@ -112,7 +112,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (pendingCount > 0) ...[
@@ -121,12 +121,12 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppConstants.dangerRed.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$pendingCount TO AUDIT",
-                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -143,7 +143,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -152,7 +152,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                   admin.fetchAllData();
                 },
                 icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -242,7 +242,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -257,7 +257,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -331,7 +331,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                             "₨ ${_currencyFormat.format(currentBal)}",
                             style: TextStyle(
                               color: hasFunds ? AppConstants.dangerRed : AppConstants.accentGreen,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                               fontSize: 13.5,
                             ),
                           ),
@@ -360,14 +360,14 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.dangerRed,
-                              foregroundColor: Color(0xFF0F172A),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: _isActionBusy
                                 ? null
                                 : () => _confirmClosureDecision(context, id, mobile, 'APPROVE', currentBal, name, admin),
-                            child: const Text("🗑 Terminate", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5)),
+                            child: const Text("🗑 Terminate", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
@@ -458,7 +458,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                         "₨ ${_currencyFormat.format(currentBal)}",
                         style: TextStyle(
                           color: hasFunds ? AppConstants.dangerRed : AppConstants.accentGreen,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
                       ),
@@ -481,7 +481,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.dangerRed,
-                          foregroundColor: Color(0xFF0F172A),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -489,7 +489,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                             ? null
                             : () => _confirmClosureDecision(context, id, mobile, 'APPROVE', currentBal, name, admin),
                         icon: const Icon(Icons.delete_forever_rounded, size: 16),
-                        label: const Text("Terminate Account", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12)),
+                        label: const Text("Terminate Account", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -539,7 +539,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -569,12 +569,12 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(isApprove ? Icons.delete_forever_rounded : Icons.cancel_rounded, color: isApprove ? AppConstants.dangerRed : AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text(isApprove ? "PERMANENT TERMINATION" : "Reject Closure Request", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(isApprove ? "PERMANENT TERMINATION" : "Reject Closure Request", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Column(
@@ -666,7 +666,7 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
                 if (mounted) setState(() => _isActionBusy = false);
               }
             },
-            child: Text(isApprove ? "Yes, Terminate Account" : "Yes, Reject Request", style: const TextStyle(fontWeight: FontWeight.w900)),
+            child: Text(isApprove ? "Yes, Terminate Account" : "Yes, Reject Request", style: const TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),

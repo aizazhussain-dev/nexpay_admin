@@ -64,7 +64,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (pendingCount > 0) ...[
@@ -73,12 +73,12 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppConstants.accentGold.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$pendingCount PENDING REVIEW",
-                              style: const TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -95,13 +95,13 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () => admin.fetchAllData(),
                 icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -176,7 +176,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -236,7 +236,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                     DataCell(
                       Text(
                         "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 14),
+                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
                       ),
                     ),
                     DataCell(
@@ -257,7 +257,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.surfaceCard,
-                          foregroundColor: Color(0xFF0F172A),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
@@ -275,12 +275,12 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Color(0xFF021A13),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: () => _confirmDepositDecision(context, id, true, amount, d['user_name'] ?? 'Customer', admin),
-                            child: const Text("✓ Approve", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5)),
+                            child: const Text("✓ Approve", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
@@ -373,7 +373,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                   ),
                   Text(
                     "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 17),
+                    style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 17),
                   ),
                 ],
               ),
@@ -401,12 +401,12 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Color(0xFF021A13),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         onPressed: () => _confirmDepositDecision(context, id, true, amount, d['user_name'] ?? 'Customer', admin),
-                        child: const Text("Approve & Credit", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
+                        child: const Text("Approve & Credit", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -450,7 +450,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -470,12 +470,12 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(approved ? Icons.verified_rounded : Icons.cancel_rounded, color: approved ? AppConstants.accentGreen : AppConstants.dangerRed),
             const SizedBox(width: 8),
-            Text(approved ? "Approve Deposit" : "Reject Deposit", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(approved ? "Approve Deposit" : "Reject Deposit", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -508,7 +508,7 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
                 );
               }
             },
-            child: Text(approved ? "Yes, Approve & Credit" : "Yes, Reject", style: const TextStyle(fontWeight: FontWeight.w900)),
+            child: Text(approved ? "Yes, Approve & Credit" : "Yes, Reject", style: const TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -583,7 +583,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
     return Dialog(
       backgroundColor: AppConstants.surface,
       insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Color(0xFFE2E8F0))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 680, maxHeight: 800),
         padding: const EdgeInsets.all(20),
@@ -596,7 +596,7 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Payment Receipt Proof #${widget.depositId}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
+                    Text("Payment Receipt Proof #${widget.depositId}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16)),
                     const SizedBox(height: 2),
                     Text("${widget.customerName} • ₨ ${widget.amount.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGreen, fontSize: 12, fontWeight: FontWeight.bold)),
                   ],

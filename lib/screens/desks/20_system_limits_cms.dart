@@ -141,7 +141,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -149,14 +149,14 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: AppConstants.accentGreen.withValues(alpha: 0.3),
                             ),
                           ),
                           child: const Text(
                             "SBP COMPLIANT",
-                            style: TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w900),
+                            style: TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -187,7 +187,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -199,7 +199,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                       );
                     },
                     icon: const Icon(Icons.sync_rounded, size: 18),
-                    label: const Text("Sync Memory", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Sync Memory", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                 ],
               ),
@@ -257,7 +257,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Color(0xFF021A13),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
                         onPressed: _isSaving ? null : () => _saveLimits(admin),
@@ -266,7 +266,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                             : const Icon(Icons.save_rounded, size: 20),
                         label: Text(
                           _isSaving ? "Enforcing System Limits..." : "Save & Enforce System Limits Across All Terminals",
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                       ),
                     ),
@@ -286,7 +286,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
       ),
       child: Column(
@@ -299,11 +299,11 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.amber.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(
                   "TIER-1 (BASIC ACCOUNTS)",
-                  style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w900, fontSize: 11),
+                  style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w700, fontSize: 11),
                 ),
               ),
               const Text("Unverified / Basic", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
@@ -347,7 +347,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.4), width: 1.5),
       ),
       child: Column(
@@ -360,11 +360,11 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(
                   "TIER-2 (BIOMETRIC / VIP)",
-                  style: TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 11),
+                  style: TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 11),
                 ),
               ),
               const Text("CNIC Biometric Verified", style: TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.bold, fontSize: 11)),
@@ -408,7 +408,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
@@ -416,7 +416,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
         children: [
           const Text(
             "💰 SURCHARGES & SERVICE HANDLING FEES",
-            style: TextStyle(color: AppConstants.accentGold, fontSize: 11.5, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+            style: TextStyle(color: AppConstants.accentGold, fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
           ),
           const SizedBox(height: 16),
           Row(
@@ -491,7 +491,7 @@ class _SystemLimitsCmsScreenState extends State<SystemLimitsCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );

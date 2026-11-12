@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  // --- Modern Fintech Light Mode Palette ---
+  // --- Institutional Fintech Surface Palette (Stripe / Mercury Style) ---
   static const Color background = Color(0xFFF8FAFC);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceCard = Color(0xFFF1F5F9);
-  static const Color bgDark = Color(0xFFF8FAFC);
+  static const Color bgDark = Color(0xFF0F172A);
   static const Color borderColor = Color(0xFFE2E8F0);
+  static const Color borderStrong = Color(0xFFCBD5E1);
 
-  // --- Typography Colors ---
+  // --- Executive Typography Colors ---
   static const Color textPrimary = Color(0xFF0F172A);
+  static const Color textSecondary = Color(0xFF334155);
   static const Color textMuted = Color(0xFF64748B);
   static const Color textLight = Color(0xFF94A3B8);
 
-  // --- Fintech Brand Accents ---
+  // --- Refined Fintech Accents ---
   static const Color accentGreen = Color(0xFF059669);
-  static const Color accentGreenLight = Color(0xFFD1FAE5);
-  static const Color accentBlue = Color(0xFF2563EB);
-  static const Color accentBlueLight = Color(0xFFDBEAFE);
-  static const Color accentGold = Color(0xFFD97706);
-  static const Color accentGoldLight = Color(0xFFFEF3C7);
+  static const Color accentGreenLight = Color(0xFFECFDF5);
+  static const Color accentBlue = Color(0xFF1D4ED8);
+  static const Color accentBlueLight = Color(0xFFEFF6FF);
+  static const Color accentGold = Color(0xFFB45309);
+  static const Color accentGoldLight = Color(0xFFFFFBEB);
   static const Color dangerRed = Color(0xFFDC2626);
-  static const Color dangerRedLight = Color(0xFFFEE2E2);
+  static const Color dangerRedLight = Color(0xFFFEF2F2);
 
   // --- Live Hostinger API & Auth Credentials ---
   static const String baseUrl = "https://smartvest.tech";
@@ -34,12 +36,12 @@ class AppConstants {
   static const String defaultAdminUser = "aizaz_admin";
   static const String defaultAdminPass = "NexPay@2026";
 
-  // --- Shadows ---
+  // --- Subtle Institutional Elevation ---
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
-      color: const Color(0xFF0F172A).withValues(alpha: 0.04),
-      blurRadius: 10,
-      offset: const Offset(0, 4),
+      color: const Color(0xFF0F172A).withValues(alpha: 0.03),
+      blurRadius: 8,
+      offset: const Offset(0, 2),
     ),
   ];
 }

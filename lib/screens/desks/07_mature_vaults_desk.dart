@@ -98,7 +98,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     style: TextStyle(
     color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w900,
+    fontWeight: FontWeight.w700,
     ),
     ),
     const SizedBox(height: 4),
@@ -112,13 +112,13 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Color(0xFF021A13),
+    foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
     onPressed: () => admin.fetchAllData(),
     icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
     ),
     ],
     ),
@@ -195,7 +195,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -258,7 +258,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   DataCell(
   Text(
   "₨ ${_currencyFormat.format(amt)}",
-  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 14),
+  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
   ),
   ),
   DataCell(
@@ -266,7 +266,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text("${pt['rate']}% p.a.", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w900, fontSize: 13)),
+  Text("${pt['rate']}% p.a.", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 13)),
   Text("+₨ ${_currencyFormat.format(profit)} Profit", style: const TextStyle(color: AppConstants.accentGreen, fontSize: 11, fontWeight: FontWeight.bold)),
   ],
   ),
@@ -285,14 +285,14 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   borderRadius: BorderRadius.circular(10),
   border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
   ),
-  child: const Text("ACTIVE VAULT", style: TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w900)),
+  child: const Text("ACTIVE VAULT", style: TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w700)),
   ),
   ),
   DataCell(
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -300,7 +300,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   icon: const Icon(Icons.paid_rounded, size: 14),
   label: Text(
   "Release (₨ ${_currencyFormat.format(totalPayout)})",
-  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5),
+  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
   ),
   ),
   ),
@@ -344,7 +344,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   color: Colors.amber.withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(8),
   ),
-  child: const Text("ACTIVE VAULT", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w900, fontSize: 10)),
+  child: const Text("ACTIVE VAULT", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w700, fontSize: 10)),
   ),
   ],
   ),
@@ -358,14 +358,14 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
   const Text("Principal Invested", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-  Text("₨ ${_currencyFormat.format(amt)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 15)),
+  Text("₨ ${_currencyFormat.format(amt)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 15)),
   ],
   ),
   Column(
   crossAxisAlignment: CrossAxisAlignment.end,
   children: [
   Text("Accrued Shariah Profit (${pt['rate']}%)", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-  Text("+₨ ${_currencyFormat.format(profit)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w900, fontSize: 15)),
+  Text("+₨ ${_currencyFormat.format(profit)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 15)),
   ],
   ),
   ],
@@ -378,7 +378,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(vertical: 10),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   ),
@@ -386,7 +386,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   icon: const Icon(Icons.paid_rounded, size: 16),
   label: Text(
   "Disburse Full Matured Payout (₨ ${_currencyFormat.format(totalPayout)})",
-  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5),
+  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5),
   ),
   ),
   ),
@@ -409,12 +409,12 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.monetization_on_rounded, color: AppConstants.accentGreen),
   SizedBox(width: 8),
-  Text("Disburse Matured Vault", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Disburse Matured Vault", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: Text(
@@ -430,7 +430,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _isSettling = true);
@@ -518,7 +518,7 @@ class _MaturedVaultsDeskScreenState extends State<MaturedVaultsDeskScreen> {
   if (mounted) setState(() => _isSettling = false);
   }
   },
-  child: const Text("Disburse Matured Payout", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Disburse Matured Payout", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),

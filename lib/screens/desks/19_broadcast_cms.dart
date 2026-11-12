@@ -100,7 +100,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -108,7 +108,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: (isActive ? AppConstants.accentGreen : AppConstants.dangerRed).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (isActive ? AppConstants.accentGreen : AppConstants.dangerRed).withValues(alpha: 0.3),
                             ),
@@ -118,7 +118,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                             style: TextStyle(
                               color: isActive ? AppConstants.accentGreen : AppConstants.dangerRed,
                               fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -135,7 +135,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -147,7 +147,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   );
                 },
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -216,7 +216,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Form(
@@ -232,7 +232,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   style: TextStyle(
                     color: Color(0xFFA855F7),
                     fontSize: 12,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -259,7 +259,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                             style: TextStyle(
                               color: isActive ? Color(0xFF021A13) : AppConstants.textMuted,
                               fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -277,7 +277,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                             style: TextStyle(
                               color: !isActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                               fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -378,7 +378,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                   _isSaving
                       ? "Deploying Announcement..."
                       : (isActive ? "Publish Bank Announcement Live" : "Save Changes (Notice Disabled)"),
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ),
             ),
@@ -397,7 +397,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
@@ -408,7 +408,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
             children: [
               const Text(
                 "CUSTOMER APP PREVIEW",
-                style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
@@ -463,7 +463,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
                     Expanded(
                       child: Text(
                         title.isNotEmpty ? title : "Bank Announcement Title",
-                        style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13.5),
+                        style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13.5),
                       ),
                     ),
                   ],
@@ -522,7 +522,7 @@ class _BroadcastCmsScreenState extends State<BroadcastCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 15, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 15, fontWeight: FontWeight.w700)),
         ],
       ),
     );

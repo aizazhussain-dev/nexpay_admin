@@ -201,7 +201,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -209,12 +209,12 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: Color(0xFFA855F7).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             "$totalKeysInVault KEYS IN VAULT",
-                            style: const TextStyle(color: Color(0xFFA855F7), fontSize: 10, fontWeight: FontWeight.w900),
+                            style: const TextStyle(color: Color(0xFFA855F7), fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -234,17 +234,17 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openAddEditProductDialog(context, null, admin),
                     icon: const Icon(Icons.add_shopping_cart_rounded, size: 18),
-                    label: const Text("Add New Product", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Add New Product", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -352,7 +352,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -367,7 +367,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -385,7 +385,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 11,
       ),
       side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
@@ -473,7 +473,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   children: [
   Text(
   "₨ ${_currencyFormat.format(price)}",
-  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 13.5),
+  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 13.5),
   ),
   Text("Pass: $validity", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
   ],
@@ -495,7 +495,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   isOutOfStock ? "0 (OUT OF STOCK)" : "${keys.length} Ready Keys",
   style: TextStyle(
   color: isOutOfStock ? AppConstants.dangerRed : Color(0xFFA855F7),
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   fontSize: 11,
   ),
   ),
@@ -504,7 +504,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.surfaceCard,
-  foregroundColor: Color(0xFF0F172A),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -587,7 +587,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   children: [
   Text(icon, style: const TextStyle(fontSize: 20)),
   const SizedBox(width: 8),
-  Text(p['name'] ?? 'Product', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(p['name'] ?? 'Product', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14.5)),
   ],
   ),
   _buildStatusBadge(isActive, isOutOfStock),
@@ -598,7 +598,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
   _buildCategoryBadge(cat),
-  Text("₨ ${_currencyFormat.format(price)} ($validity)", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 14)),
+  Text("₨ ${_currencyFormat.format(price)} ($validity)", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14)),
   ],
   ),
   const SizedBox(height: 6),
@@ -656,7 +656,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   color: color.withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(8),
   ),
-  child: Text(cat, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w900)),
+  child: Text(cat, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -682,7 +682,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-  child: Text(label, style: TextStyle(color: text, fontSize: 10, fontWeight: FontWeight.w900)),
+  child: Text(label, style: TextStyle(color: text, fontSize: 10, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -701,7 +701,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setModalState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -713,7 +713,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   Expanded(
   child: Text(
   "Vault: ${product['name']}",
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 17),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 17),
   overflow: TextOverflow.ellipsis,
   ),
   ),
@@ -741,7 +741,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   children: [
   const Text(
   "ADD BATCH KEYS (PASTE ONE KEY / CREDENTIAL PER LINE)",
-  style: TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w900),
+  style: TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w700),
   ),
   const SizedBox(height: 6),
   TextField(
@@ -762,7 +762,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   child: ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Color(0xFF021A13),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(vertical: 10),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   ),
@@ -782,7 +782,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   });
   },
   icon: const Icon(Icons.add_circle_outline_rounded, size: 16),
-  label: const Text("Load Keys into Vault", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12)),
+  label: const Text("Load Keys into Vault", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
   ),
   ),
   const Divider(color: Color(0xFFE2E8F0), height: 24),
@@ -857,7 +857,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
 
@@ -868,7 +868,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   await _saveProductsList(updatedList, admin);
   }
   },
-  child: const Text("Save Vault Keys", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save Vault Keys", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -894,10 +894,10 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Product: ${existing['name']}" : "Add Digital Shop Product",
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -1059,7 +1059,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final name = nameController.text.trim();
   final price = double.tryParse(priceController.text.trim()) ?? 0.0;
@@ -1089,7 +1089,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
 
   await _saveProductsList(updatedList, admin);
   },
-  child: const Text("Save Product Live", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save Product Live", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -1116,12 +1116,12 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Delete Product?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Delete Product?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: Text("Kya aap waqai \"${p['name']}\" aur iske tamam vault keys ko inventory se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_productsList);

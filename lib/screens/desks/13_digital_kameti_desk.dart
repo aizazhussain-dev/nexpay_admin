@@ -111,7 +111,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (runningPools > 0) ...[
@@ -120,12 +120,12 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$runningPools ACTIVE COMMITTEES",
-                              style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -146,17 +146,17 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openCreatePoolDialog(context),
                     icon: const Icon(Icons.add_circle_rounded, size: 18),
-                    label: const Text("Launch New Pool", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Launch New Pool", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -258,7 +258,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -273,7 +273,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -349,7 +349,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                     DataCell(
                       Text(
                         "₨ ${_currencyFormat.format(qist)}",
-                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 14),
+                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
                       ),
                     ),
                     DataCell(
@@ -357,7 +357,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("₨ ${_currencyFormat.format(grossPot)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 13)),
+                          Text("₨ ${_currencyFormat.format(grossPot)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 13)),
                           Text("Net: ₨ ${_currencyFormat.format(netPayout)} (1.5% Fee)", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
                         ],
                       ),
@@ -400,7 +400,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.surfaceCard,
-                              foregroundColor: Color(0xFF0F172A),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             ),
@@ -433,7 +433,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                                   : () => _confirmReleasePot(context, poolId, p['title'] ?? 'Kameti', winnerMob, winnerName, netPayout, isCollectionComplete, totalMembers - paidCount),
                               child: Text(
                                 isCollectionComplete ? "Release Pot" : "Deficit (${totalMembers - paidCount} Due)",
-                                style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
                               ),
                             ),
                           ],
@@ -504,14 +504,14 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("Monthly Qist", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text("₨ ${_currencyFormat.format(qist)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w900, fontSize: 15)),
+                      Text("₨ ${_currencyFormat.format(qist)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 15)),
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text("Net Pot Release", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text("₨ ${_currencyFormat.format(netPayout)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 15)),
+                      Text("₨ ${_currencyFormat.format(netPayout)}", style: const TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 15)),
                     ],
                   ),
                 ],
@@ -556,7 +556,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                             : () => _confirmReleasePot(context, poolId, p['title'] ?? 'Kameti', winnerMob, winnerName, netPayout, isCollectionComplete, totalMembers - paidCount),
                         child: Text(
                           isCollectionComplete ? "Release Pot" : "Deficit Alert",
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
                         ),
                       ),
                     ),
@@ -588,7 +588,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -603,12 +603,12 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.add_circle_rounded, color: AppConstants.accentGreen),
             SizedBox(width: 8),
-            Text("Launch Digital Kameti", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Launch Digital Kameti", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Container(
@@ -633,7 +633,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
               TextField(
                 controller: amountController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900),
+                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700),
                 decoration: InputDecoration(
                   labelText: "MONTHLY QIST AMOUNT (PKR)",
                   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -684,7 +684,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
             onPressed: () async {
               final title = titleController.text.trim();
               final amount = double.tryParse(amountController.text) ?? 0.0;
@@ -719,7 +719,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                 if (mounted) setState(() => _isActionBusy = false);
               }
             },
-            child: const Text("Launch Pool Live", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Launch Pool Live", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -737,8 +737,8 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: Text("Edit ${pool['title']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        title: Text("Edit ${pool['title']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
         content: Container(
           constraints: const BoxConstraints(maxWidth: 440),
           child: Column(
@@ -759,7 +759,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
               TextField(
                 controller: amountController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900),
+                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700),
                 decoration: InputDecoration(
                   labelText: "MONTHLY QIST (PKR)",
                   labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -774,7 +774,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
             onPressed: () async {
               final title = titleController.text.trim();
               final amount = double.tryParse(amountController.text) ?? 0.0;
@@ -809,7 +809,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                 if (mounted) setState(() => _isActionBusy = false);
               }
             },
-            child: const Text("Save Changes", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Save Changes", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -825,12 +825,12 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             const Icon(Icons.people_alt_rounded, color: AppConstants.accentBlue),
             const SizedBox(width: 8),
-            Expanded(child: Text("${pool['title']} (Members Audit)", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16))),
+            Expanded(child: Text("${pool['title']} (Members Audit)", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16))),
           ],
         ),
         content: Container(
@@ -863,10 +863,10 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                       children: [
                         Row(
                           children: [
-                            Text(m['user_name'] ?? 'Member', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13.5)),
+                            Text(m['user_name'] ?? 'Member', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13.5)),
                             if (isCurrentWinner) ...[
                               const SizedBox(width: 6),
-                              const Text("👑 WINNER", style: TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w900, fontSize: 10)),
+                              const Text("👑 WINNER", style: TextStyle(color: Color(0xFFFBBF24), fontWeight: FontWeight.w700, fontSize: 10)),
                             ],
                           ],
                         ),
@@ -880,7 +880,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                         Text(turnMonth > 0 ? "Turn: Month #$turnMonth" : "Pending Lucky Draw", style: const TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold, fontSize: 11.5)),
                         const SizedBox(height: 3),
                         isPaid
-                            ? const Text("✓ Qist Paid", style: TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w900))
+                            ? const Text("✓ Qist Paid", style: TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w700))
                             : Text(isOverdue ? "⚠️ Overdue (10th Passed)" : "⏳ Unpaid", style: TextStyle(color: isOverdue ? AppConstants.dangerRed : Colors.amber, fontSize: 10.5, fontWeight: FontWeight.bold)),
                       ],
                     ),
@@ -904,7 +904,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
         context: context,
         builder: (ctx) => AlertDialog(
           backgroundColor: AppConstants.surface,
-          title: const Text("Deficit Warning", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+          title: const Text("Deficit Warning", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
           content: Text("Is mahine abhi $shortfall members ki qist baqi hai! Poori collection ke baghair pot release nahi kiya ja sakta.", style: const TextStyle(color: AppConstants.textMuted)),
           actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("OK", style: TextStyle(color: AppConstants.accentGreen)))],
         ),
@@ -916,12 +916,12 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.monetization_on_rounded, color: AppConstants.accentGreen),
             SizedBox(width: 8),
-            Text("Authorize Pot Payout", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Authorize Pot Payout", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -931,7 +931,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
             onPressed: () async {
               Navigator.pop(ctx);
               setState(() => _isActionBusy = true);
@@ -955,7 +955,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                 if (mounted) setState(() => _isActionBusy = false);
               }
             },
-            child: const Text("Disburse Pot", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Disburse Pot", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -968,12 +968,12 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        title: const Text("Delete Pool with Auto-Refund?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+        title: const Text("Delete Pool with Auto-Refund?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
         content: Text("Kya aap waqai Kameti \"$title\" (#$poolId) ko DELETE karna chahte hain?\n\nAgar members ne is mahine qist bhari hui hai to unka paisa foran unke wallet me AUTO-REFUND ho jayega!", style: const TextStyle(color: AppConstants.textMuted, height: 1.4)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
             onPressed: () async {
               Navigator.pop(ctx);
               setState(() => _isActionBusy = true);
@@ -997,7 +997,7 @@ class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
                 if (mounted) setState(() => _isActionBusy = false);
               }
             },
-            child: const Text("Delete & Refund", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Delete & Refund", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),

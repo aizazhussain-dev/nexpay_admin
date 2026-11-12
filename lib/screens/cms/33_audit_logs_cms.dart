@@ -186,7 +186,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -194,12 +194,12 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             "IMMUTABLE LEDGER",
-                            style: TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w900),
+                            style: TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -219,13 +219,13 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: _exportLogsToCsv,
                     icon: const Icon(Icons.download_rounded, size: 18),
-                    label: const Text("Export CSV Audit", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Export CSV Audit", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
@@ -335,7 +335,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -350,7 +350,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -370,7 +370,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? activeColor : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 11,
       ),
       side: BorderSide(color: isSelected ? activeColor : Color(0xFFE2E8F0)),
@@ -429,7 +429,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 13)),
+  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13)),
   Text(role, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10)),
   ],
   ),
@@ -456,7 +456,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.surfaceCard,
-  foregroundColor: Color(0xFF0F172A),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -507,7 +507,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
-  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
+  Text("@$op", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14)),
   _buildSeverityBadge(sev),
   ],
   ),
@@ -547,7 +547,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   borderRadius: BorderRadius.circular(8),
   border: Border.all(color: color.withValues(alpha: 0.3)),
   ),
-  child: Text(sev, style: TextStyle(color: color, fontSize: 9.5, fontWeight: FontWeight.w900)),
+  child: Text(sev, style: TextStyle(color: color, fontSize: 9.5, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -562,13 +562,13 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   children: [
   const Icon(Icons.data_object_rounded, color: AppConstants.accentGreen),
   const SizedBox(width: 8),
   Expanded(
-  child: Text("Audit Payload: ${log['action']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
+  child: Text("Audit Payload: ${log['action']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16)),
   ),
   ],
   ),
@@ -648,7 +648,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Purge Audit Trail?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Purge Audit Trail?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: const Text(
   "WARNING: Audit logs provide legal compliance and regulatory dispute defense. Clearing them will permanently delete historical activity trail records.",
   style: TextStyle(color: AppConstants.textMuted, height: 1.4),
@@ -656,7 +656,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _logsList = []);

@@ -93,7 +93,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     style: TextStyle(
     color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w900,
+    fontWeight: FontWeight.w700,
     ),
     ),
     if (pendingCount > 0) ...[
@@ -102,12 +102,12 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
     decoration: BoxDecoration(
     color: AppConstants.dangerRed.withValues(alpha: 0.15),
-    borderRadius: BorderRadius.circular(20),
+    borderRadius: BorderRadius.circular(12),
     border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
     ),
     child: Text(
     "$pendingCount PENDING VERIFICATION",
-    style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w900),
+    style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
     ),
     ),
     ],
@@ -124,13 +124,13 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Color(0xFF021A13),
+    foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
     onPressed: () => admin.fetchAllData(),
     icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
     ),
     ],
     ),
@@ -219,7 +219,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -234,7 +234,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -324,7 +324,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   icon: const Icon(Icons.document_scanner_rounded, size: 15),
   label: Text(
   status == 'PENDING' ? "Review Dossier" : "Inspect Dossier",
-  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5),
+  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
   ),
   ),
   ),
@@ -396,7 +396,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   icon: const Icon(Icons.document_scanner_rounded, size: 16),
   label: Text(
   status == 'PENDING' ? "Review & Verify Documents" : "Inspect Biometric Dossier",
-  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
+  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
   ),
   ),
   ),
@@ -428,7 +428,7 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
   return Container(
   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
   decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-  child: Text(status, style: TextStyle(color: text, fontSize: 10, fontWeight: FontWeight.w900)),
+  child: Text(status, style: TextStyle(color: text, fontSize: 10, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -511,7 +511,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
     return Dialog(
       backgroundColor: AppConstants.surface,
       insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: Color(0xFFE2E8F0))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 780, maxHeight: 850),
         padding: const EdgeInsets.all(22),
@@ -524,7 +524,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Identity Dossier: $name", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+                    Text("Identity Dossier: $name", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
                     const SizedBox(height: 2),
                     Text("Mobile: ${widget.mobile} • CNIC: $cnic", style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
                   ],
@@ -546,7 +546,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Tri-Document Scans Display
-                    const Text("📸 TRI-DOCUMENT REGULATORY SCANS", style: TextStyle(color: AppConstants.accentGreen, fontSize: 11, fontWeight: FontWeight.w900)),
+                    const Text("📸 TRI-DOCUMENT REGULATORY SCANS", style: TextStyle(color: AppConstants.accentGreen, fontSize: 11, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -570,7 +570,7 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("NATIONAL IDENTITY REGULATORY ATTRIBUTES", style: TextStyle(color: Color(0xFF0F172A), fontSize: 11.5, fontWeight: FontWeight.w900)),
+                          const Text("NATIONAL IDENTITY REGULATORY ATTRIBUTES", style: TextStyle(color: Color(0xFF0F172A), fontSize: 11.5, fontWeight: FontWeight.w700)),
                           const SizedBox(height: 12),
                           Row(
                             children: [
@@ -598,13 +598,13 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: _isProcessingDecision ? null : () => _executeDecision(true),
                     icon: const Icon(Icons.check_circle_rounded, size: 18),
-                    label: const Text("✓ Approve & Verify Tier-2", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("✓ Approve & Verify Tier-2", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                 ),
                 const SizedBox(width: 10),

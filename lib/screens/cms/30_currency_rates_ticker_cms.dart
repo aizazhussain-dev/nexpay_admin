@@ -151,7 +151,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -160,7 +160,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                           decoration: BoxDecoration(
                             color: (isTickerLive ? AppConstants.accentGreen : AppConstants.dangerRed)
                                 .withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (isTickerLive ? AppConstants.accentGreen : AppConstants.dangerRed)
                                   .withValues(alpha: 0.3),
@@ -171,7 +171,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                             style: TextStyle(
                               color: isTickerLive ? AppConstants.accentGreen : AppConstants.dangerRed,
                               fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -188,7 +188,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -200,7 +200,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                   );
                 },
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -268,7 +268,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Color(0xFF021A13),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),
                         onPressed: _isSaving ? null : () => _saveRatesAndTicker(admin),
@@ -277,7 +277,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                             : const Icon(Icons.bolt_rounded, size: 20),
                         label: Text(
                           _isSaving ? "Deploying Ticker & Rates..." : "Save & Synchronize Rates Live Across All Terminals",
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                       ),
                     ),
@@ -314,7 +314,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               isTickerLive ? "LIVE TICKER" : "PAUSED",
               style: TextStyle(
                 color: isTickerLive ? AppConstants.accentGreen : AppConstants.dangerRed,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
                 fontSize: 10.5,
               ),
             ),
@@ -352,7 +352,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       children: [
         Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5, fontWeight: FontWeight.bold)),
         const SizedBox(width: 6),
-        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace')),
+        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.w700, fontFamily: 'monospace')),
       ],
     );
   }
@@ -370,7 +370,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFFBBF24).withValues(alpha: 0.3)),
       ),
       child: Column(
@@ -388,7 +388,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                     style: TextStyle(
                       color: Color(0xFFFBBF24),
                       fontSize: 12.5,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
                     ),
                   ),
@@ -417,7 +417,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                           style: TextStyle(
                             color: _tickerStatus == "ACTIVE" ? Color(0xFF021A13) : AppConstants.textMuted,
                             fontSize: 11,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -435,7 +435,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                           style: TextStyle(
                             color: _tickerStatus == "DISABLED" ? Color(0xFF0F172A) : AppConstants.textMuted,
                             fontSize: 11,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -456,7 +456,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 child: TextFormField(
                   controller: _goldGramController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
                   decoration: InputDecoration(
                     labelText: "24K PURE GOLD SPOT (PER GRAM PKR)",
                     labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -482,7 +482,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 child: TextFormField(
                   controller: _goldSpreadController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16),
+                  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
                   decoration: InputDecoration(
                     labelText: "BROKER SPREAD / MARGIN (%)",
                     labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
@@ -533,7 +533,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       children: [
         Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
+        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14)),
       ],
     );
   }
@@ -544,7 +544,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
@@ -559,7 +559,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
                 style: TextStyle(
                   color: AppConstants.accentGreen,
                   fontSize: 12.5,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -639,7 +639,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(code, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14)),
+                  Text(code, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14)),
                   Text(name, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
                 ],
               ),
@@ -706,7 +706,7 @@ class _CurrencyRatesTickerCmsScreenState extends State<CurrencyRatesTickerCmsScr
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );

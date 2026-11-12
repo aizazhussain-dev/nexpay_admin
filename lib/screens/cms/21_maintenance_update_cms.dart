@@ -121,7 +121,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -129,7 +129,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: (isShieldActive ? AppConstants.dangerRed : AppConstants.accentGreen).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (isShieldActive ? AppConstants.dangerRed : AppConstants.accentGreen).withValues(alpha: 0.3),
                             ),
@@ -139,7 +139,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                             style: TextStyle(
                               color: isShieldActive ? AppConstants.dangerRed : AppConstants.accentGreen,
                               fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -156,7 +156,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -168,7 +168,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                   );
                 },
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -227,7 +227,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                           _isSaving
                               ? "Deploying Configuration..."
                               : "Save & Deploy Maintenance / Version Settings Live",
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                       ),
                     ),
@@ -249,7 +249,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
         color: isShieldActive
             ? AppConstants.dangerRed.withValues(alpha: 0.05)
             : AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isShieldActive
               ? AppConstants.dangerRed.withValues(alpha: 0.35)
@@ -279,7 +279,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                         style: TextStyle(
                           color: isShieldActive ? AppConstants.dangerRed : Color(0xFF0F172A),
                           fontSize: 13,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 0.6,
                         ),
                       ),
@@ -316,7 +316,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                           style: TextStyle(
                             color: !isShieldActive ? Color(0xFF021A13) : AppConstants.textMuted,
                             fontSize: 11,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -334,7 +334,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                           style: TextStyle(
                             color: isShieldActive ? Color(0xFF0F172A) : AppConstants.textMuted,
                             fontSize: 11,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -400,7 +400,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE2E8F0)),
       ),
       child: Column(
@@ -415,7 +415,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                 style: TextStyle(
                   color: AppConstants.accentBlue,
                   fontSize: 12.5,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                 ),
               ),
@@ -433,7 +433,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                   children: [
                     TextFormField(
                       controller: _minVersionController,
-                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14),
+                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14),
                       decoration: InputDecoration(
                         labelText: "MINIMUM SUPPORTED VERSION (FORCE TRIGGER)",
                         labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -462,7 +462,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
                   children: [
                     TextFormField(
                       controller: _latestVersionController,
-                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14),
+                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14),
                       decoration: InputDecoration(
                         labelText: "LATEST RELEASE VERSION",
                         labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5),
@@ -541,7 +541,7 @@ class _MaintenanceUpdateCmsScreenState extends State<MaintenanceUpdateCmsScreen>
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.w700)),
         ],
       ),
     );

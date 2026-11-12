@@ -167,7 +167,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -175,12 +175,12 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             "$activeCount OPERATORS ACTIVE",
-                            style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w900),
+                            style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -200,17 +200,17 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openAddEditStaffDialog(context, null, admin),
                     icon: const Icon(Icons.person_add_alt_1_rounded, size: 18),
-                    label: const Text("Register Staff Member", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Register Staff Member", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -319,7 +319,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -336,7 +336,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? color : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? color : Color(0xFFE2E8F0)),
@@ -354,7 +354,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 11,
       ),
       side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
@@ -408,7 +408,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Text(s['name'] ?? 'Staff', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
   if (isRoot) ...[
   const SizedBox(width: 6),
-  const Text("🛡️ ROOT", style: TextStyle(color: Color(0xFFEF4444), fontSize: 9.5, fontWeight: FontWeight.w900)),
+  const Text("🛡️ ROOT", style: TextStyle(color: Color(0xFFEF4444), fontSize: 9.5, fontWeight: FontWeight.w700)),
   ],
   ],
   ),
@@ -506,13 +506,13 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   Flexible(
   child: Text(
   s['name'] ?? 'Staff',
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14.5),
   overflow: TextOverflow.ellipsis,
   ),
   ),
   if (isRoot) ...[
   const SizedBox(width: 6),
-  const Text("🛡️ ROOT", style: TextStyle(color: Color(0xFFEF4444), fontSize: 9.5, fontWeight: FontWeight.w900)),
+  const Text("🛡️ ROOT", style: TextStyle(color: Color(0xFFEF4444), fontSize: 9.5, fontWeight: FontWeight.w700)),
   ],
   ],
   ),
@@ -594,7 +594,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   ),
   child: Text(
   label,
-  style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w900),
+  style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700),
   ),
   );
   }
@@ -624,7 +624,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   borderRadius: BorderRadius.circular(8),
   border: Border.all(color: color.withValues(alpha: 0.3)),
   ),
-  child: Text(label, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w900)),
+  child: Text(label, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -690,7 +690,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setMatrixState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Row(
   children: [
   const Icon(Icons.rule_folder_rounded, color: AppConstants.accentBlue),
@@ -699,7 +699,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text("RBAC Privileges: ${staff['name']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 16)),
+  Text("RBAC Privileges: ${staff['name']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16)),
   Text("Role: ${staff['role']}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
   ],
   ),
@@ -784,7 +784,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   if (!isRoot)
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = _staffList.map((e) => Map<String, dynamic>.from(e)).toList();
@@ -794,7 +794,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   await _saveStaffList(updatedList, admin);
   }
   },
-  child: const Text("Save RBAC Privileges", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save RBAC Privileges", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -847,10 +847,10 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Staff: ${existing['name']}" : "Register Operator Account",
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -983,7 +983,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final name = nameController.text.trim();
   final email = emailController.text.trim();
@@ -1022,7 +1022,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
 
   await _saveStaffList(updatedList, admin);
   },
-  child: const Text("Save Operator Account", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save Operator Account", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -1049,7 +1049,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Delete Operator Account?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Delete Operator Account?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: Text(
   "Kya aap waqai operator \"${s['name']}\" (@${s['username']}) ko remove karna chahte hain? Inki console access foran block ho jayegi.",
   style: const TextStyle(color: AppConstants.textMuted),
@@ -1057,7 +1057,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = _staffList.map((e) => Map<String, dynamic>.from(e)).toList();

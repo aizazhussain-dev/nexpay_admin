@@ -179,7 +179,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -187,12 +187,12 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             "$activeCount BILLERS ONLINE",
-                            style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w900),
+                            style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -212,17 +212,17 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openAddEditProviderDialog(context, null, admin),
                     icon: const Icon(Icons.add_business_rounded, size: 18),
-                    label: const Text("Add Utility Biller", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Add Utility Biller", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -329,7 +329,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -344,7 +344,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -362,7 +362,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF0F172A) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 11,
       ),
       side: BorderSide(color: isSelected ? Color(0xFF94A3B8) : Color(0xFFE2E8F0)),
@@ -448,7 +448,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   fee == 0.0 ? "FREE (₨ 0)" : "₨ ${fee.toStringAsFixed(0)}",
   style: TextStyle(
   color: fee == 0.0 ? AppConstants.accentGreen : AppConstants.accentGold,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   fontSize: 12.5,
   ),
   ),
@@ -519,7 +519,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   children: [
   Text(icon, style: const TextStyle(fontSize: 20)),
   const SizedBox(width: 8),
-  Text(p['name'] ?? 'Biller', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 14.5)),
+  Text(p['name'] ?? 'Biller', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 14.5)),
   ],
   ),
   _buildStatusBadge(isActive),
@@ -597,7 +597,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   color: color.withValues(alpha: 0.15),
   borderRadius: BorderRadius.circular(8),
   ),
-  child: Text(cat, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w900)),
+  child: Text(cat, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700)),
   );
   }
 
@@ -613,7 +613,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   style: TextStyle(
   color: isActive ? AppConstants.accentGreen : AppConstants.dangerRed,
   fontSize: 10,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   ),
   ),
   );
@@ -637,10 +637,10 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Biller: ${existing['name']}" : "Add Utility Billing Company",
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -816,7 +816,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final name = nameController.text.trim();
   final id = idController.text.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
@@ -845,7 +845,7 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
 
   await _saveProvidersList(updatedList, admin);
   },
-  child: const Text("Save Utility Biller", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save Utility Biller", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -872,12 +872,12 @@ class _BillProvidersCmsScreenState extends State<BillProvidersCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Delete Biller?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Delete Biller?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: Text("Kya aap waqai ${p['name']} ko active billers list se delete karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_providersList);

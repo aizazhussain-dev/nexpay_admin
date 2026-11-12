@@ -64,7 +64,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (pendingCount > 0) ...[
@@ -73,12 +73,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppConstants.dangerRed.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$pendingCount PENDING",
-                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -95,13 +95,13 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () => admin.fetchAllData(),
                 icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -179,7 +179,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -256,13 +256,13 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                     DataCell(
                       Text(
                         p['beneficiary_account'] ?? '-',
-                        style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 13),
+                        style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
                       ),
                     ),
                     DataCell(
                       Text(
                         "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900, fontSize: 14),
+                        style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 14),
                       ),
                     ),
                     DataCell(Text(p['tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
@@ -274,13 +274,13 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Color(0xFF021A13),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: () => _confirmCompletePayout(context, p, admin),
                             icon: const Icon(Icons.check_rounded, size: 14),
-                            label: const Text("Accept", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5)),
+                            label: const Text("Accept", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton.icon(
@@ -348,7 +348,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                     ),
                     child: Text(
                       p['target_bank'] ?? 'Bank',
-                      style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w900, fontSize: 11.5),
+                      style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w700, fontSize: 11.5),
                     ),
                   ),
                   _buildStatusBadge(status),
@@ -363,12 +363,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                     children: [
                       Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
                       const SizedBox(height: 2),
-                      Text(p['beneficiary_account'] ?? '-', style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 13)),
+                      Text(p['beneficiary_account'] ?? '-', style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13)),
                     ],
                   ),
                   Text(
                     "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900, fontSize: 16),
+                    style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                 ],
               ),
@@ -391,13 +391,13 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Color(0xFF021A13),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         onPressed: () => _confirmCompletePayout(context, p, admin),
                         icon: const Icon(Icons.check_rounded, size: 16),
-                        label: const Text("Accept Transfer", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
+                        label: const Text("Accept Transfer", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -449,7 +449,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
         color: bg,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -469,12 +469,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.check_circle_rounded, color: AppConstants.accentGreen),
             SizedBox(width: 8),
-            Text("Complete Transfer", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Complete Transfer", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -484,7 +484,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
             onPressed: () async {
               Navigator.pop(ctx);
               final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
@@ -502,7 +502,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                 );
               }
             },
-            child: const Text("Yes, Mark Completed", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Yes, Mark Completed", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -518,12 +518,12 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: const Row(
           children: [
             Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
             SizedBox(width: 8),
-            Text("Reject & Auto-Refund", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text("Reject & Auto-Refund", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -533,7 +533,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
             onPressed: () async {
               Navigator.pop(ctx);
               final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
@@ -551,7 +551,7 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
                 );
               }
             },
-            child: const Text("Reject & Refund Funds", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Reject & Refund Funds", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),

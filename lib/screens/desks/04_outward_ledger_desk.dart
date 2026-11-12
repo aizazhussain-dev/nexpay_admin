@@ -110,7 +110,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     style: TextStyle(
     color: Color(0xFF0F172A),
     fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w900,
+    fontWeight: FontWeight.w700,
     ),
     ),
     const SizedBox(height: 4),
@@ -124,13 +124,13 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
     backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Color(0xFF021A13),
+    foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
     onPressed: () => admin.fetchAllData(),
     icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
     ),
     ],
     ),
@@ -172,7 +172,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     ),
     child: Text(
     "Total Outward: ₨ ${_currencyFormat.format(totalOutwardVolume)}",
-    style: const TextStyle(color: AppConstants.dangerRed, fontSize: 12, fontWeight: FontWeight.w900),
+    style: const TextStyle(color: AppConstants.dangerRed, fontSize: 12, fontWeight: FontWeight.w700),
     ),
     ),
     ],
@@ -213,7 +213,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -296,7 +296,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   DataCell(
   Text(
   "- ₨ ${_currencyFormat.format(amt)}",
-  style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900, fontSize: 14),
+  style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 14),
   ),
   ),
   DataCell(Text(tid, style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5, fontFamily: 'monospace'))),
@@ -359,12 +359,12 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   ),
   child: Text(
   item['title'],
-  style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w900, fontSize: 11),
+  style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w700, fontSize: 11),
   ),
   ),
   Text(
   "- ₨ ${_currencyFormat.format(amt)}",
-  style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900, fontSize: 16),
+  style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 16),
   ),
   ],
   ),
@@ -396,7 +396,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   ? null
       : () => _confirmDisputeRecall(context, senderMob, tid, amt, recMob, admin),
   icon: const Icon(Icons.replay_rounded, size: 16),
-  label: const Text("1-Click Dispute Recall (Refund)", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
+  label: const Text("1-Click Dispute Recall (Refund)", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
   ),
   ),
   ],
@@ -438,12 +438,12 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: const Row(
   children: [
   Icon(Icons.warning_amber_rounded, color: Colors.amber),
   SizedBox(width: 8),
-  Text("Execute 1-Click Reversal", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+  Text("Execute 1-Click Reversal", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
   ],
   ),
   content: Text(
@@ -458,7 +458,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.black),
+  style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   setState(() => _isReversing = true);
@@ -514,7 +514,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
   if (mounted) setState(() => _isReversing = false);
   }
   },
-  child: const Text("Execute Reversal", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Execute Reversal", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),

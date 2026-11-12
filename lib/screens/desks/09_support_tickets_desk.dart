@@ -78,7 +78,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (openCount > 0) ...[
@@ -87,12 +87,12 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppConstants.dangerRed.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$openCount OPEN INQUIRIES",
-                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -109,13 +109,13 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () => admin.fetchAllData(),
                 icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -202,7 +202,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -217,7 +217,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -324,7 +324,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                         icon: Icon(isOpen ? Icons.reply_rounded : Icons.edit_note_rounded, size: 14),
                         label: Text(
                           isOpen ? "Reply & Resolve" : "Update Reply",
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
                         ),
                       ),
                     ),
@@ -376,7 +376,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                           color: Color(0xFFA855F7).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(sub, style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w900, fontSize: 11)),
+                        child: Text(sub, style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w700, fontSize: 11)),
                       ),
                     ],
                   ),
@@ -442,7 +442,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
         style: TextStyle(
           color: isOpen ? Colors.amber : AppConstants.accentGreen,
           fontSize: 10.5,
-          fontWeight: FontWeight.w900,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -463,12 +463,12 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             const Icon(Icons.headset_mic_rounded, color: AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text("Dispatch Support Resolution #$id", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 17)),
+            Text("Dispatch Support Resolution #$id", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 17)),
           ],
         ),
         content: Container(
@@ -517,7 +517,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppConstants.accentGreen,
-              foregroundColor: Color(0xFF021A13),
+              foregroundColor: Colors.white,
             ),
             onPressed: () async {
               final replyText = replyController.text.trim();
@@ -563,7 +563,7 @@ class _SupportTicketsDeskScreenState extends State<SupportTicketsDeskScreen> {
                 if (mounted) setState(() => _isReplying = false);
               }
             },
-            child: const Text("Send Reply & Resolve Ticket", style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const Text("Send Reply & Resolve Ticket", style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),

@@ -117,7 +117,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -125,12 +125,12 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: BoxDecoration(
                             color: Color(0xFFA855F7).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             "$activeCount LIVE BANNERS",
-                            style: const TextStyle(color: Color(0xFFA855F7), fontSize: 10, fontWeight: FontWeight.w900),
+                            style: const TextStyle(color: Color(0xFFA855F7), fontSize: 10, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -150,17 +150,17 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Color(0xFF021A13),
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () => _openAddEditBannerDialog(context, null, admin),
                     icon: const Icon(Icons.add_photo_alternate_rounded, size: 18),
-                    label: const Text("Add New Banner", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                    label: const Text("Add New Banner", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Color(0xFF0F172A),
+                      foregroundColor: Colors.white,
                       side: const BorderSide(color: Color(0xFF94A3B8)),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -261,7 +261,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 16.5, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -276,7 +276,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -375,7 +375,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
   backgroundColor: AppConstants.surfaceCard,
-  foregroundColor: Color(0xFF0F172A),
+  foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),
@@ -511,7 +511,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   style: TextStyle(
   color: isActive ? AppConstants.accentGreen : AppConstants.dangerRed,
   fontSize: 10,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w700,
   ),
   ),
   );
@@ -532,10 +532,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   builder: (ctx) => StatefulBuilder(
   builder: (ctx, setDialogState) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22), side: const BorderSide(color: Color(0xFFE2E8F0))),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
   title: Text(
   isEdit ? "Edit Banner: ${existing['title']}" : "Add Promotional Banner",
-  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18),
+  style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18),
   ),
   content: Container(
   constraints: const BoxConstraints(maxWidth: 520),
@@ -648,7 +648,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Color(0xFF021A13)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
   onPressed: () async {
   final title = titleController.text.trim();
   final subtitle = subtitleController.text.trim();
@@ -677,7 +677,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
 
   await _saveBannersList(updatedList, admin);
   },
-  child: const Text("Save & Publish Banner", style: TextStyle(fontWeight: FontWeight.w900)),
+  child: const Text("Save & Publish Banner", style: TextStyle(fontWeight: FontWeight.w700)),
   ),
   ],
   ),
@@ -691,12 +691,12 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   context: context,
   builder: (ctx) => AlertDialog(
   backgroundColor: AppConstants.surface,
-  title: const Text("Delete Banner?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w900)),
+  title: const Text("Delete Banner?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
   content: Text("Kya aap waqai \"${b['title']}\" ko customer app se remove karna chahte hain?", style: const TextStyle(color: AppConstants.textMuted)),
   actions: [
   TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
   ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Color(0xFF0F172A)),
+  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
   onPressed: () async {
   Navigator.pop(ctx);
   final updatedList = List.from(_bannersList);

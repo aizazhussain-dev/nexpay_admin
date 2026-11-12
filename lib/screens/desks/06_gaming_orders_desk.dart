@@ -84,7 +84,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                           style: TextStyle(
                             color: Color(0xFF0F172A),
                             fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (pendingCount > 0) ...[
@@ -93,12 +93,12 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
                               color: Colors.amber.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               "$pendingCount TO DELIVER",
-                              style: const TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w900),
+                              style: const TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -115,13 +115,13 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Color(0xFF021A13),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () => admin.fetchAllData(),
                 icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
           ),
@@ -232,7 +232,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
         children: [
           Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -247,7 +247,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       backgroundColor: AppConstants.surface,
       labelStyle: TextStyle(
         color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
         fontSize: 12,
       ),
       side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
@@ -321,7 +321,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                           gameKey,
                           style: TextStyle(
                             color: gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                             fontSize: 11,
                           ),
                         ),
@@ -332,7 +332,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                         children: [
                           Text(
                             playerId,
-                            style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 13),
+                            style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
                           ),
                           const SizedBox(width: 6),
                           IconButton(
@@ -351,7 +351,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                     DataCell(
                       Text(
                         "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w900, fontSize: 14),
+                        style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 14),
                       ),
                     ),
                     DataCell(Text(o['order_tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
@@ -363,12 +363,12 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Color(0xFF021A13),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: () => _confirmVoucherDecision(context, orderId, 'ACCEPTED', amount, userMob, playerId, admin),
-                            child: const Text("✓ Deliver", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5)),
+                            child: const Text("✓ Deliver", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
@@ -440,7 +440,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                       gameKey,
                       style: TextStyle(
                         color: gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                         fontSize: 11,
                       ),
                     ),
@@ -460,14 +460,14 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                       Row(
                         children: [
                           const Text("Player UID: ", style: TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-                          Text(playerId, style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w900, fontSize: 13)),
+                          Text(playerId, style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13)),
                         ],
                       ),
                     ],
                   ),
                   Text(
                     "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w900, fontSize: 16),
+                    style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                 ],
               ),
@@ -489,12 +489,12 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Color(0xFF021A13),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         onPressed: () => _confirmVoucherDecision(context, orderId, 'ACCEPTED', amount, userMob, playerId, admin),
-                        child: const Text("Deliver Voucher", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
+                        child: const Text("Deliver Voucher", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -542,7 +542,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w900)),
+      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -572,12 +572,12 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Color(0xFFE2E8F0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
         title: Row(
           children: [
             Icon(isReject ? Icons.warning_amber_rounded : Icons.check_circle_rounded, color: isReject ? AppConstants.dangerRed : AppConstants.accentGreen),
             const SizedBox(width: 8),
-            Text(isReject ? "Reject & Auto-Refund" : "Deliver Voucher", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w900, fontSize: 18)),
+            Text(isReject ? "Reject & Auto-Refund" : "Deliver Voucher", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
           ],
         ),
         content: Text(
@@ -637,7 +637,7 @@ class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
                 }
               }
             },
-            child: Text(isReject ? "Yes, Reject & Refund" : "Yes, Mark Delivered", style: const TextStyle(fontWeight: FontWeight.w900)),
+            child: Text(isReject ? "Yes, Reject & Refund" : "Yes, Mark Delivered", style: const TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
       ),
