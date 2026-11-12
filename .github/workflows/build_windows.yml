@@ -1,0 +1,40 @@
+name: Build NexPay Admin Windows EXE
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter Engine
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Windows Desktop Support
+        run: flutter config --enable-windows-desktop
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Compile Windows Release EXE
+        run: flutter build windows --release
+
+      - name: Package EXE & Runtime DLLs
+        run: |
+          Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "NexPayAdmin_Windows_x64.zip"
+
+      - name: Upload Standalone Software Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NexPay-Admin-Console-EXE
+          path: NexPayAdmin_Windows_x64.zip
+          retention-days: 7
