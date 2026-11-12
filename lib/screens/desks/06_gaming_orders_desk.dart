@@ -1,10 +1,11 @@
-import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/institutional_scroll.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class GamingOrdersDeskScreen extends StatefulWidget {
   const GamingOrdersDeskScreen({super.key});
@@ -14,633 +15,270 @@ class GamingOrdersDeskScreen extends StatefulWidget {
 }
 
 class _GamingOrdersDeskScreenState extends State<GamingOrdersDeskScreen> {
-  final ApiClient _api = ApiClient();
-  final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
-  String _searchQuery = "";
-  String _statusFilter = "ALL"; // ALL, PENDING, ACCEPTED, REJECTED
-  String _gameFilter = "ALL"; // ALL, PUBG, FREEFIRE
+  final TextEditingController _searchCtrl = TextEditingController();
+  final NumberFormat _money = NumberFormat('#,##0.00', 'en_US');
+  String _statusFilter = 'ALL';
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
     final orders = admin.voucherOrders;
 
-    // Filter Logic matching backend
-    final filteredList = orders.where((o) {
-      final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
-      final gameKey = (o['game_key'] ?? '').toString().toUpperCase();
+    int pendingCount = 0;
+    double pendingSales = 0;
+    int completedCount = 0;
+    double completedSales = 0;
+    int rejectedCount = 0;
 
-      if (_statusFilter == "PENDING" && status != "PENDING") return false;
-      if (_statusFilter == "ACCEPTED" && (status != "ACCEPTED" && status != "FULFILLED")) return false;
-      if (_statusFilter == "REJECTED" && status != "REJECTED") return false;
-
-      if (_gameFilter != "ALL" && !gameKey.contains(_gameFilter)) return false;
-
-      if (_searchQuery.isNotEmpty) {
-        final q = _searchQuery.toLowerCase();
-        final mob = (o['user_mobile'] ?? '').toString().toLowerCase();
-        final name = (o['user_name'] ?? '').toString().toLowerCase();
-        final playerId = (o['player_id'] ?? '').toString().toLowerCase();
-        final title = (o['voucher_title'] ?? '').toString().toLowerCase();
-        final tid = (o['order_tid'] ?? '').toString().toLowerCase();
-        return mob.contains(q) || name.contains(q) || playerId.contains(q) || title.contains(q) || tid.contains(q);
+    for (final raw in orders) {
+      if (raw is! Map) continue;
+      final st = (raw['status'] ?? 'PENDING').toString().toUpperCase();
+      final amt = double.tryParse(raw['amount']?.toString() ?? raw['price']?.toString() ?? '0') ?? 0;
+      if (st == 'PENDING') {
+        pendingCount++;
+        pendingSales += amt;
+      } else if (st == 'COMPLETED' || st == 'APPROVED' || st == 'DELIVERED') {
+        completedCount++;
+        completedSales += amt;
+      } else {
+        rejectedCount++;
       }
-      return true;
+    }
+
+    final filtered = orders.where((raw) {
+      if (raw is! Map) return false;
+      final st = (raw['status'] ?? 'PENDING').toString().toUpperCase();
+      if (_statusFilter == 'PENDING' && st != 'PENDING') return false;
+      if (_statusFilter == 'COMPLETED' && !(st == 'COMPLETED' || st == 'APPROVED' || st == 'DELIVERED')) return false;
+      if (_statusFilter == 'REJECTED' && st != 'REJECTED') return false;
+
+      if (_query.isEmpty) return true;
+      final hay = '${raw['order_id']} ${raw['id']} ${raw['user_mobile']} ${raw['title']} ${raw['package']} ${raw['player_id']}'
+          .toLowerCase();
+      return hay.contains(_query);
     }).toList();
 
-    // Financial Counters
-    int pendingCount = 0;
-    double totalGamingSales = 0;
-    double pendingFulfillmentAmt = 0;
+    return NexPayDeskScaffold(
+      header: NexPayDeskHeader(
+        title: 'Gaming Top-Ups & Digital Voucher Fulfillment',
+        subtitle: 'Process PUBG UC, Free Fire Diamonds, and digital gift cards or issue instant wallet refunds',
+        badgeText: 'DIGITAL FULFILLMENT',
+        badgeColor: AppConstants.accentBlue,
+        actions: [
+          ElevatedButton.icon(
+            onPressed: () => admin.fetchAllData(),
+            icon: const Icon(Icons.refresh_rounded, size: 17),
+            label: const Text('Sync Voucher Queue'),
+          ),
+        ],
+      ),
+      statStrip: NexPayStatStrip(
+        items: [
+          NexPayStatItem(
+            label: 'Pending Top-Ups',
+            value: '$pendingCount Orders',
+            sublabel: 'Rs. ${_money.format(pendingSales)} awaiting delivery',
+            icon: Icons.hourglass_bottom_rounded,
+            color: AppConstants.accentGold,
+          ),
+          NexPayStatItem(
+            label: 'Fulfilled Vouchers',
+            value: '$completedCount Delivered',
+            sublabel: 'Rs. ${_money.format(completedSales)} settled volume',
+            icon: Icons.sports_esports_rounded,
+            color: AppConstants.accentGreen,
+          ),
+          NexPayStatItem(
+            label: 'Cancelled / Refunded',
+            value: '$rejectedCount Refunded',
+            sublabel: 'Amount restored to user wallets',
+            icon: Icons.replay_rounded,
+            color: AppConstants.dangerRed,
+          ),
+          NexPayStatItem(
+            label: 'Total Digital Sales',
+            value: 'Rs. ${_money.format(pendingSales + completedSales)}',
+            sublabel: '${orders.length} total digital shop orders',
+            icon: Icons.shopping_bag_outlined,
+            color: AppConstants.accentBlue,
+          ),
+        ],
+      ),
+      filterBar: NexPayFilterBar(
+        searchController: _searchCtrl,
+        searchHint: 'Search by order ID, mobile, game title, or Player UID...',
+        onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+        filters: const ['ALL', 'PENDING', 'COMPLETED', 'REJECTED'],
+        selectedFilter: _statusFilter,
+        onFilterChanged: (f) => setState(() => _statusFilter = f),
+        resultSummary: 'Showing ${filtered.length} of ${orders.length} orders',
+      ),
+      body: NexPayFullWidthTable(
+        minTableWidth: 1120,
+        emptyState: const InstitutionalEmptyState(
+          icon: Icons.sports_esports_rounded,
+          title: 'No Gaming or Voucher Orders Found',
+          subtitle: 'There are no digital shop orders matching your filter in the live database.',
+        ),
+        columns: const [
+          DataColumn(label: Text('ORDER ID')),
+          DataColumn(label: Text('CUSTOMER MOBILE')),
+          DataColumn(label: Text('PRODUCT / PACKAGE')),
+          DataColumn(label: Text('PLAYER UID / TARGET')),
+          DataColumn(label: Text('AMOUNT (PKR)'), numeric: true),
+          DataColumn(label: Text('ORDER DATE')),
+          DataColumn(label: Text('STATUS')),
+          DataColumn(label: Text('FULFILLMENT')),
+        ],
+        rows: filtered.map((raw) {
+          final o = Map<String, dynamic>.from(raw as Map);
+          final orderId = (o['order_id'] ?? o['id'] ?? '').toString();
+          final mobile = (o['user_mobile'] ?? o['mobile'] ?? '-').toString();
+          final pkg = (o['title'] ?? o['package'] ?? o['product_name'] ?? 'Digital Voucher').toString();
+          final playerId = (o['player_id'] ?? o['target_id'] ?? o['account_id'] ?? '-').toString();
+          final amt = double.tryParse(o['amount']?.toString() ?? o['price']?.toString() ?? '0') ?? 0;
+          final date = (o['created_at'] ?? o['date'] ?? '-').toString();
+          final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
+          final isPending = status == 'PENDING';
 
-    for (var o in orders) {
-      final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
-      final amt = double.tryParse(o['amount']?.toString() ?? '0') ?? 0.0;
-      totalGamingSales += amt;
-
-      if (status == 'PENDING') {
-        pendingCount++;
-        pendingFulfillmentAmt += amt;
-      }
-    }
-
-    return Padding(
-      padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Bar
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          return DataRow(
+            cells: [
+              DataCell(Text('#$orderId', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(Text(mobile, style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(Text(pkg, style: const TextStyle(fontWeight: FontWeight.w700))),
+              DataCell(
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Gaming Shop Top-Up & Voucher Queue",
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        if (pendingCount > 0) ...[
-                          const SizedBox(width: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.amber.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              "$pendingCount TO DELIVER",
-                              style: const TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Deliver PUBG Mobile UC and Free Fire Diamonds vouchers directly to player UIDs",
-                      style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                    ),
+                    Text(playerId, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w600)),
+                    if (playerId != '-')
+                      IconButton(
+                        tooltip: 'Copy Player ID',
+                        icon: const Icon(Icons.copy_rounded, size: 15, color: AppConstants.textMuted),
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: playerId));
+                          _toast(context, 'Player ID copied.', true);
+                        },
+                      ),
                   ],
                 ),
               ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              DataCell(Text('Rs. ${_money.format(amt)}', style: const TextStyle(fontWeight: FontWeight.w700))),
+              DataCell(Text(date, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(NexPayStatusBadge(status: status)),
+              DataCell(
+                OutlinedButton.icon(
+                  onPressed: () => _openOrderDrawer(context, admin, o),
+                  icon: const Icon(Icons.bolt_rounded, size: 15),
+                  label: Text(isPending ? 'Fulfill' : 'Details'),
                 ),
-                onPressed: () => admin.fetchAllData(),
-                icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               ),
             ],
-          ),
-          const SizedBox(height: 20),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
-          // Operational Metrics
-          Wrap(
-            spacing: 14,
-            runSpacing: 10,
-            children: [
-              _buildMetricCard("PENDING ORDERS", "$pendingCount Orders", Colors.amber, isDesktop),
-              _buildMetricCard("PENDING VOLUME", "₨ ${_currencyFormat.format(pendingFulfillmentAmt)}", AppConstants.dangerRed, isDesktop),
-              _buildMetricCard("TOTAL SHOP SALES", "₨ ${_currencyFormat.format(totalGamingSales)}", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("ALL ORDERS", "${orders.length} Placed", AppConstants.accentBlue, isDesktop),
-            ],
-          ),
-          const SizedBox(height: 20),
+  void _openOrderDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> o) {
+    final orderId = (o['order_id'] ?? o['id'] ?? '').toString();
+    final mobile = (o['user_mobile'] ?? o['mobile'] ?? '').toString();
+    final pkg = (o['title'] ?? o['package'] ?? o['product_name'] ?? 'Digital Voucher').toString();
+    final playerId = (o['player_id'] ?? o['target_id'] ?? o['account_id'] ?? '-').toString();
+    final amt = double.tryParse(o['amount']?.toString() ?? o['price']?.toString() ?? '0') ?? 0;
+    final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
+    final isPending = status == 'PENDING';
 
-          // Filters & Search
-          Wrap(
-            spacing: 12,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SizedBox(
-                width: isDesktop ? 340 : double.infinity,
-                child: TextField(
-                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-                  decoration: InputDecoration(
-                    hintText: "Search Mobile, UID, Voucher, TID...",
-                    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-                    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-                    filled: true,
-                    fillColor: AppConstants.surface,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                  ),
-                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                ),
-              ),
-              _buildFilterChip("ALL", "All Statuses"),
-              _buildFilterChip("PENDING", "Pending ($pendingCount)"),
-              _buildFilterChip("ACCEPTED", "Delivered / Accepted"),
-              _buildFilterChip("REJECTED", "Rejected & Refunded"),
-              const SizedBox(width: 8),
-              // Game Filter Dropdown
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: AppConstants.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Color(0xFFE2E8F0)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: _gameFilter,
-                    dropdownColor: AppConstants.surfaceCard,
-                    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.bold),
-                    items: const [
-                      DropdownMenuItem(value: "ALL", child: Text("All Games")),
-                      DropdownMenuItem(value: "PUBG", child: Text("🎯 PUBG Mobile")),
-                      DropdownMenuItem(value: "FREEFIRE", child: Text("🔥 Free Fire")),
-                    ],
-                    onChanged: (val) => setState(() => _gameFilter = val ?? "ALL"),
-                  ),
-                ),
-              ),
-            ],
+    showNexPayInspectorDrawer(
+      context: context,
+      title: 'Digital Order #$orderId',
+      subtitle: '$pkg • $mobile',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppConstants.borderColor),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(pkg, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 4),
+                Text('Rs. ${_money.format(amt)}', style: const TextStyle(color: AppConstants.accentGreen, fontSize: 22, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 8),
+                NexPayStatusBadge(status: status),
+              ],
+            ),
           ),
           const SizedBox(height: 18),
-
-          // Content
-          Expanded(
-            child: filteredList.isEmpty
-                ? const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.sports_esports_outlined, size: 54, color: AppConstants.textMuted),
-                  SizedBox(height: 12),
-                  Text(
-                    "No gaming voucher orders found",
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )
-                : isDesktop
-                ? _buildDesktopTable(filteredList, admin)
-                : _buildMobileCards(filteredList, admin),
-          ),
+          _kv('Player UID / Target Account', playerId),
+          _kv('Customer NexPay Mobile', mobile),
+          _kv('Order Reference', orderId),
+          _kv('Submitted Timestamp', (o['created_at'] ?? o['date'] ?? '-').toString()),
         ],
       ),
+      footerActions: isPending
+          ? [
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.reviewVoucherOrder(orderId, 'REJECTED', mobile, amt);
+            if (context.mounted) {
+              _toast(context, ok ? 'Order #$orderId rejected & Rs. ${_money.format(amt)} refunded.' : 'Action failed.', ok);
+            }
+          },
+          icon: const Icon(Icons.replay_rounded, size: 17),
+          label: const Text('Reject & Refund'),
+        ),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.reviewVoucherOrder(orderId, 'COMPLETED', mobile, amt);
+            if (context.mounted) {
+              _toast(context, ok ? 'Order #$orderId marked COMPLETED!' : 'Action failed.', ok);
+            }
+          },
+          icon: const Icon(Icons.check_circle_rounded, size: 17),
+          label: const Text('Mark Top-Up Delivered'),
+        ),
+      ]
+          : [
+        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+      ],
     );
   }
 
-  Widget _buildMetricCard(String title, String value, Color color, bool isDesktop) {
-    return Container(
-      width: isDesktop ? 220 : 160,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
+  Widget _kv(String k, String v) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
+          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 2),
+          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 14, fontWeight: FontWeight.w600)),
         ],
       ),
     );
   }
 
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _statusFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
-      ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _statusFilter = key),
-    );
-  }
-
-  Widget _buildDesktopTable(List<dynamic> list, AdminProvider admin) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: InstitutionalVScroll(
-          scrollDirection: Axis.vertical,
-          child: InstitutionalHScroll(
-            child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-              dataRowColor: WidgetStateProperty.all(Colors.transparent),
-              horizontalMargin: 20,
-              columnSpacing: 24,
-              columns: const [
-                DataColumn(label: Text("ORDER DATE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("CUSTOMER", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("GAME", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("PLAYER UID / IGN", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("VOUCHER ITEM", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("AMOUNT (PKR)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("TID", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("STATUS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("FULFILLMENT ACTION", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-              ],
-              rows: list.map((o) {
-                final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
-                final isPending = status == 'PENDING';
-                final isAccepted = status == 'ACCEPTED' || status == 'FULFILLED';
-                final amount = double.tryParse(o['amount']?.toString() ?? '0') ?? 0.0;
-                final dateStr = _formatTimestamp(o['created_at']);
-                final orderId = (o['id'] ?? o['order_tid']).toString();
-                final userMob = (o['user_mobile'] ?? '').toString();
-                final gameKey = (o['game_key'] ?? 'PUBG').toString().toUpperCase();
-                final playerId = (o['player_id'] ?? '-').toString();
-
-                return DataRow(
-                  cells: [
-                    DataCell(Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5))),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(o['user_name'] ?? 'Player', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
-                          Text(userMob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: (gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: (gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange).withValues(alpha: 0.3)),
-                        ),
-                        child: Text(
-                          gameKey,
-                          style: TextStyle(
-                            color: gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Row(
-                        children: [
-                          Text(
-                            playerId,
-                            style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
-                          ),
-                          const SizedBox(width: 6),
-                          IconButton(
-                            icon: const Icon(Icons.copy_rounded, size: 14, color: AppConstants.textMuted),
-                            tooltip: "Copy Player UID",
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Copied UID: $playerId"), duration: const Duration(seconds: 1)),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    DataCell(Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5))),
-                    DataCell(
-                      Text(
-                        "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                    DataCell(Text(o['order_tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
-                    DataCell(_buildStatusBadge(status)),
-                    DataCell(
-                      isPending
-                          ? Row(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmVoucherDecision(context, orderId, 'ACCEPTED', amount, userMob, playerId, admin),
-                            child: const Text("✓ Deliver", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
-                          ),
-                          const SizedBox(width: 8),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppConstants.dangerRed,
-                              side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmVoucherDecision(context, orderId, 'REJECTED', amount, userMob, playerId, admin),
-                            child: const Text("✕ Reject & Refund", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5)),
-                          ),
-                        ],
-                      )
-                          : Text(
-                        isAccepted ? "✓ Delivered" : "✕ Refunded",
-                        style: TextStyle(
-                          color: isAccepted ? AppConstants.accentGreen : AppConstants.dangerRed,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileCards(List<dynamic> list, AdminProvider admin) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, idx) {
-        final o = list[idx];
-        final status = (o['status'] ?? 'PENDING').toString().toUpperCase();
-        final isPending = status == 'PENDING';
-        final amount = double.tryParse(o['amount']?.toString() ?? '0') ?? 0.0;
-        final dateStr = _formatTimestamp(o['created_at']);
-        final orderId = (o['id'] ?? o['order_tid']).toString();
-        final userMob = (o['user_mobile'] ?? '').toString();
-        final gameKey = (o['game_key'] ?? 'PUBG').toString().toUpperCase();
-        final playerId = (o['player_id'] ?? '-').toString();
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppConstants.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: (gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange).withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      gameKey,
-                      style: TextStyle(
-                        color: gameKey.contains("PUBG") ? Colors.amber : Colors.deepOrange,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ),
-                  _buildStatusBadge(status),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(o['voucher_title'] ?? 'Gaming Voucher', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          const Text("Player UID: ", style: TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-                          Text(playerId, style: const TextStyle(color: AppConstants.accentGreen, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                ],
-              ),
-              const Divider(color: Color(0xFFE2E8F0), height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Customer: ${o['user_name']} ($userMob)", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-                  Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text("TID: ${o['order_tid'] ?? '-'}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
-              if (isPending) ...[
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmVoucherDecision(context, orderId, 'ACCEPTED', amount, userMob, playerId, admin),
-                        child: const Text("Deliver Voucher", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppConstants.dangerRed,
-                          side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmVoucherDecision(context, orderId, 'REJECTED', amount, userMob, playerId, admin),
-                        child: const Text("Reject & Refund", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5)),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildStatusBadge(String status) {
-    Color bg;
-    Color text;
-    String label = status;
-
-    if (status == 'PENDING') {
-      bg = Colors.amber.withValues(alpha: 0.15);
-      text = Colors.amber;
-      label = "PENDING DELIVERY";
-    } else if (status == 'ACCEPTED' || status == 'FULFILLED') {
-      bg = AppConstants.accentGreen.withValues(alpha: 0.15);
-      text = AppConstants.accentGreen;
-      label = "DELIVERED";
-    } else {
-      bg = AppConstants.dangerRed.withValues(alpha: 0.15);
-      text = AppConstants.dangerRed;
-      label = "REJECTED & REFUNDED";
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
-    );
-  }
-
-  String _formatTimestamp(dynamic timestamp) {
-    if (timestamp == null) return "-";
-    try {
-      final date = DateTime.parse(timestamp.toString());
-      return DateFormat("dd MMM, hh:mm a").format(date);
-    } catch (_) {
-      return timestamp.toString();
-    }
-  }
-
-  // Confirm Decision Dialog (Accept or Reject & Refund)
-  void _confirmVoucherDecision(
-      BuildContext context,
-      String orderId,
-      String decision,
-      double amount,
-      String userMobile,
-      String playerId,
-      AdminProvider admin,
-      ) {
-    final isReject = decision == 'REJECTED';
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: Row(
-          children: [
-            Icon(isReject ? Icons.warning_amber_rounded : Icons.check_circle_rounded, color: isReject ? AppConstants.dangerRed : AppConstants.accentGreen),
-            const SizedBox(width: 8),
-            Text(isReject ? "Reject & Auto-Refund" : "Deliver Voucher", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          isReject
-              ? "Kya aap waqai Order #$orderId ko REJECT karna chahte hain?\n\n₨ ${_currencyFormat.format(amount)} customer ($userMobile) ke wallet balance me foran refund ho jayenge."
-              : "Kya aapne Player UID: $playerId par voucher deliver kar diya hai?\n\nOrder ko DELIVERED mark kar diya jaye?",
-          style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isReject ? AppConstants.dangerRed : AppConstants.accentGreen,
-              foregroundColor: isReject ? Color(0xFF0F172A) : Color(0xFF021A13),
-            ),
-            onPressed: () async {
-              Navigator.pop(ctx);
-
-              try {
-                final res = await _api.dio.post(
-                  '',
-                  queryParameters: {'action': 'review_voucher_order'},
-                  data: {
-                    'orderId': orderId,
-                    'status': decision,
-                    'userMobile': userMobile,
-                    'amount': amount,
-                    'adminName': 'Administrator',
-                  },
-                );
-
-                if (res.data['status'] == 'success') {
-                  await admin.fetchAllData();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: isReject ? AppConstants.dangerRed : AppConstants.accentGreen,
-                        content: Text(
-                          isReject ? "✓ Order rejected & ₨ ${_currencyFormat.format(amount)} refunded to $userMobile!" : "✓ Voucher order marked as delivered!",
-                          style: TextStyle(color: isReject ? Color(0xFF0F172A) : Color(0xFF021A13), fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    );
-                  }
-                } else {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(backgroundColor: AppConstants.dangerRed, content: Text(res.data['message'] ?? "Order update failed.")),
-                    );
-                  }
-                }
-              } catch (_) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(backgroundColor: AppConstants.dangerRed, content: Text("Network error while updating voucher order.")),
-                  );
-                }
-              }
-            },
-            child: Text(isReject ? "Yes, Reject & Refund" : "Yes, Mark Delivered", style: const TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+  void _toast(BuildContext context, String msg, bool ok) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

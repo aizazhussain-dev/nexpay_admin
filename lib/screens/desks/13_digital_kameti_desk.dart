@@ -1,10 +1,10 @@
-import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/institutional_scroll.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class DigitalKametiDeskScreen extends StatefulWidget {
   const DigitalKametiDeskScreen({super.key});
@@ -14,993 +14,379 @@ class DigitalKametiDeskScreen extends StatefulWidget {
 }
 
 class _DigitalKametiDeskScreenState extends State<DigitalKametiDeskScreen> {
-  final ApiClient _api = ApiClient();
-  final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
-
-  bool _isLoading = true;
-  List<dynamic> _poolsList = [];
-  String _searchQuery = "";
-  String _statusFilter = "ALL"; // ALL, OPEN, RUNNING, COMPLETED
-  bool _isActionBusy = false;
+  final TextEditingController _searchCtrl = TextEditingController();
+  final NumberFormat _money = NumberFormat('#,##0', 'en_US');
+  String _statusFilter = 'ALL';
+  String _query = '';
 
   @override
-  void initState() {
-    super.initState();
-    _fetchKametiPools();
-  }
-
-  Future<void> _fetchKametiPools() async {
-    setState(() => _isLoading = true);
-    try {
-      final res = await _api.dio.get(
-        '',
-        queryParameters: {'action': 'get_kametis', '_t': DateTime.now().millisecondsSinceEpoch},
-      );
-      if (res.data['status'] == 'success') {
-        setState(() {
-          _poolsList = res.data['pools'] ?? [];
-        });
-      }
-    } catch (e) {
-      debugPrint("Kameti API Error: $e");
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
+    final pools = admin.kametiPools;
+    final members = admin.kametiMembers;
 
-    // Filter Logic
-    final filteredList = _poolsList.where((p) {
-      final status = (p['status'] ?? 'OPEN').toString().toUpperCase();
-      if (_statusFilter == "OPEN" && status != "OPEN") return false;
-      if (_statusFilter == "RUNNING" && status != "RUNNING") return false;
-      if (_statusFilter == "COMPLETED" && status != "COMPLETED") return false;
+    double totalMonthlyRunRate = 0;
+    int activePools = 0;
 
-      if (_searchQuery.isNotEmpty) {
-        final q = _searchQuery.toLowerCase();
-        final title = (p['title'] ?? '').toString().toLowerCase();
-        final id = (p['id'] ?? '').toString();
-        final winnerName = (p['current_winner'] != null ? (p['current_winner']['user_name'] ?? '') : '').toString().toLowerCase();
-        return title.contains(q) || id.contains(q) || winnerName.contains(q);
-      }
-      return true;
-    }).toList();
-
-    // Operational Counters
-    int runningPools = 0;
-    int openPools = 0;
-    double totalActivePotCapital = 0.0;
-    int totalEnrolledMembers = 0;
-
-    for (var p in _poolsList) {
-      final status = (p['status'] ?? 'OPEN').toString().toUpperCase();
-      final qist = double.tryParse(p['monthly_amount']?.toString() ?? '0') ?? 0.0;
-      final membersCount = int.tryParse(p['total_members']?.toString() ?? '10') ?? 10;
-      final joinedCount = int.tryParse(p['joined_count']?.toString() ?? '0') ?? 0;
-
-      totalEnrolledMembers += joinedCount;
-
-      if (status == 'RUNNING') {
-        runningPools++;
-        totalActivePotCapital += (qist * membersCount);
-      } else if (status == 'OPEN') {
-        openPools++;
-      }
+    for (final raw in pools) {
+      if (raw is! Map) continue;
+      final st = (raw['status'] ?? 'ACTIVE').toString().toUpperCase();
+      final monthly = double.tryParse(raw['monthly_amount']?.toString() ?? raw['monthlyAmount']?.toString() ?? '0') ?? 0;
+      final cap = int.tryParse(raw['total_members']?.toString() ?? raw['totalMembers']?.toString() ?? '0') ?? 0;
+      if (st == 'ACTIVE' || st == 'OPEN') activePools++;
+      totalMonthlyRunRate += (monthly * cap);
     }
 
-    return Padding(
-      padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
+    final filtered = pools.where((raw) {
+      if (raw is! Map) return false;
+      final st = (raw['status'] ?? 'ACTIVE').toString().toUpperCase();
+      if (_statusFilter == 'ACTIVE' && !(st == 'ACTIVE' || st == 'OPEN')) return false;
+      if (_statusFilter == 'COMPLETED' && st != 'COMPLETED') return false;
+
+      if (_query.isEmpty) return true;
+      final hay = '${raw['id']} ${raw['title']} ${raw['status']}'.toLowerCase();
+      return hay.contains(_query);
+    }).toList();
+
+    return NexPayDeskScaffold(
+      header: NexPayDeskHeader(
+        title: 'Digital Kameti ROSCA Committees & Pot Disbursement',
+        subtitle: 'Launch verified rotating savings committees, audit member installments, and release monthly payouts',
+        badgeText: 'ROSCA TREASURY',
+        badgeColor: AppConstants.accentGreen,
+        actions: [
+          OutlinedButton.icon(
+            onPressed: () => admin.fetchAllData(),
+            icon: const Icon(Icons.refresh_rounded, size: 17),
+            label: const Text('Sync Committees'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => _openCreatePoolDrawer(context, admin),
+            icon: const Icon(Icons.add_circle_outline_rounded, size: 18),
+            label: const Text('Create Kameti Pool'),
+          ),
+        ],
+      ),
+      statStrip: NexPayStatStrip(
+        items: [
+          NexPayStatItem(
+            label: 'Active Kameti Pools',
+            value: '$activePools Committees',
+            sublabel: '${pools.length} total ROSCA pools created',
+            icon: Icons.groups_rounded,
+            color: AppConstants.accentGreen,
+          ),
+          NexPayStatItem(
+            label: 'Enrolled Participants',
+            value: '${members.length} Members',
+            sublabel: 'KYC-verified committee subscribers',
+            icon: Icons.person_pin_rounded,
+            color: AppConstants.accentBlue,
+          ),
+          NexPayStatItem(
+            label: 'Monthly Pool Liquidity',
+            value: 'Rs. ${_money.format(totalMonthlyRunRate)}',
+            sublabel: 'Aggregate monthly pot rotation',
+            icon: Icons.account_balance_wallet_rounded,
+            color: AppConstants.accentGold,
+          ),
+          const NexPayStatItem(
+            label: 'Payout Governance',
+            value: 'Admin Audited',
+            sublabel: 'Manual or Lucky-Draw pot release',
+            icon: Icons.verified_user_rounded,
+            color: AppConstants.accentGreen,
+          ),
+        ],
+      ),
+      filterBar: NexPayFilterBar(
+        searchController: _searchCtrl,
+        searchHint: 'Search committee by pool ID or title...',
+        onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+        filters: const ['ALL', 'ACTIVE', 'COMPLETED'],
+        selectedFilter: _statusFilter,
+        onFilterChanged: (f) => setState(() => _statusFilter = f),
+        resultSummary: 'Showing ${filtered.length} of ${pools.length} Kameti pools',
+      ),
+      body: NexPayFullWidthTable(
+        minTableWidth: 1140,
+        emptyState: const InstitutionalEmptyState(
+          icon: Icons.groups_rounded,
+          title: 'No Digital Kameti Pools Found',
+          subtitle: 'Click "Create Kameti Pool" above to launch a new rotating savings committee.',
+        ),
+        columns: const [
+          DataColumn(label: Text('POOL ID')),
+          DataColumn(label: Text('COMMITTEE TITLE')),
+          DataColumn(label: Text('MONTHLY SHARE'), numeric: true),
+          DataColumn(label: Text('ENROLLED / CAPACITY')),
+          DataColumn(label: Text('DURATION')),
+          DataColumn(label: Text('TOTAL POT VALUE'), numeric: true),
+          DataColumn(label: Text('STATUS')),
+          DataColumn(label: Text('POOL MANAGEMENT')),
+        ],
+        rows: filtered.map((raw) {
+          final p = Map<String, dynamic>.from(raw as Map);
+          final id = int.tryParse(p['id']?.toString() ?? '0') ?? 0;
+          final title = (p['title'] ?? 'Kameti Committee').toString();
+          final monthly = double.tryParse(p['monthly_amount']?.toString() ?? p['monthlyAmount']?.toString() ?? '0') ?? 0;
+          final totalMembers = int.tryParse(p['total_members']?.toString() ?? p['totalMembers']?.toString() ?? '10') ?? 10;
+          final totalMonths = int.tryParse(p['total_months']?.toString() ?? p['totalMonths']?.toString() ?? '$totalMembers') ?? totalMembers;
+          final poolMembers = members.where((m) => m is Map && (m['pool_id']?.toString() == '$id' || m['kameti_id']?.toString() == '$id')).toList();
+          final grossPot = monthly * totalMembers;
+          final status = (p['status'] ?? 'ACTIVE').toString().toUpperCase();
+
+          return DataRow(
+            cells: [
+              DataCell(Text('#KM-$id', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
+              DataCell(Text('Rs. ${_money.format(monthly)}', style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(
+                Text(
+                  '${poolMembers.length} / $totalMembers Members',
+                  style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentBlue),
+                ),
+              ),
+              DataCell(Text('$totalMonths Months', style: const TextStyle(fontSize: 12.5))),
+              DataCell(
+                Text(
+                  'Rs. ${_money.format(grossPot)}',
+                  style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGold),
+                ),
+              ),
+              DataCell(NexPayStatusBadge(status: status)),
+              DataCell(
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => _openPoolInspectorDrawer(context, admin, p, poolMembers),
+                      icon: const Icon(Icons.emoji_events_outlined, size: 15),
+                      label: const Text('Manage & Release Pot'),
+                    ),
+                    const SizedBox(width: 6),
+                    IconButton(
+                      tooltip: 'Delete Pool',
+                      icon: const Icon(Icons.delete_outline_rounded, color: AppConstants.dangerRed, size: 19),
+                      onPressed: () async {
+                        final ok = await admin.deleteKametiPool(id);
+                        if (context.mounted) {
+                          _toast(context, ok ? 'Kameti pool #KM-$id deleted.' : 'Cannot delete active pool.', ok);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  void _openCreatePoolDrawer(BuildContext context, AdminProvider admin) {
+    final titleCtrl = TextEditingController();
+    final monthlyCtrl = TextEditingController(text: '10000');
+    final membersCtrl = TextEditingController(text: '10');
+    final monthsCtrl = TextEditingController(text: '10');
+
+    showNexPayInspectorDrawer(
+      context: context,
+      title: 'Launch New Digital Kameti Pool',
+      subtitle: 'Configure monthly contribution, slot capacity, and committee cycle',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Bar with Launch & Sync Action
+          TextField(
+            controller: titleCtrl,
+            decoration: const InputDecoration(labelText: 'Committee Title (e.g. Executive 100K Gold Kameti)'),
+          ),
+          const SizedBox(height: 14),
+          TextField(
+            controller: monthlyCtrl,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Monthly Installment Per Member (PKR)', prefixText: 'Rs. '),
+          ),
+          const SizedBox(height: 14),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
+                child: TextField(
+                  controller: membersCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Total Member Slots'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  controller: monthsCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Duration (Months)'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      footerActions: [
+        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () async {
+            final title = titleCtrl.text.trim();
+            final monthly = double.tryParse(monthlyCtrl.text.trim()) ?? 0;
+            final count = int.tryParse(membersCtrl.text.trim()) ?? 0;
+            final months = int.tryParse(monthsCtrl.text.trim()) ?? count;
+            if (title.isEmpty || monthly <= 0 || count < 2) {
+              _toast(context, 'Enter valid pool title, monthly amount, and at least 2 members.', false);
+              return;
+            }
+            Navigator.pop(context);
+            final ok = await admin.createKametiPool(title, monthly, count, months);
+            if (context.mounted) {
+              _toast(context, ok ? 'Kameti pool "$title" launched!' : 'Failed to create pool.', ok);
+            }
+          },
+          icon: const Icon(Icons.rocket_launch_rounded, size: 17),
+          label: const Text('Launch Committee'),
+        ),
+      ],
+    );
+  }
+
+  void _openPoolInspectorDrawer(
+      BuildContext context,
+      AdminProvider admin,
+      Map<String, dynamic> p,
+      List<dynamic> poolMembers,
+      ) {
+    final id = int.tryParse(p['id']?.toString() ?? '0') ?? 0;
+    final title = (p['title'] ?? 'Kameti Committee').toString();
+    final monthly = double.tryParse(p['monthly_amount']?.toString() ?? p['monthlyAmount']?.toString() ?? '0') ?? 0;
+    final totalMembers = int.tryParse(p['total_members']?.toString() ?? p['totalMembers']?.toString() ?? '10') ?? 10;
+    final grossPot = monthly * totalMembers;
+    String selectedWinnerMobile = '';
+
+    showNexPayInspectorDrawer(
+      context: context,
+      width: 560,
+      title: 'Committee #KM-$id: $title',
+      subtitle: 'Monthly Share: Rs. ${_money.format(monthly)} • Total Pot: Rs. ${_money.format(grossPot)}',
+      child: StatefulBuilder(
+        builder: (ctx, setDrawerState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppConstants.surfaceCard,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppConstants.borderColor),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Digital Kameti (Bachat Committee) Command",
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        if (runningPools > 0) ...[
-                          const SizedBox(width: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: AppConstants.accentGreen.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppConstants.accentGreen.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              "$runningPools ACTIVE COMMITTEES",
-                              style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                    const Text('MONTHLY POT DISBURSEMENT VALUE', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 4),
-                    const Text(
-                      "Automated 10-seat savings pools, 10th monthly cutoff tracker, risk-weighted lucky draws & safe pot release",
-                      style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                    ),
+                    Text('Rs. ${_money.format(grossPot)}', style: const TextStyle(color: AppConstants.accentGold, fontSize: 24, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 4),
+                    Text('Enrolled Slots: ${poolMembers.length} / $totalMembers', style: const TextStyle(color: AppConstants.textSecondary, fontSize: 12.5, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: () => _openCreatePoolDialog(context),
-                    icon: const Icon(Icons.add_circle_rounded, size: 18),
-                    label: const Text("Launch New Pool", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                  ),
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Color(0xFF94A3B8)),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: () {
-                      _fetchKametiPools();
-                      admin.fetchAllData();
-                    },
-                    icon: const Icon(Icons.sync_rounded, size: 18, color: AppConstants.accentGreen),
-                    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Operational Metric Cards
-          Wrap(
-            spacing: 14,
-            runSpacing: 10,
-            children: [
-              _buildMetricCard("ACTIVE RUNNING POOLS", "$runningPools Pools", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("ACTIVE CAPITAL VOLUME", "₨ ${_currencyFormat.format(totalActivePotCapital)}", AppConstants.accentGold, isDesktop),
-              _buildMetricCard("ENROLLED PARTICIPANTS", "$totalEnrolledMembers Members", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("SLOTS ACCEPTING MEMBERS", "$openPools Open Pools", Color(0xFFA855F7), isDesktop),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Filters & Search
-          Wrap(
-            spacing: 12,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SizedBox(
-                width: isDesktop ? 340 : double.infinity,
-                child: TextField(
-                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-                  decoration: InputDecoration(
-                    hintText: "Search Pool Title, ID, Winner Name...",
-                    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-                    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-                    filled: true,
-                    fillColor: AppConstants.surface,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                  ),
-                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                ),
-              ),
-              _buildFilterChip("ALL", "All Pools (${_poolsList.length})"),
-              _buildFilterChip("RUNNING", "Running / Active ($runningPools)"),
-              _buildFilterChip("OPEN", "Open for Joining ($openPools)"),
-              _buildFilterChip("COMPLETED", "Matured & Completed"),
-            ],
-          ),
-          const SizedBox(height: 18),
-
-          // Content Desk
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator(color: AppConstants.accentGreen))
-                : filteredList.isEmpty
-                ? const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.groups_outlined, size: 54, color: AppConstants.textMuted),
-                  SizedBox(height: 12),
-                  Text(
-                    "No digital kameti pools found",
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )
-                : isDesktop
-                ? _buildDesktopTable(filteredList, admin)
-                : _buildMobileCards(filteredList, admin),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMetricCard(String title, String value, Color color, bool isDesktop) {
-    return Container(
-      width: isDesktop ? 220 : 160,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _statusFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
-      ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _statusFilter = key),
-    );
-  }
-
-  Widget _buildDesktopTable(List<dynamic> list, AdminProvider admin) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: InstitutionalVScroll(
-          scrollDirection: Axis.vertical,
-          child: InstitutionalHScroll(
-            child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-              dataRowColor: WidgetStateProperty.all(Colors.transparent),
-              horizontalMargin: 20,
-              columnSpacing: 22,
-              columns: const [
-                DataColumn(label: Text("POOL DETAILS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("MONTHLY QIST", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("POT VALUE & FEE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("MEMBERS & 10TH CUTOFF", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("CYCLE & RIGHTFUL WINNER", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("STATUS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("EXECUTIVE ACTIONS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-              ],
-              rows: list.map((p) {
-                final poolId = int.tryParse(p['id']?.toString() ?? '0') ?? 0;
-                final status = (p['status'] ?? 'OPEN').toString().toUpperCase();
-                final isRunning = status == 'RUNNING';
-
-                final qist = double.tryParse(p['monthly_amount']?.toString() ?? '0') ?? 0.0;
-                final totalMembers = int.tryParse(p['total_members']?.toString() ?? '10') ?? 10;
-                final totalMonths = int.tryParse(p['total_months']?.toString() ?? '10') ?? 10;
-                final currentMonth = int.tryParse(p['current_month']?.toString() ?? '1') ?? 1;
-
-                final joinedCount = int.tryParse(p['joined_count']?.toString() ?? '0') ?? 0;
-                final paidCount = int.tryParse(p['current_month_paid_count']?.toString() ?? '0') ?? 0;
-
-                final grossPot = qist * totalMembers;
-                final fee = grossPot * 0.015; // 1.5% NexPay platform fee
-                final netPayout = grossPot - fee;
-
-                final isFull = joinedCount >= totalMembers;
-                final isCollectionComplete = paidCount >= totalMembers;
-                final isPast10th = (p['is_past_10th'] == 1 || p['is_past_10th'] == true);
-
-                final winner = p['current_winner'];
-                final winnerName = winner != null ? (winner['user_name'] ?? 'Pending') : 'Pending';
-                final winnerMob = winner != null ? (winner['user_mobile'] ?? '') : '';
-
-                return DataRow(
-                  cells: [
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(p['title'] ?? 'Digital Kameti', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
-                          Text("ID: #$poolId • Duration: $totalMonths Months", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11, fontFamily: 'monospace')),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        "₨ ${_currencyFormat.format(qist)}",
-                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("₨ ${_currencyFormat.format(grossPot)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 13)),
-                          Text("Net: ₨ ${_currencyFormat.format(netPayout)} (1.5% Fee)", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Text("$joinedCount / $totalMembers Members", style: TextStyle(color: isFull ? AppConstants.accentGreen : AppConstants.accentGold, fontWeight: FontWeight.bold, fontSize: 12)),
-                              const SizedBox(width: 4),
-                              Text("($paidCount Paid)", style: const TextStyle(color: Color(0xFF64748B), fontSize: 11)),
-                            ],
-                          ),
-                          if (isPast10th && !isCollectionComplete && isRunning) ...[
-                            const SizedBox(height: 2),
-                            const Text("⚠️ 10th Cutoff Deficit", style: TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w800)),
-                          ],
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Month #$currentMonth of $totalMonths", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 12)),
-                          if (isRunning && winnerMob.isNotEmpty) ...[
-                            Text("👑 $winnerName ($winnerMob)", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11, fontFamily: 'monospace')),
-                          ],
-                        ],
-                      ),
-                    ),
-                    DataCell(_buildStatusBadge(status)),
-                    DataCell(
-                      Row(
-                        children: [
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppConstants.surfaceCard,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            onPressed: () => _openMembersAuditDialog(context, p),
-                            icon: const Icon(Icons.people_alt_rounded, size: 14, color: AppConstants.accentBlue),
-                            label: Text("Members ($joinedCount)", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-                          ),
-                          const SizedBox(width: 6),
-                          IconButton(
-                            icon: const Icon(Icons.edit_note_rounded, size: 18, color: AppConstants.accentGold),
-                            tooltip: "Edit Pool Settings",
-                            onPressed: () => _openEditPoolDialog(context, p),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline_rounded, size: 18, color: AppConstants.dangerRed),
-                            tooltip: "Delete & Auto-Refund Pool",
-                            onPressed: () => _confirmDeletePool(context, poolId, p['title'] ?? 'Kameti'),
-                          ),
-                          if (isRunning) ...[
-                            const SizedBox(width: 4),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isCollectionComplete ? AppConstants.accentGreen : Colors.amber.withValues(alpha: 0.2),
-                                foregroundColor: isCollectionComplete ? Color(0xFF021A13) : Colors.amber,
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              ),
-                              onPressed: _isActionBusy
-                                  ? null
-                                  : () => _confirmReleasePot(context, poolId, p['title'] ?? 'Kameti', winnerMob, winnerName, netPayout, isCollectionComplete, totalMembers - paidCount),
-                              child: Text(
-                                isCollectionComplete ? "Release Pot" : "Deficit (${totalMembers - paidCount} Due)",
-                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileCards(List<dynamic> list, AdminProvider admin) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, idx) {
-        final p = list[idx];
-        final poolId = int.tryParse(p['id']?.toString() ?? '0') ?? 0;
-        final status = (p['status'] ?? 'OPEN').toString().toUpperCase();
-        final isRunning = status == 'RUNNING';
-
-        final qist = double.tryParse(p['monthly_amount']?.toString() ?? '0') ?? 0.0;
-        final totalMembers = int.tryParse(p['total_members']?.toString() ?? '10') ?? 10;
-        final totalMonths = int.tryParse(p['total_months']?.toString() ?? '10') ?? 10;
-        final currentMonth = int.tryParse(p['current_month']?.toString() ?? '1') ?? 1;
-
-        final joinedCount = int.tryParse(p['joined_count']?.toString() ?? '0') ?? 0;
-        final paidCount = int.tryParse(p['current_month_paid_count']?.toString() ?? '0') ?? 0;
-
-        final grossPot = qist * totalMembers;
-        final fee = grossPot * 0.015;
-        final netPayout = grossPot - fee;
-        final isCollectionComplete = paidCount >= totalMembers;
-
-        final winner = p['current_winner'];
-        final winnerName = winner != null ? (winner['user_name'] ?? 'Pending') : 'Pending';
-        final winnerMob = winner != null ? (winner['user_mobile'] ?? '') : '';
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppConstants.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isRunning ? AppConstants.accentGreen.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(p['title'] ?? 'Digital Kameti', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14.5)),
-                  _buildStatusBadge(status),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text("ID: #$poolId • Month #$currentMonth of $totalMonths", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5, fontFamily: 'monospace')),
-              const Divider(color: Color(0xFFE2E8F0), height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Monthly Qist", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text("₨ ${_currencyFormat.format(qist)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 15)),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Text("Net Pot Release", style: TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                      Text("₨ ${_currencyFormat.format(netPayout)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 15)),
-                    ],
-                  ),
-                ],
+              const SizedBox(height: 18),
+              const Text(
+                'ENROLLED MEMBERS (SELECT SPECIFIC RECIPIENT OR LEAVE EMPTY FOR LUCKY DRAW)',
+                style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Capacity: $joinedCount / $totalMembers Members ($paidCount Paid)", style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5, fontWeight: FontWeight.bold)),
-                  if (isRunning && winnerMob.isNotEmpty)
-                    Text("👑 $winnerName", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontWeight: FontWeight.bold)),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppConstants.accentBlue,
-                        side: BorderSide(color: AppConstants.accentBlue.withValues(alpha: 0.4)),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      onPressed: () => _openMembersAuditDialog(context, p),
-                      icon: const Icon(Icons.people_alt_rounded, size: 16),
-                      label: Text("Audit Members ($joinedCount)", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
+              if (poolMembers.isEmpty)
+                const Text('No customers have joined this pool yet.', style: TextStyle(color: AppConstants.textMuted, fontSize: 13))
+              else
+                ...poolMembers.map((rawM) {
+                  if (rawM is! Map) return const SizedBox.shrink();
+                  final mob = (rawM['user_mobile'] ?? rawM['mobile'] ?? '').toString();
+                  final mName = (rawM['user_name'] ?? rawM['name'] ?? 'Member').toString();
+                  final hasWon = rawM['has_won'] == 1 || rawM['has_won'] == true || rawM['won'] == true;
+                  final isSelected = selectedWinnerMobile == mob;
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppConstants.accentGreenLight : AppConstants.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: isSelected ? AppConstants.accentGreen : AppConstants.borderColor),
                     ),
-                  ),
-                  if (isRunning) ...[
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isCollectionComplete ? AppConstants.accentGreen : Colors.amber.withValues(alpha: 0.2),
-                          foregroundColor: isCollectionComplete ? Color(0xFF021A13) : Colors.amber,
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        onPressed: _isActionBusy
-                            ? null
-                            : () => _confirmReleasePot(context, poolId, p['title'] ?? 'Kameti', winnerMob, winnerName, netPayout, isCollectionComplete, totalMembers - paidCount),
-                        child: Text(
-                          isCollectionComplete ? "Release Pot" : "Deficit Alert",
-                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildStatusBadge(String status) {
-    Color bg;
-    Color text;
-
-    if (status == 'RUNNING') {
-      bg = AppConstants.accentGreen.withValues(alpha: 0.15);
-      text = AppConstants.accentGreen;
-    } else if (status == 'OPEN') {
-      bg = Colors.amber.withValues(alpha: 0.15);
-      text = Colors.amber;
-    } else {
-      bg = Color(0xFFA855F7).withValues(alpha: 0.15);
-      text = Color(0xFFA855F7);
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
-    );
-  }
-
-  // Dialog 1: Create Pool Modal
-  void _openCreatePoolDialog(BuildContext context) {
-    final titleController = TextEditingController();
-    final amountController = TextEditingController();
-    final membersController = TextEditingController(text: "10");
-    final monthsController = TextEditingController(text: "10");
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: const Row(
-          children: [
-            Icon(Icons.add_circle_rounded, color: AppConstants.accentGreen),
-            SizedBox(width: 8),
-            Text("Launch Digital Kameti", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Container(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                style: const TextStyle(color: Color(0xFF0F172A)),
-                decoration: InputDecoration(
-                  labelText: "KAMETI TITLE / NAME",
-                  labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                  hintText: "e.g. Monthly 5k Bachat Committee",
-                  hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                  filled: true,
-                  fillColor: AppConstants.surfaceCard,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700),
-                decoration: InputDecoration(
-                  labelText: "MONTHLY QIST AMOUNT (PKR)",
-                  labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                  hintText: "5000",
-                  hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                  filled: true,
-                  fillColor: AppConstants.surfaceCard,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: membersController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Color(0xFF0F172A)),
-                      decoration: InputDecoration(
-                        labelText: "TOTAL MEMBERS",
-                        labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                        filled: true,
-                        fillColor: AppConstants.surfaceCard,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: monthsController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Color(0xFF0F172A)),
-                      decoration: InputDecoration(
-                        labelText: "MONTHS (DURATION)",
-                        labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                        filled: true,
-                        fillColor: AppConstants.surfaceCard,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-            onPressed: () async {
-              final title = titleController.text.trim();
-              final amount = double.tryParse(amountController.text) ?? 0.0;
-              final members = int.tryParse(membersController.text) ?? 10;
-              final months = int.tryParse(monthsController.text) ?? 10;
-
-              if (title.isEmpty || amount <= 0) return;
-              Navigator.pop(ctx);
-              setState(() => _isActionBusy = true);
-
-              try {
-                final res = await _api.dio.post(
-                  '',
-                  queryParameters: {'action': 'create_kameti_pool'},
-                  data: {
-                    'title': title,
-                    'monthly_amount': amount,
-                    'total_members': members,
-                    'total_months': months,
-                  },
-                );
-
-                if (res.data['status'] == 'success') {
-                  await _fetchKametiPools();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ $title launched live!", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-                    );
-                  }
-                }
-              } catch (_) {} finally {
-                if (mounted) setState(() => _isActionBusy = false);
-              }
-            },
-            child: const Text("Launch Pool Live", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Dialog 2: Edit Pool Modal
-  void _openEditPoolDialog(BuildContext context, dynamic pool) {
-    final titleController = TextEditingController(text: pool['title']);
-    final amountController = TextEditingController(text: pool['monthly_amount'].toString());
-    final membersController = TextEditingController(text: pool['total_members'].toString());
-    final monthsController = TextEditingController(text: pool['total_months'].toString());
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: Text("Edit ${pool['title']}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-        content: Container(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                style: const TextStyle(color: Color(0xFF0F172A)),
-                decoration: InputDecoration(
-                  labelText: "POOL TITLE",
-                  labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                  filled: true,
-                  fillColor: AppConstants.surfaceCard,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700),
-                decoration: InputDecoration(
-                  labelText: "MONTHLY QIST (PKR)",
-                  labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                  filled: true,
-                  fillColor: AppConstants.surfaceCard,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-            onPressed: () async {
-              final title = titleController.text.trim();
-              final amount = double.tryParse(amountController.text) ?? 0.0;
-              final members = int.tryParse(membersController.text) ?? 10;
-              final months = int.tryParse(monthsController.text) ?? 10;
-
-              Navigator.pop(ctx);
-              setState(() => _isActionBusy = true);
-
-              try {
-                final res = await _api.dio.post(
-                  '',
-                  queryParameters: {'action': 'edit_kameti_pool'},
-                  data: {
-                    'poolId': pool['id'],
-                    'title': title,
-                    'monthly_amount': amount,
-                    'total_members': members,
-                    'total_months': months,
-                  },
-                );
-
-                if (res.data['status'] == 'success') {
-                  await _fetchKametiPools();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ Pool settings updated!", style: TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-                    );
-                  }
-                }
-              } catch (_) {} finally {
-                if (mounted) setState(() => _isActionBusy = false);
-              }
-            },
-            child: const Text("Save Changes", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Dialog 3: Members Payment Audit Modal
-  void _openMembersAuditDialog(BuildContext context, dynamic pool) {
-    final members = pool['members'] is List ? pool['members'] as List : [];
-    final currentMonth = int.tryParse(pool['current_month']?.toString() ?? '1') ?? 1;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: Row(
-          children: [
-            const Icon(Icons.people_alt_rounded, color: AppConstants.accentBlue),
-            const SizedBox(width: 8),
-            Expanded(child: Text("${pool['title']} (Members Audit)", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16))),
-          ],
-        ),
-        content: Container(
-          constraints: const BoxConstraints(maxWidth: 620, maxHeight: 520),
-          child: members.isEmpty
-              ? const Center(child: Text("Is kameti pool me abhi tak koi member join nahi hua.", style: TextStyle(color: Color(0xFF64748B))))
-              : ListView.builder(
-            shrinkWrap: true,
-            itemCount: members.length,
-            itemBuilder: (context, idx) {
-              final m = members[idx];
-              final turnMonth = int.tryParse(m['turn_month']?.toString() ?? '0') ?? 0;
-              final isCurrentWinner = turnMonth == currentMonth;
-              final isPaid = (m['is_current_paid'] == 1 || m['is_current_paid'] == true);
-              final isOverdue = (m['is_overdue'] == 1 || m['is_overdue'] == true);
-
-              return Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isCurrentWinner ? AppConstants.accentGold.withValues(alpha: 0.1) : AppConstants.surfaceCard,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: isCurrentWinner ? AppConstants.accentGold : Color(0xFFE2E8F0)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Text(m['user_name'] ?? 'Member', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 13.5)),
-                            if (isCurrentWinner) ...[
-                              const SizedBox(width: 6),
-                              const Text("👑 WINNER", style: TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 10)),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(mName, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                              Text(mob, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
                             ],
-                          ],
+                          ),
                         ),
-                        const SizedBox(height: 2),
-                        Text("📱 ${m['user_mobile']}", style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11, fontFamily: 'monospace')),
+                        if (hasWon)
+                          const NexPayStatusBadge(status: 'POT RECEIVED')
+                        else
+                          OutlinedButton(
+                            onPressed: () {
+                              setDrawerState(() {
+                                selectedWinnerMobile = isSelected ? '' : mob;
+                              });
+                            },
+                            child: Text(isSelected ? 'Selected Winner' : 'Select Recipient'),
+                          ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(turnMonth > 0 ? "Turn: Month #$turnMonth" : "Pending Lucky Draw", style: const TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold, fontSize: 11.5)),
-                        const SizedBox(height: 3),
-                        isPaid
-                            ? const Text("✓ Qist Paid", style: TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w700))
-                            : Text(isOverdue ? "⚠️ Overdue (10th Passed)" : "⏳ Unpaid", style: TextStyle(color: isOverdue ? AppConstants.dangerRed : Colors.amber, fontSize: 10.5, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ],
-                ),
+                  );
+                }),
+            ],
+          );
+        },
+      ),
+      footerActions: [
+        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.releaseKametiPot(id, targetMobile: selectedWinnerMobile);
+            if (context.mounted) {
+              _toast(
+                context,
+                ok
+                    ? (selectedWinnerMobile.isEmpty
+                    ? 'Lucky Draw executed & pot disbursed for #KM-$id!'
+                    : 'Kameti pot released to $selectedWinnerMobile!')
+                    : 'Pot release failed.',
+                ok,
               );
-            },
-          ),
+            }
+          },
+          icon: const Icon(Icons.emoji_events_rounded, size: 17),
+          label: const Text('Release Monthly Pot'),
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
-        ],
-      ),
+      ],
     );
   }
 
-  // Dialog 4: Release Pot to Winner
-  void _confirmReleasePot(BuildContext context, int poolId, String title, String winnerMob, String winnerName, double netPayout, bool isReady, int shortfall) {
-    if (!isReady) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: AppConstants.surface,
-          title: const Text("Deficit Warning", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
-          content: Text("Is mahine abhi $shortfall members ki qist baqi hai! Poori collection ke baghair pot release nahi kiya ja sakta.", style: const TextStyle(color: AppConstants.textMuted)),
-          actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("OK", style: TextStyle(color: AppConstants.accentGreen)))],
-        ),
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: const Row(
-          children: [
-            Icon(Icons.monetization_on_rounded, color: AppConstants.accentGreen),
-            SizedBox(width: 8),
-            Text("Authorize Pot Payout", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          "Kya aap waqai ₨ ${_currencyFormat.format(netPayout)} ka poora pot rightful winner $winnerName ($winnerMob) ke primary wallet balance me transfer karna chahte hain?",
-          style: const TextStyle(color: AppConstants.textMuted, fontSize: 13, height: 1.4),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-            onPressed: () async {
-              Navigator.pop(ctx);
-              setState(() => _isActionBusy = true);
-
-              try {
-                final res = await _api.dio.post(
-                  '',
-                  queryParameters: {'action': 'release_kameti_pot'},
-                  data: {'poolId': poolId, 'targetMobile': winnerMob},
-                );
-
-                if (res.data['status'] == 'success') {
-                  await _fetchKametiPools();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ Pot released to $winnerName!", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-                    );
-                  }
-                }
-              } catch (_) {} finally {
-                if (mounted) setState(() => _isActionBusy = false);
-              }
-            },
-            child: const Text("Disburse Pot", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Dialog 5: Delete Pool with Auto-Refund Safeguard
-  void _confirmDeletePool(BuildContext context, int poolId, String title) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        title: const Text("Delete Pool with Auto-Refund?", style: TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700)),
-        content: Text("Kya aap waqai Kameti \"$title\" (#$poolId) ko DELETE karna chahte hain?\n\nAgar members ne is mahine qist bhari hui hai to unka paisa foran unke wallet me AUTO-REFUND ho jayega!", style: const TextStyle(color: AppConstants.textMuted, height: 1.4)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
-            onPressed: () async {
-              Navigator.pop(ctx);
-              setState(() => _isActionBusy = true);
-
-              try {
-                final res = await _api.dio.post(
-                  '',
-                  queryParameters: {'action': 'delete_kameti_pool'},
-                  data: {'poolId': poolId},
-                );
-
-                if (res.data['status'] == 'success') {
-                  await _fetchKametiPools();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(backgroundColor: AppConstants.accentGreen, content: Text(res.data['message'] ?? "Pool deleted & refunded.", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-                    );
-                  }
-                }
-              } catch (_) {} finally {
-                if (mounted) setState(() => _isActionBusy = false);
-              }
-            },
-            child: const Text("Delete & Refund", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+  void _toast(BuildContext context, String msg, bool ok) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

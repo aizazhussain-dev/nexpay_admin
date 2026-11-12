@@ -1,936 +1,470 @@
-import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/institutional_scroll.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
-class UsersDirectoryDeskScreen extends StatefulWidget {
-  const UsersDirectoryDeskScreen({super.key});
+class UsersDirectoryScreen extends StatefulWidget {
+  const UsersDirectoryScreen({super.key});
 
   @override
-  State<UsersDirectoryDeskScreen> createState() => _UsersDirectoryDeskScreenState();
+  State<UsersDirectoryScreen> createState() => _UsersDirectoryScreenState();
 }
 
-class _UsersDirectoryDeskScreenState extends State<UsersDirectoryDeskScreen> {
-  final ApiClient _api = ApiClient();
-  final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
+class _UsersDirectoryScreenState extends State<UsersDirectoryScreen> {
+  final TextEditingController _searchCtrl = TextEditingController();
+  final NumberFormat _money = NumberFormat('#,##0.00', 'en_US');
+  String _filter = 'ALL';
+  String _query = '';
 
-  String _searchQuery = "";
-  String _riskFilter = "ALL"; // ALL, VERIFIED, BASIC, FROZEN
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
-    final usersMap = admin.users;
+    final List allUsers = [];
 
-    // Convert map to list for filtering and sorting
-    final List userList = [];
-    usersMap.forEach((mob, u) {
-    if (u is Map<String, dynamic>) {
-    userList.add(Map<String, dynamic>.from(u)..['mobile'] = mob);
-    } else if (u is Map) {
-    userList.add(Map<String, dynamic>.from(u)..['mobile'] = mob);
-    }
-    });
-
-    // Filter Logic
-    final filteredList = userList.where((u) {
-    final isFrozen = u['isFrozen'] == true || u['is_frozen'] == 1 || u['is_frozen'] == '1';
-    final isKyc = u['isKycVerified'] == true || u['is_kyc_verified'] == 1 || u['is_kyc_verified'] == '1';
-
-    if (_riskFilter == "VERIFIED" && !isKyc) return false;
-    if (_riskFilter == "BASIC" && (isKyc || isFrozen)) return false;
-    if (_riskFilter == "FROZEN" && !isFrozen) return false;
-
-    if (_searchQuery.isNotEmpty) {
-    final q = _searchQuery.toLowerCase();
-    final name = (u['name'] ?? '').toString().toLowerCase();
-    final mob = (u['mobile'] ?? '').toString().toLowerCase();
-    final cnic = (u['cnic'] ?? '').toString().toLowerCase();
-    final email = (u['email'] ?? '').toString().toLowerCase();
-    return name.contains(q) || mob.contains(q) || cnic.contains(q) || email.contains(q);
-    }
-    return true;
-    }).toList();
-
-    // Metrics
+    double totalPkr = 0;
+    double totalUsdt = 0;
+    double totalGold = 0;
     int verifiedCount = 0;
     int frozenCount = 0;
-    double totalSystemCash = 0.0;
-    double totalSystemCrypto = 0.0;
 
-    for (var u in userList) {
-    final isKyc = u['isKycVerified'] == true || u['is_kyc_verified'] == 1;
-    final isFrozen = u['isFrozen'] == true || u['is_frozen'] == 1;
-    final bal = double.tryParse(u['balance']?.toString() ?? '0') ?? 0.0;
-    final crypto = double.tryParse(u['crypto']?.toString() ?? '0') ?? 0.0;
+    admin.users.forEach((mobile, raw) {
+    if (raw is! Map) return;
+    final u = Map<String, dynamic>.from(raw);
+    u['mobile'] = (u['mobile'] ?? mobile).toString();
+    allUsers.add(u);
 
-    totalSystemCash += bal;
-    totalSystemCrypto += crypto;
+    totalPkr += double.tryParse(u['balance']?.toString() ?? '0') ?? 0;
+    totalUsdt += double.tryParse(u['cryptoBalance']?.toString() ?? u['usdt']?.toString() ?? '0') ?? 0;
+    totalGold += double.tryParse(u['goldGrams']?.toString() ?? u['gold']?.toString() ?? '0') ?? 0;
+
+    final isKyc = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
     if (isKyc) verifiedCount++;
-    if (isFrozen) frozenCount++;
-    }
+    if (u['isFrozen'] == true || u['isFrozen'] == 1) frozenCount++;
+    });
 
-    return Padding(
-    padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    // Header Bar
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    Expanded(
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Text(
-    "Master User Directory & Security Controller",
-    style: TextStyle(
-    color: Color(0xFF0F172A),
-    fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w700,
-    ),
-    ),
-    const SizedBox(height: 4),
-    const Text(
-    "360° customer inspector, compliance locks, asset adjustments, and MPIN overrides",
-    style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-    ),
-    ],
-    ),
-    ),
+    final filtered = allUsers.where((u) {
+    final isKyc = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final isFrozen = u['isFrozen'] == true || u['isFrozen'] == 1;
+    final kycStatus = (u['kycStatus'] ?? (isKyc ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+
+    if (_filter == 'VERIFIED' && !isKyc) return false;
+    if (_filter == 'PENDING KYC' && kycStatus != 'PENDING') return false;
+    if (_filter == 'FROZEN' && !isFrozen) return false;
+
+    if (_query.isEmpty) return true;
+    final hay = '${u['name']} ${u['mobile']} ${u['email']} ${u['cnic']} ${u['address']}'.toLowerCase();
+    return hay.contains(_query);
+    }).toList();
+
+    return NexPayDeskScaffold(
+    header: NexPayDeskHeader(
+    title: 'Master Customer Accounts Directory',
+    subtitle: 'Live customer custody balances, CNIC profile editing, wallet adjustments, freeze & device reset controls',
+    badgeText: '${allUsers.length} LIVE ACCOUNTS',
+    badgeColor: AppConstants.accentGreen,
+    actions: [
     ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-    backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Colors.white,
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
     onPressed: () => admin.fetchAllData(),
-    icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Directory", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+    icon: const Icon(Icons.refresh_rounded, size: 17),
+    label: const Text('Sync Customer Base'),
     ),
     ],
     ),
-    const SizedBox(height: 20),
+    statStrip: NexPayStatStrip(
+    items: [
+    NexPayStatItem(
+    label: 'Total Registered Users',
+    value: '${allUsers.length} Accounts',
+    sublabel: '$verifiedCount KYC Verified • $frozenCount Frozen',
+    icon: Icons.people_alt_rounded,
+    color: AppConstants.accentBlue,
+    ),
+    NexPayStatItem(
+    label: 'Total PKR Wallet Custody',
+    value: 'Rs. ${_money.format(totalPkr)}',
+    sublabel: 'Aggregate customer liquid float',
+    icon: Icons.account_balance_wallet_rounded,
+    color: AppConstants.accentGreen,
+    ),
+    NexPayStatItem(
+    label: 'Total USDT Custody',
+    value: '\$ ${_money.format(totalUsdt)}',
+    sublabel: 'Digital dollar wallet reserves',
+    icon: Icons.currency_bitcoin_rounded,
+    color: AppConstants.accentGold,
+    ),
+    NexPayStatItem(
+    label: '24K Bullion Holdings',
+    value: '${totalGold.toStringAsFixed(3)} g',
+    sublabel: 'Allocated physical gold vault grams',
+    icon: Icons.diamond_rounded,
+    color: AppConstants.accentGold,
+    ),
+    ],
+    ),
+    filterBar: NexPayFilterBar(
+    searchController: _searchCtrl,
+    searchHint: 'Search by customer name, mobile (03xx), CNIC, or email...',
+    onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+    filters: const ['ALL', 'VERIFIED', 'PENDING KYC', 'FROZEN'],
+    selectedFilter: _filter,
+    onFilterChanged: (f) => setState(() => _filter = f),
+    resultSummary: 'Showing ${filtered.length} of ${allUsers.length} customers',
+    ),
+    body: NexPayFullWidthTable(
+    minTableWidth: 1240,
+    emptyState: const InstitutionalEmptyState(
+    icon: Icons.people_outline_rounded,
+    title: 'No Customer Accounts Found',
+    subtitle: 'No registered accounts match your current search or filter.',
+    ),
+    columns: const [
+    DataColumn(label: Text('CUSTOMER & MOBILE')),
+    DataColumn(label: Text('CNIC / EMAIL')),
+    DataColumn(label: Text('PKR BALANCE'), numeric: true),
+    DataColumn(label: Text('USDT'), numeric: true),
+    DataColumn(label: Text('GOLD (g)'), numeric: true),
+    DataColumn(label: Text('KYC STATUS')),
+    DataColumn(label: Text('ACCOUNT STATE')),
+    DataColumn(label: Text('ADMIN CONTROLS')),
+    ],
+    rows: filtered.map((u) {
+    final mobile = u['mobile'].toString();
+    final name = (u['name'] ?? 'Unnamed User').toString();
+    final email = (u['email'] ?? '-').toString();
+    final cnic = (u['cnic'] ?? 'Not Submitted').toString();
+    final pkr = double.tryParse(u['balance']?.toString() ?? '0') ?? 0;
+    final usdt = double.tryParse(u['cryptoBalance']?.toString() ?? u['usdt']?.toString() ?? '0') ?? 0;
+    final gold = double.tryParse(u['goldGrams']?.toString() ?? u['gold']?.toString() ?? '0') ?? 0;
+    final isKyc = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final kycStatus = (u['kycStatus'] ?? (isKyc ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    final isFrozen = u['isFrozen'] == true || u['isFrozen'] == 1;
 
-    // Metric Badges
-    Wrap(
-    spacing: 14,
-    runSpacing: 10,
+    return DataRow(
+    cells: [
+    DataCell(
+    Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-    _buildMetricCard("TOTAL ACCOUNTS", "${userList.length} Registered", AppConstants.accentBlue, isDesktop),
-    _buildMetricCard("TIER-2 VERIFIED", "$verifiedCount Verified", AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("TOTAL WALLET CASH", "₨ ${_currencyFormat.format(totalSystemCash)}", AppConstants.accentGold, isDesktop),
-    _buildMetricCard("FROZEN ACCOUNTS", "$frozenCount Locked", frozenCount > 0 ? AppConstants.dangerRed : AppConstants.textMuted, isDesktop),
+    Text(name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
+    Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 12, fontWeight: FontWeight.w600)),
     ],
     ),
-    const SizedBox(height: 20),
-
-    // Filters & Search
-    Wrap(
-    spacing: 12,
-    runSpacing: 10,
-    crossAxisAlignment: WrapCrossAlignment.center,
+    ),
+    DataCell(
+    Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-    SizedBox(
-    width: isDesktop ? 340 : double.infinity,
-    child: TextField(
-    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-    decoration: InputDecoration(
-    hintText: "Search Mobile, Name, CNIC, Email...",
-    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-    filled: true,
-    fillColor: AppConstants.surface,
-    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-    ),
-    onChanged: (val) => setState(() => _searchQuery = val.trim()),
-    ),
-    ),
-    _buildFilterChip("ALL", "All Accounts (${userList.length})"),
-    _buildFilterChip("VERIFIED", "Tier-2 Verified ($verifiedCount)"),
-    _buildFilterChip("BASIC", "Tier-1 Basic"),
-    _buildFilterChip("FROZEN", "Locked / Frozen ($frozenCount)"),
+    Text(cnic, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w600, fontSize: 12)),
+    Text(email, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
     ],
     ),
-    const SizedBox(height: 18),
-
-    // Content Desk
-    Expanded(
-    child: filteredList.isEmpty
-    ? const Center(
-    child: Column(
+    ),
+    DataCell(
+    Text(
+    'Rs. ${_money.format(pkr)}',
+    style: const TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppConstants.accentGreen,
+    fontFeatures: [FontFeature.tabularFigures()],
+    ),
+    ),
+    ),
+    DataCell(
+    Text(
+    '\$ ${_money.format(usdt)}',
+    style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGold),
+    ),
+    ),
+    DataCell(
+    Text(
+    '${gold.toStringAsFixed(3)} g',
+    style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGold),
+    ),
+    ),
+    DataCell(NexPayStatusBadge(status: kycStatus)),
+    DataCell(NexPayStatusBadge(status: isFrozen ? 'FROZEN' : 'ACTIVE')),
+    DataCell(
+    Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-    Icon(Icons.people_alt_outlined, size: 54, color: AppConstants.textMuted),
-    SizedBox(height: 12),
-    Text(
-    "No customer accounts found matching criteria",
-    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
+    ElevatedButton.icon(
+    onPressed: () => _openCustomerControlDrawer(context, admin, u),
+    icon: const Icon(Icons.manage_accounts_rounded, size: 15),
+    label: const Text('Manage'),
     ),
-    ],
+    const SizedBox(width: 6),
+    IconButton(
+    tooltip: isFrozen ? 'Unfreeze Account' : 'Freeze Account',
+    icon: Icon(
+    isFrozen ? Icons.lock_open_rounded : Icons.lock_outline_rounded,
+    color: isFrozen ? AppConstants.accentGreen : AppConstants.dangerRed,
+    size: 19,
     ),
-    )
-        : isDesktop
-    ? _buildDesktopTable(filteredList, admin)
-        : _buildMobileCards(filteredList, admin),
-    ),
-    ],
-    ),
+    onPressed: () async {
+    final ok = await admin.toggleUserFreeze(mobile, !isFrozen);
+    if (context.mounted) {
+    _toast(
+    context,
+    ok ? (isFrozen ? 'Account $mobile unfrozen.' : 'Account $mobile frozen.') : 'Action failed.',
+    ok,
     );
     }
-
-  Widget _buildMetricCard(String title, String value, Color color, bool isDesktop) {
-    return Container(
-      width: isDesktop ? 220 : 160,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
-        ],
-      ),
+    },
+    ),
+    ],
+    ),
+    ),
+    ],
+    );
+    }).toList(),
+    ),
     );
   }
 
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _riskFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
+  void _openCustomerControlDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> u) {
+    final oldMobile = u['mobile'].toString();
+    final nameCtrl = TextEditingController(text: (u['name'] ?? '').toString());
+    final mobileCtrl = TextEditingController(text: oldMobile);
+    final emailCtrl = TextEditingController(text: (u['email'] ?? '').toString());
+    final cnicCtrl = TextEditingController(text: (u['cnic'] ?? '').toString());
+    final addressCtrl = TextEditingController(text: (u['address'] ?? '').toString());
+    final deltaCtrl = TextEditingController();
+
+    bool isKycVerified = u['isKycVerified'] == true ||
+        u['isKycVerified'] == 1 ||
+        (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    String kycStatus = (u['kycStatus'] ?? (isKycVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    if (!['VERIFIED', 'PENDING', 'UNVERIFIED', 'REJECTED'].contains(kycStatus)) {
+      kycStatus = isKycVerified ? 'VERIFIED' : 'UNVERIFIED';
+    }
+    final isFrozen = u['isFrozen'] == true || u['isFrozen'] == 1;
+    final pkr = double.tryParse(u['balance']?.toString() ?? '0') ?? 0;
+
+    showNexPayInspectorDrawer(
+      context: context,
+      width: 580,
+      title: (u['name'] ?? 'Customer Control').toString(),
+      subtitle: 'Mobile: $oldMobile • Balance: Rs. ${_money.format(pkr)}',
+      child: StatefulBuilder(
+        builder: (ctx, setDrawerState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Direct Wallet Adjustment Box
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppConstants.surfaceCard,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppConstants.borderColor),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'INSTANT TREASURY WALLET CREDIT / DEBIT (PKR)',
+                      style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Current Wallet: Rs. ${_money.format(pkr)}',
+                      style: const TextStyle(color: AppConstants.accentGreen, fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: deltaCtrl,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                            decoration: const InputDecoration(
+                              hintText: 'Amount e.g. 5000 or -2000',
+                              prefixText: 'Rs. ',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final delta = double.tryParse(deltaCtrl.text.trim());
+                            if (delta == null || delta == 0) return;
+                            Navigator.pop(context);
+                            final ok = await admin.adjustBalance(oldMobile, delta);
+                            if (context.mounted) {
+                              _toast(
+                                context,
+                                ok ? 'Wallet adjusted by Rs. ${_money.format(delta)} for $oldMobile.' : 'Adjustment failed.',
+                                ok,
+                              );
+                            }
+                          },
+                          child: const Text('Apply'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 22),
+
+              // 2. Full Profile & Identity Editor
+              const Text(
+                'CUSTOMER PROFILE & IDENTITY RECORD',
+                style: TextStyle(color: AppConstants.textPrimary, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+              ),
+              const SizedBox(height: 12),
+              TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full Legal Name')),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(child: TextField(controller: mobileCtrl, decoration: const InputDecoration(labelText: 'Mobile Number'))),
+                  const SizedBox(width: 12),
+                  Expanded(child: TextField(controller: cnicCtrl, decoration: const InputDecoration(labelText: 'CNIC Number'))),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TextField(controller: emailCtrl, decoration: const InputDecoration(labelText: 'Email Address')),
+              const SizedBox(height: 12),
+              TextField(controller: addressCtrl, decoration: const InputDecoration(labelText: 'Residential Address')),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      initialValue: kycStatus,
+                      decoration: const InputDecoration(labelText: 'KYC Status'),
+                      items: const ['VERIFIED', 'PENDING', 'UNVERIFIED', 'REJECTED']
+                          .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                          .toList(),
+                      onChanged: (val) {
+                        if (val != null) {
+                          setDrawerState(() {
+                            kycStatus = val;
+                            isKycVerified = val == 'VERIFIED';
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('KYC Verified', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      value: isKycVerified,
+                      activeThumbColor: AppConstants.accentGreen,
+                      onChanged: (v) {
+                        setDrawerState(() {
+                          isKycVerified = v;
+                          kycStatus = v ? 'VERIFIED' : 'UNVERIFIED';
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 22),
+
+              // 3. Security & Hardware Reset Controls
+              const Text(
+                'SECURITY & HARDWARE COMPLIANCE ACTIONS',
+                style: TextStyle(color: AppConstants.textPrimary, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: isFrozen ? AppConstants.accentGreen : AppConstants.dangerRed,
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final ok = await admin.toggleUserFreeze(oldMobile, !isFrozen);
+                      if (context.mounted) {
+                        _toast(context, ok ? (isFrozen ? 'Account Unfrozen' : 'Account Frozen') : 'Failed', ok);
+                      }
+                    },
+                    icon: Icon(isFrozen ? Icons.lock_open_rounded : Icons.lock_rounded, size: 16),
+                    label: Text(isFrozen ? 'Unfreeze Wallet' : 'Freeze Wallet'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final ok = await admin.resetUserKyc(oldMobile);
+                      if (context.mounted) {
+                        _toast(context, ok ? 'Biometric KYC reset for $oldMobile.' : 'Reset failed.', ok);
+                      }
+                    },
+                    icon: const Icon(Icons.verified_user_outlined, size: 16, color: AppConstants.accentGold),
+                    label: const Text('Reset Biometric KYC'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final ok = await admin.resetUserDevice(oldMobile);
+                      if (context.mounted) {
+                        _toast(context, ok ? 'Trusted device binding cleared for $oldMobile.' : 'Reset failed.', ok);
+                      }
+                    },
+                    icon: const Icon(Icons.phonelink_erase_rounded, size: 16, color: AppConstants.accentBlue),
+                    label: const Text('Reset Device Lock'),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _riskFilter = key),
+      footerActions: [
+        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.updateUserFullProfile(
+              oldMobile: oldMobile,
+              newMobile: mobileCtrl.text.trim(),
+              name: nameCtrl.text.trim(),
+              email: emailCtrl.text.trim(),
+              cnic: cnicCtrl.text.trim(),
+              address: addressCtrl.text.trim(),
+              isKycVerified: isKycVerified,
+              kycStatus: kycStatus,
+            );
+            if (context.mounted) {
+              _toast(context, ok ? 'Customer profile updated in live database.' : 'Update failed.', ok);
+            }
+          },
+          icon: const Icon(Icons.save_rounded, size: 17),
+          label: const Text('Save Profile Changes'),
+        ),
+      ],
     );
   }
 
-  Widget _buildDesktopTable(List list, AdminProvider admin) {
-  return Container(
-  decoration: BoxDecoration(
-  color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Color(0xFFE2E8F0)),
-  ),
-  child: ClipRRect(
-  borderRadius: BorderRadius.circular(18),
-  child: InstitutionalVScroll(
-  scrollDirection: Axis.vertical,
-  child: InstitutionalHScroll(
-  child: DataTable(
-  headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-  dataRowColor: WidgetStateProperty.all(Colors.transparent),
-  horizontalMargin: 20,
-  columnSpacing: 26,
-  columns: const [
-  DataColumn(label: Text("CUSTOMER PROFILE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("CNIC IDENTITY", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("RISK TIER", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("CASH BALANCE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("CRYPTO (USDT)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("GOLD (24K)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("SECURITY & INSPECT", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  ],
-  rows: list.map((u) {
-  final mob = (u['mobile'] ?? '').toString();
-  final name = (u['name'] ?? 'Customer').toString();
-  final email = (u['email'] ?? '').toString();
-  final cnic = (u['cnic'] ?? 'Pending').toString();
-
-  final bal = double.tryParse(u['balance']?.toString() ?? '0') ?? 0.0;
-  final crypto = double.tryParse(u['crypto']?.toString() ?? '0') ?? 0.0;
-  final gold = double.tryParse(u['goldGrams']?.toString() ?? u['gold_grams']?.toString() ?? '0') ?? 0.0;
-
-  final isFrozen = u['isFrozen'] == true || u['is_frozen'] == 1;
-  final isKyc = u['isKycVerified'] == true || u['is_kyc_verified'] == 1;
-
-  return DataRow(
-  cells: [
-  DataCell(
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
-  Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
-  if (email.isNotEmpty)
-  Text(email, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 10.5, fontWeight: FontWeight.w600)),
-  ],
-  ),
-  ),
-  DataCell(Text(cnic, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontSize: 12))),
-  DataCell(_buildRiskTierBadge(isKyc, isFrozen)),
-  DataCell(
-  Text(
-  "₨ ${_currencyFormat.format(bal)}",
-  style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
-  ),
-  ),
-  DataCell(
-  Text(
-  "\$ ${crypto.toStringAsFixed(2)}",
-  style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 13),
-  ),
-  ),
-  DataCell(
-  Text(
-  "${gold.toStringAsFixed(3)} g",
-  style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 13),
-  ),
-  ),
-  DataCell(
-  ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(
-  backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Colors.white,
-  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  ),
-  onPressed: () => _openUser360InspectModal(context, mob, admin),
-  icon: const Icon(Icons.remove_red_eye_rounded, size: 14),
-  label: const Text("360° Inspect", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
-  ),
-  ),
-  ],
-  );
-  }).toList(),
-  ),
-  ),
-  ),
-  ),
-  );
-  }
-
-  Widget _buildMobileCards(List list, AdminProvider admin) {
-  return ListView.builder(
-  itemCount: list.length,
-  itemBuilder: (context, idx) {
-  final u = list[idx];
-  final mob = (u['mobile'] ?? '').toString();
-  final name = (u['name'] ?? 'Customer').toString();
-  final email = (u['email'] ?? '').toString();
-  final cnic = (u['cnic'] ?? 'Pending').toString();
-
-  final bal = double.tryParse(u['balance']?.toString() ?? '0') ?? 0.0;
-  final crypto = double.tryParse(u['crypto']?.toString() ?? '0') ?? 0.0;
-  final gold = double.tryParse(u['goldGrams']?.toString() ?? u['gold_grams']?.toString() ?? '0') ?? 0.0;
-
-  final isFrozen = u['isFrozen'] == true || u['is_frozen'] == 1;
-  final isKyc = u['isKycVerified'] == true || u['is_kyc_verified'] == 1;
-
-  return Container(
-  margin: const EdgeInsets.only(bottom: 12),
-  padding: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-  color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: isFrozen ? AppConstants.dangerRed.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-  ),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
-  Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11.5)),
-  ],
-  ),
-  _buildRiskTierBadge(isKyc, isFrozen),
-  ],
-  ),
-  if (email.isNotEmpty) ...[
-  const SizedBox(height: 2),
-  Text(email, style: const TextStyle(color: AppConstants.accentGreen, fontSize: 11)),
-  ],
-  const Divider(color: Color(0xFFE2E8F0), height: 18),
-  Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Text("Cash Balance", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  Text("₨ ${_currencyFormat.format(bal)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14)),
-  ],
-  ),
-  Column(
-  children: [
-  const Text("USDT Crypto", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold, fontSize: 13)),
-  ],
-  ),
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.end,
-  children: [
-  const Text("Gold Vault", style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold, fontSize: 13)),
-  ],
-  ),
-  ],
-  ),
-  const SizedBox(height: 12),
-  SizedBox(
-  width: double.infinity,
-  child: ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(
-  backgroundColor: AppConstants.accentGreen,
-  foregroundColor: Colors.white,
-  padding: const EdgeInsets.symmetric(vertical: 9),
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  ),
-  onPressed: () => _openUser360InspectModal(context, mob, admin),
-  icon: const Icon(Icons.remove_red_eye_rounded, size: 16),
-  label: const Text("360° Inspect & Control Account", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
-  ),
-  ),
-  ],
-  ),
-  );
-  },
-  );
-  }
-
-  Widget _buildRiskTierBadge(bool isKyc, bool isFrozen) {
-  if (isFrozen) {
-  return Container(
-  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-  decoration: BoxDecoration(color: AppConstants.dangerRed.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
-  child: const Text("LOCKED / FROZEN", style: TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700)),
-  );
-  }
-  if (isKyc) {
-  return Container(
-  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-  decoration: BoxDecoration(color: AppConstants.accentGreen.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
-  child: const Text("TIER-2 VIP VERIFIED", style: TextStyle(color: AppConstants.accentGreen, fontSize: 10, fontWeight: FontWeight.w700)),
-  );
-  }
-  return Container(
-  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-  decoration: BoxDecoration(color: Colors.amber.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
-  child: const Text("TIER-1 BASIC", style: TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.w700)),
-  );
-  }
-
-  // =========================================================================
-  // 360° USER ACCOUNT INSPECTOR & EXECUTIVE CONTROL MODAL
-  // =========================================================================
-  void _openUser360InspectModal(BuildContext context, String mobile, AdminProvider admin) {
-  final user = admin.users[mobile];
-  if (user == null) return;
-
-  final isFrozen = user['isFrozen'] == true || user['is_frozen'] == 1;
-  final isKyc = user['isKycVerified'] == true || user['is_kyc_verified'] == 1;
-  final cleanMob = mobile.replaceAll(RegExp(r'[^0-9]'), '');
-  final iban = "PK76NEXP${cleanMob.length >= 10 ? cleanMob.substring(1) : "0000000000"}01";
-
-  final bal = double.tryParse(user['balance']?.toString() ?? '0') ?? 0.0;
-  final crypto = double.tryParse(user['crypto']?.toString() ?? '0') ?? 0.0;
-  final gold = double.tryParse(user['goldGrams']?.toString() ?? user['gold_grams']?.toString() ?? '0') ?? 0.0;
-  final txs = (user['transactions'] is List) ? List<dynamic>.from(user['transactions']) : [];
-
-  showDialog(
-  context: context,
-  builder: (ctx) => StatefulBuilder(
-  builder: (ctx, setModalState) => AlertDialog(
-  backgroundColor: AppConstants.surface,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-  title: Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Text("${user['name'] ?? 'Customer'}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-  const SizedBox(height: 2),
-  Text("IBAN: $iban • Mobile: $mobile", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11, fontFamily: 'monospace')),
-  ],
-  ),
-  _buildRiskTierBadge(isKyc, isFrozen),
-  ],
-  ),
-  content: Container(
-  constraints: const BoxConstraints(maxWidth: 680, maxHeight: 600),
-  child: InstitutionalVScroll(
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  // Balances Row
-  Row(
-  children: [
-  Expanded(
-  child: Container(
-  padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Text("CASH WALLET", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
-  const SizedBox(height: 4),
-  Text("₨ ${_currencyFormat.format(bal)}", style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 16)),
-  ],
-  ),
-  ),
-  ),
-  const SizedBox(width: 8),
-  Expanded(
-  child: Container(
-  padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Text("CRYPTO (USDT)", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
-  const SizedBox(height: 4),
-  Text("\$ ${crypto.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16)),
-  ],
-  ),
-  ),
-  ),
-  const SizedBox(width: 8),
-  Expanded(
-  child: Container(
-  padding: const EdgeInsets.all(12),
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Text("24K GOLD BULLION", style: TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
-  const SizedBox(height: 4),
-  Text("${gold.toStringAsFixed(3)} g", style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w700, fontSize: 16)),
-  ],
-  ),
-  ),
-  ),
-  ],
-  ),
-  const SizedBox(height: 18),
-
-  // Management & Security Control Bar
-  Container(
-  padding: const EdgeInsets.all(14),
-  decoration: BoxDecoration(
-  color: AppConstants.dangerRed.withValues(alpha: 0.05),
-  borderRadius: BorderRadius.circular(16),
-  border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.25)),
-  ),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Text("⚠️ SECURITY, MPIN & COMPLIANCE TOOLS", style: TextStyle(color: AppConstants.dangerRed, fontSize: 11, fontWeight: FontWeight.w700)),
-  const SizedBox(height: 10),
-  Wrap(
-  spacing: 8,
-  runSpacing: 8,
-  children: [
-  // Freeze / Unfreeze
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(
-  backgroundColor: isFrozen ? AppConstants.accentGreen : AppConstants.dangerRed,
-  foregroundColor: isFrozen ? Color(0xFF021A13) : Color(0xFF0F172A),
-  ),
-  onPressed: () => _toggleFreezeUser(ctx, mobile, isFrozen, user, admin),
-  child: Text(isFrozen ? "🔓 Unfreeze Account" : "🔒 Freeze Account", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-
-  // Reset Device Trust
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: Colors.amber.withValues(alpha: 0.15), foregroundColor: Colors.amber),
-  onPressed: () => _resetDeviceTrust(ctx, mobile, admin),
-  child: const Text("📱 Reset Device (Force OTP)", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-
-  // Reset / Wipe KYC
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed.withValues(alpha: 0.15), foregroundColor: AppConstants.dangerRed),
-  onPressed: () => _resetUserKyc(ctx, mobile, admin),
-  child: const Text("🔄 Wipe KYC (Allow Re-KYC)", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-
-  // Override MPIN
-  OutlinedButton(
-  style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
-  onPressed: () => _promptOverrideMpin(ctx, mobile, user, admin),
-  child: const Text("🔑 Reset 4-Digit MPIN", style: TextStyle(fontSize: 11.5)),
-  ),
-
-  // Update Gmail
-  OutlinedButton(
-  style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
-  onPressed: () => _promptUpdateEmail(ctx, mobile, user, admin),
-  child: const Text("📧 Update Gmail", style: TextStyle(fontSize: 11.5)),
-  ),
-
-  // Adjust Cash Balance
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: AppConstants.accentGreen),
-  onPressed: () => _promptAdjustBalance(ctx, mobile, 'cash', bal, admin),
-  child: const Text("± Edit Cash", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-
-  // Adjust Crypto Balance
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: AppConstants.accentGold),
-  onPressed: () => _promptAdjustBalance(ctx, mobile, 'crypto', crypto, admin),
-  child: const Text("± Edit USDT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-
-  // Adjust Gold Balance
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.surfaceCard, foregroundColor: AppConstants.accentGold),
-  onPressed: () => _promptAdjustBalance(ctx, mobile, 'gold', gold, admin),
-  child: const Text("± Edit Gold", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5)),
-  ),
-  ],
-  ),
-  ],
-  ),
-  ),
-  const SizedBox(height: 18),
-
-  // Live Passbook & Transactions Ledger
-  const Text("📜 LIVE ACCOUNT PASSBOOK & LEDGER (WITH 1-CLICK DISPUTE RECALL)", style: TextStyle(color: Color(0xFF0F172A), fontSize: 12, fontWeight: FontWeight.w700)),
-  const SizedBox(height: 8),
-  Container(
-  height: 220,
-  decoration: BoxDecoration(color: AppConstants.surfaceCard, borderRadius: BorderRadius.circular(14), border: Border.all(color: Color(0xFFE2E8F0))),
-  child: txs.isEmpty
-  ? const Center(child: Text("No transaction history recorded for this account.", style: TextStyle(color: AppConstants.textMuted, fontSize: 12)))
-      : ListView.separated(
-  itemCount: txs.length,
-  separatorBuilder: (_, __) => const Divider(color: Color(0xFFE2E8F0), height: 1),
-  itemBuilder: (c, idx) {
-  final t = txs[idx];
-  final amt = double.tryParse(t['amount']?.toString() ?? '0') ?? 0.0;
-  final isDebit = amt < 0;
-  final tid = (t['tid'] ?? 'TRX').toString();
-
-  return ListTile(
-  dense: true,
-  title: Text(t['title'] ?? 'Transaction', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 12)),
-  subtitle: Text("${t['date'] ?? '-'} • TID: $tid • ${t['dest'] ?? '-'}", style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5)),
-  trailing: Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-  Text(
-  "${isDebit ? '-' : '+'} ₨ ${_currencyFormat.format(amt.abs())}",
-  style: TextStyle(color: isDebit ? AppConstants.dangerRed : AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 13),
-  ),
-  if (isDebit) ...[
-  const SizedBox(width: 8),
-  OutlinedButton(
-  style: OutlinedButton.styleFrom(
-  foregroundColor: Colors.amber,
-  side: const BorderSide(color: Colors.amber),
-  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-  visualDensity: VisualDensity.compact,
-  ),
-  onPressed: () => _executeOneClickReversal(ctx, mobile, tid, amt.abs(), admin),
-  child: const Text("↩ Reverse", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-  ),
-  ],
-  ],
-  ),
-  );
-  },
-  ),
-  ),
-  ],
-  ),
-  ),
-  ),
-  actions: [
-  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Close", style: TextStyle(color: Color(0xFF64748B)))),
-  ],
-  ),
-  ),
-  );
-  }
-
-  // Toggle Freeze
-  Future<void> _toggleFreezeUser(BuildContext ctx, String mobile, bool isCurrentlyFrozen, Map<String, dynamic> user, AdminProvider admin) async {
-  Navigator.pop(ctx);
-  final newState = !isCurrentlyFrozen;
-
-  final userCopy = Map<String, dynamic>.from(user);
-  userCopy['isFrozen'] = newState;
-
-  try {
-  final res = await _api.dio.post(
-  '',
-  queryParameters: {'action': 'save_all'},
-  data: {
-  'users': {mobile: userCopy}
-  },
-  );
-  if (res.data['status'] == 'success') {
-  await admin.fetchAllData();
-  if (mounted) {
-  ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-  backgroundColor: AppConstants.accentGreen,
-  content: Text(newState ? "✓ Account $mobile has been FROZEN." : "✓ Account $mobile has been RESTORED.", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold)),
-  ),
-  );
-  }
-  }
-  } catch (_) {}
-  }
-
-  // Reset Device Trust
-  Future<void> _resetDeviceTrust(BuildContext ctx, String mobile, AdminProvider admin) async {
-  Navigator.pop(ctx);
-  try {
-  final res = await _api.dio.post(
-  '',
-  queryParameters: {'action': 'admin_reset_device'},
-  data: {'mobile': mobile},
-  );
-  if (res.data['status'] == 'success') {
-  await admin.fetchAllData();
-  if (mounted) {
-  ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ ${res.data['message']}", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-  );
-  }
-  }
-  } catch (_) {}
-  }
-
-  // Reset / Wipe KYC
-  Future<void> _resetUserKyc(BuildContext ctx, String mobile, AdminProvider admin) async {
-  Navigator.pop(ctx);
-  try {
-  final res = await _api.dio.post(
-  '',
-  queryParameters: {'action': 'admin_reset_kyc'},
-  data: {'mobile': mobile},
-  );
-  if (res.data['status'] == 'success') {
-  await admin.fetchAllData();
-  if (mounted) {
-  ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ ${res.data['message']}", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-  );
-  }
-  }
-  } catch (_) {}
-  }
-
-  // Override MPIN
-  void _promptOverrideMpin(BuildContext ctx, String mobile, Map<String, dynamic> user, AdminProvider admin) {
-  Navigator.pop(ctx);
-  final controller = TextEditingController();
-
-  showDialog(
-  context: context,
-  builder: (dCtx) => AlertDialog(
-  backgroundColor: AppConstants.surface,
-  title: Text("Override 4-Digit MPIN ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
-  content: TextField(
-  controller: controller,
-  keyboardType: TextInputType.number,
-  maxLength: 4,
-  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: 6),
-  decoration: InputDecoration(
-  hintText: "••••",
-  filled: true,
-  fillColor: AppConstants.surfaceCard,
-  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-  ),
-  ),
-  actions: [
-  TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-  onPressed: () async {
-  final pin = controller.text.trim();
-  if (pin.length != 4) return;
-  Navigator.pop(dCtx);
-
-  final userCopy = Map<String, dynamic>.from(user);
-  userCopy['mpin'] = pin;
-
-  await _api.dio.post(
-  '',
-  queryParameters: {'action': 'save_all'},
-  data: {
-  'users': {mobile: userCopy}
-  },
-  );
-  await admin.fetchAllData();
-  },
-  child: const Text("Save MPIN"),
-  ),
-  ],
-  ),
-  );
-  }
-
-  // Update Email
-  void _promptUpdateEmail(BuildContext ctx, String mobile, Map<String, dynamic> user, AdminProvider admin) {
-  Navigator.pop(ctx);
-  final controller = TextEditingController(text: user['email'] ?? '');
-
-  showDialog(
-  context: context,
-  builder: (dCtx) => AlertDialog(
-  backgroundColor: AppConstants.surface,
-  title: Text("Update Linked Gmail ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
-  content: TextField(
-  controller: controller,
-  style: const TextStyle(color: Color(0xFF0F172A)),
-  decoration: InputDecoration(
-  hintText: "customer@gmail.com",
-  filled: true,
-  fillColor: AppConstants.surfaceCard,
-  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-  ),
-  ),
-  actions: [
-  TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-  onPressed: () async {
-  final email = controller.text.trim();
-  if (!email.contains('@')) return;
-  Navigator.pop(dCtx);
-
-  final userCopy = Map<String, dynamic>.from(user);
-  userCopy['email'] = email;
-
-  await _api.dio.post(
-  '',
-  queryParameters: {'action': 'save_all'},
-  data: {
-  'users': {mobile: userCopy}
-  },
-  );
-  await admin.fetchAllData();
-  },
-  child: const Text("Save Gmail"),
-  ),
-  ],
-  ),
-  );
-  }
-
-  // Adjust Balances (Cash, Crypto, Gold)
-  void _promptAdjustBalance(BuildContext ctx, String mobile, String type, double currentVal, AdminProvider admin) {
-  Navigator.pop(ctx);
-  final controller = TextEditingController();
-
-  showDialog(
-  context: context,
-  builder: (dCtx) => AlertDialog(
-  backgroundColor: AppConstants.surface,
-  title: Text("Adjust ${type.toUpperCase()} ($mobile)", style: const TextStyle(color: Color(0xFF0F172A), fontSize: 16)),
-  content: Column(
-  mainAxisSize: MainAxisSize.min,
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Text("Current: $currentVal", style: const TextStyle(color: AppConstants.textMuted, fontSize: 12)),
-  const SizedBox(height: 10),
-  TextField(
-  controller: controller,
-  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-  style: const TextStyle(color: Color(0xFF0F172A)),
-  decoration: InputDecoration(
-  hintText: "e.g. 500 or -200",
-  filled: true,
-  fillColor: AppConstants.surfaceCard,
-  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-  ),
-  ),
-  ],
-  ),
-  actions: [
-  TextButton(onPressed: () => Navigator.pop(dCtx), child: const Text("Cancel")),
-  ElevatedButton(
-  style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-  onPressed: () async {
-  final delta = double.tryParse(controller.text) ?? 0.0;
-  if (delta == 0.0) return;
-  Navigator.pop(dCtx);
-
-  if (type == 'cash') {
-  await _api.dio.post(
-  '',
-  queryParameters: {'action': 'adjust_balance'},
-  data: {'mobile': mobile, 'amount': delta},
-  );
-  } else {
-  final userRaw = admin.users[mobile];
-  if (userRaw != null) {
-  final userCopy = Map<String, dynamic>.from(userRaw);
-  if (type == 'crypto') {
-  userCopy['crypto'] = (double.tryParse(userCopy['crypto']?.toString() ?? '0') ?? 0.0) + delta;
-  } else if (type == 'gold') {
-  userCopy['goldGrams'] = (double.tryParse(userCopy['goldGrams']?.toString() ?? '0') ?? 0.0) + delta;
-  }
-  await _api.dio.post(
-  '',
-  queryParameters: {'action': 'save_all'},
-  data: {
-  'users': {mobile: userCopy}
-  },
-  );
-  }
-  }
-  await admin.fetchAllData();
-  },
-  child: const Text("Update Balance"),
-  ),
-  ],
-  ),
-  );
-  }
-
-  // 1-Click Ledger Dispute Reversal
-  Future<void> _executeOneClickReversal(BuildContext ctx, String mobile, String tid, double amount, AdminProvider admin) async {
-  Navigator.pop(ctx);
-  try {
-  final res = await _api.dio.post(
-  '',
-  queryParameters: {'action': 'reverse_transaction'},
-  data: {
-  'senderMobile': mobile,
-  'tid': tid,
-  'amount': amount,
-  'recipientMobile': '',
-  },
-  );
-  if (res.data['status'] == 'success') {
-  await admin.fetchAllData();
-  if (mounted) {
-  ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(backgroundColor: AppConstants.accentGreen, content: Text("✓ Reversal executed! ₨ ${_currencyFormat.format(amount)} refunded to $mobile.", style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold))),
-  );
-  }
-  }
-  } catch (_) {}
+  void _toast(BuildContext context, String msg, bool ok) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+    );
   }
 }

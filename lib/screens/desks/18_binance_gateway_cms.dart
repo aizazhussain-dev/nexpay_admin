@@ -1,10 +1,9 @@
-import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/nexpay_image_picker.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class BinanceGatewayCmsScreen extends StatefulWidget {
   const BinanceGatewayCmsScreen({super.key});
@@ -14,430 +13,163 @@ class BinanceGatewayCmsScreen extends StatefulWidget {
 }
 
 class _BinanceGatewayCmsScreenState extends State<BinanceGatewayCmsScreen> {
-  final ApiClient _api = ApiClient();
-  final _formKey = GlobalKey<FormState>();
+  final _payIdCtrl = TextEditingController();
+  final _trc20Ctrl = TextEditingController();
+  final _depRateCtrl = TextEditingController();
+  final _wthRateCtrl = TextEditingController();
+  String _qrUrl = '';
+  bool _initialized = false;
+  bool _saving = false;
 
-  late TextEditingController _payIdController;
-  late TextEditingController _trc20Controller;
-  late TextEditingController _depRateController;
-  late TextEditingController _wthRateController;
-
-  bool _isSaving = false;
-  bool _isInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _payIdController = TextEditingController();
-    _trc20Controller = TextEditingController();
-    _depRateController = TextEditingController();
-    _wthRateController = TextEditingController();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInitialized) {
-      _loadConfigFromProvider();
-      _isInitialized = true;
-    }
-  }
-
-  void _loadConfigFromProvider() {
-    final admin = context.read<AdminProvider>();
+  void _syncFromConfig(AdminProvider admin) {
     final cfg = admin.cmsConfig;
-    final bSettings = (cfg['binanceSettings'] is Map)
-        ? Map<String, dynamic>.from(cfg['binanceSettings'])
-        : <String, dynamic>{};
-
-    _payIdController.text = (bSettings['officialPayId'] ?? '281920381').toString();
-    _trc20Controller.text = (bSettings['officialTrc20Address'] ?? 'TYD192aKms91kL891mNzq92Xz10A1').toString();
-    _depRateController.text = (bSettings['depRate'] ?? 277.0).toString();
-    _wthRateController.text = (bSettings['wthRate'] ?? 295.0).toString();
+    final b = (cfg['binanceSettings'] is Map) ? Map<String, dynamic>.from(cfg['binanceSettings']) : <String, dynamic>{};
+    _payIdCtrl.text = (b['officialPayId'] ?? '').toString();
+    _trc20Ctrl.text = (b['officialTrc20Address'] ?? '').toString();
+    _depRateCtrl.text = (b['depRate'] ?? admin.usdPkrRate).toString();
+    _wthRateCtrl.text = (b['wthRate'] ?? (admin.usdPkrRate - 2)).toString();
+    _qrUrl = (b['qrUrl'] ?? '').toString();
+    _initialized = true;
   }
 
   @override
   void dispose() {
-    _payIdController.dispose();
-    _trc20Controller.dispose();
-    _depRateController.dispose();
-    _wthRateController.dispose();
+    _payIdCtrl.dispose();
+    _trc20Ctrl.dispose();
+    _depRateCtrl.dispose();
+    _wthRateCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
+    if (!_initialized && admin.cmsConfig.isNotEmpty) {
+      _syncFromConfig(admin);
+    }
 
-    final depRate = double.tryParse(_depRateController.text) ?? 277.0;
-    final wthRate = double.tryParse(_wthRateController.text) ?? 295.0;
-    final spreadMargin = (wthRate - depRate).clamp(0.0, double.infinity);
-
-    return Padding(
-      padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Bar
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          "Binance Gateway & USDT Peg CMS",
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: AppConstants.accentGold.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
-                          ),
-                          child: const Text(
-                            "BINANCE PAY & TRC-20",
-                            style: TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Configure receiving Binance Pay ID, USDT TRC20 depository address, and buy/sell exchange rates",
-                      style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                onPressed: () {
-                  _loadConfigFromProvider();
-                  setState(() {});
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("✓ Reloaded settings from server memory.")),
-                  );
-                },
-                icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text("Reload Config", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-              ),
-            ],
+    return NexPayDeskScaffold(
+      header: NexPayDeskHeader(
+        title: 'Binance Pay & USDT TRC20 Treasury Gateway',
+        subtitle: 'Configure official merchant Binance Pay ID, TRC20 custody wallet, QR code from gallery, and P2P FX rates',
+        badgeText: 'CRYPTO GATEWAY',
+        badgeColor: AppConstants.accentGold,
+        actions: [
+          OutlinedButton.icon(
+            onPressed: () async {
+              await admin.fetchAllData();
+              if (mounted) setState(() => _syncFromConfig(admin));
+            },
+            icon: const Icon(Icons.sync_rounded, size: 17),
+            label: const Text('Reload Config'),
           ),
-          const SizedBox(height: 20),
-
-          // Telemetry Badges
-          Wrap(
-            spacing: 14,
-            runSpacing: 10,
-            children: [
-              _buildMetricCard("DEPOSIT RATE (PKR)", "₨ ${depRate.toStringAsFixed(2)}", AppConstants.accentGreen, isDesktop),
-              _buildMetricCard("WITHDRAWAL RATE (PKR)", "₨ ${wthRate.toStringAsFixed(2)}", AppConstants.accentGold, isDesktop),
-              _buildMetricCard("HOUSE SPREAD MARGIN", "₨ ${spreadMargin.toStringAsFixed(2)} / USDT", AppConstants.accentBlue, isDesktop),
-              _buildMetricCard("SETTLEMENT PROTOCOL", "TRC-20 / Binance Pay", Color(0xFF64748B), isDesktop),
-            ],
+          ElevatedButton.icon(
+            onPressed: _saving ? null : () => _save(admin),
+            icon: const Icon(Icons.save_rounded, size: 17),
+            label: Text(_saving ? 'Publishing...' : 'Save & Publish Gateway'),
           ),
-          const SizedBox(height: 24),
-
-          // Main Form Section
-          Expanded(
-            child: InstitutionalVScroll(
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: isDesktop ? 860 : double.infinity),
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: AppConstants.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Color(0xFFE2E8F0)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Section 1: Depository Credentials
-                      const Text(
-                        "OFFICIAL CRYPTO RECEIVING DESTINATIONS",
-                        style: TextStyle(color: AppConstants.accentGold, fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
-                      ),
-                      const SizedBox(height: 14),
-
-                      // Binance Pay ID
-                      TextFormField(
-                        controller: _payIdController,
-                        style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
-                        decoration: InputDecoration(
-                          labelText: "OFFICIAL BINANCE PAY ID",
-                          labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
-                          hintText: "e.g. 281920381",
-                          hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
-                          filled: true,
-                          fillColor: AppConstants.surfaceCard,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.copy_rounded, size: 18, color: AppConstants.textMuted),
-                            tooltip: "Copy Binance Pay ID",
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: _payIdController.text.trim()));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("✓ Copied Binance Pay ID to clipboard.")),
-                              );
-                            },
-                          ),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                        ),
-                        validator: (v) => (v == null || v.trim().isEmpty) ? "Binance Pay ID is required" : null,
-                      ),
-                      const SizedBox(height: 14),
-
-                      // USDT TRC-20 Address
-                      TextFormField(
-                        controller: _trc20Controller,
-                        style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 13.5),
-                        decoration: InputDecoration(
-                          labelText: "OFFICIAL USDT TRC-20 WALLET ADDRESS",
-                          labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
-                          hintText: "e.g. TYD192aKms91kL891mNzq92Xz10A1",
-                          hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
-                          filled: true,
-                          fillColor: AppConstants.surfaceCard,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.copy_rounded, size: 18, color: AppConstants.textMuted),
-                            tooltip: "Copy TRC-20 Address",
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: _trc20Controller.text.trim()));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("✓ Copied TRC-20 Address to clipboard.")),
-                              );
-                            },
-                          ),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                        ),
-                        validator: (v) {
-                          if (v == null || v.trim().isEmpty) return "USDT TRC20 address is required";
-                          if (!v.trim().startsWith("T") || v.trim().length < 26) {
-                            return "Enter a valid TRC-20 address starting with 'T'";
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Section 2: Exchange Rates
-                      const Text(
-                        "SETTLEMENT PEG EXCHANGE RATES (PKR / USDT)",
-                        style: TextStyle(color: AppConstants.accentGreen, fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 0.8),
-                      ),
-                      const SizedBox(height: 14),
-
-                      Row(
-                        children: [
-                          // Deposit Rate
-                          Expanded(
-                            child: TextFormField(
-                              controller: _depRateController,
-                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
-                              decoration: InputDecoration(
-                                labelText: "DEPOSIT RATE (BUYING FROM USER)",
-                                labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                                hintText: "277.00",
-                                filled: true,
-                                fillColor: AppConstants.surfaceCard,
-                                prefixText: "₨ ",
-                                prefixStyle: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.bold),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                              ),
-                              onChanged: (_) => setState(() {}),
-                              validator: (v) {
-                                final n = double.tryParse(v ?? '');
-                                return (n == null || n <= 0) ? "Enter valid deposit rate" : null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-
-                          // Withdrawal Rate
-                          Expanded(
-                            child: TextFormField(
-                              controller: _wthRateController,
-                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16),
-                              decoration: InputDecoration(
-                                labelText: "WITHDRAWAL RATE (SELLING TO USER)",
-                                labelStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 11),
-                                hintText: "295.00",
-                                filled: true,
-                                fillColor: AppConstants.surfaceCard,
-                                prefixText: "₨ ",
-                                prefixStyle: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.bold),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                              ),
-                              onChanged: (_) => setState(() {}),
-                              validator: (v) {
-                                final n = double.tryParse(v ?? '');
-                                return (n == null || n <= 0) ? "Enter valid withdrawal rate" : null;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Spread & Compliance Notice
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppConstants.surfaceCard,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Color(0xFFE2E8F0)),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(Icons.info_outline_rounded, color: AppConstants.accentGold, size: 20),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "P2P Gateway Execution Architecture",
-                                    style: TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.w800),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "When customers fund their NexPay wallet with USDT, they are instructed to transfer to the official TRC20 address or Pay ID configured above at ₨ ${depRate.toStringAsFixed(2)}/USDT. When cashing out to USDT, liquidity is settled at ₨ ${wthRate.toStringAsFixed(2)}/USDT. Net platform margin: ₨ ${spreadMargin.toStringAsFixed(2)} per USDT traded.",
-                                    style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5, height: 1.4),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 26),
-
-                      // Save Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.accentGreen,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          ),
-                          onPressed: _isSaving ? null : () => _saveBinanceSettings(admin),
-                          icon: _isSaving
-                              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Color(0xFF021A13), strokeWidth: 2))
-                              : const Icon(Icons.save_rounded, size: 20),
-                          label: Text(
-                            _isSaving ? "Synchronizing Live Database..." : "Save & Enforce Binance Settings",
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+        ],
+      ),
+      statStrip: NexPayStatStrip(
+        items: [
+          NexPayStatItem(
+            label: 'USDT Buy / Deposit Rate',
+            value: 'Rs. ${_depRateCtrl.text.isEmpty ? admin.usdPkrRate.toStringAsFixed(1) : _depRateCtrl.text}',
+            sublabel: 'Customer PKR -> USDT conversion',
+            icon: Icons.arrow_downward_rounded,
+            color: AppConstants.accentGreen,
+          ),
+          NexPayStatItem(
+            label: 'USDT Sell / Payout Rate',
+            value: 'Rs. ${_wthRateCtrl.text.isEmpty ? (admin.usdPkrRate - 2).toStringAsFixed(1) : _wthRateCtrl.text}',
+            sublabel: 'Customer USDT -> PKR cashout',
+            icon: Icons.arrow_upward_rounded,
+            color: AppConstants.accentBlue,
+          ),
+          NexPayStatItem(
+            label: 'Binance Merchant ID',
+            value: _payIdCtrl.text.isEmpty ? 'Not Set' : _payIdCtrl.text,
+            sublabel: 'Zero-fee internal Binance Pay ID',
+            icon: Icons.currency_bitcoin_rounded,
+            color: AppConstants.accentGold,
+          ),
+          NexPayStatItem(
+            label: 'Wallet QR Code',
+            value: _qrUrl.isEmpty ? 'No QR' : 'QR Active',
+            sublabel: 'Displayed in customer deposit screen',
+            icon: Icons.qr_code_2_rounded,
+            color: AppConstants.accentGreen,
+          ),
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppConstants.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppConstants.borderColor),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('MERCHANT RECEIVING CREDENTIALS & QR CODE', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
+            const SizedBox(height: 16),
+            NexPayImageUploader(
+              label: 'Binance Pay / TRC20 Deposit QR Image (Upload From Gallery)',
+              initialValue: _qrUrl,
+              previewHeight: 160,
+              onChanged: (v) => setState(() => _qrUrl = v),
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(child: TextField(controller: _payIdCtrl, decoration: const InputDecoration(labelText: 'Official Binance Pay ID'))),
+                const SizedBox(width: 16),
+                Expanded(child: TextField(controller: _trc20Ctrl, decoration: const InputDecoration(labelText: 'Official USDT (TRC20) Deposit Address'))),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _depRateCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(labelText: 'USDT Deposit Rate (PKR per 1 USDT)', prefixText: 'Rs. '),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextField(
+                    controller: _wthRateCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(labelText: 'USDT Withdrawal Rate (PKR per 1 USDT)', prefixText: 'Rs. '),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildMetricCard(String title, String value, Color color, bool isDesktop) {
-    return Container(
-      width: isDesktop ? 220 : 160,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 17, fontWeight: FontWeight.w700)),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _saveBinanceSettings(AdminProvider admin) async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isSaving = true);
-
-    final updatedBinance = {
-      'officialPayId': _payIdController.text.trim(),
-      'officialTrc20Address': _trc20Controller.text.trim(),
-      'depRate': double.tryParse(_depRateController.text.trim()) ?? 277.0,
-      'wthRate': double.tryParse(_wthRateController.text.trim()) ?? 295.0,
-    };
-
-    try {
-      final res = await _api.dio.post(
-        '',
-        queryParameters: {'action': 'save_config'},
-        data: {
-          'binanceSettings': updatedBinance,
-        },
+  Future<void> _save(AdminProvider admin) async {
+    setState(() => _saving = true);
+    final ok = await admin.saveCmsConfig({
+      'binanceSettings': {
+        'officialPayId': _payIdCtrl.text.trim(),
+        'officialTrc20Address': _trc20Ctrl.text.trim(),
+        'depRate': double.tryParse(_depRateCtrl.text.trim()) ?? admin.usdPkrRate,
+        'wthRate': double.tryParse(_wthRateCtrl.text.trim()) ?? (admin.usdPkrRate - 2),
+        'qrUrl': _qrUrl,
+      },
+    });
+    if (mounted) {
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(ok ? 'Binance gateway settings published live!' : 'Failed to save settings.'), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
       );
-
-      if (res.data['status'] == 'success') {
-        await admin.fetchAllData();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: AppConstants.accentGreen,
-              content: Text(
-                res.data['message'] ?? "✓ Binance gateway parameters updated live!",
-                style: const TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold),
-              ),
-            ),
-          );
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: AppConstants.dangerRed,
-              content: Text(res.data['message'] ?? "Failed to update Binance configuration."),
-            ),
-          );
-        }
-      }
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: AppConstants.dangerRed,
-            content: Text("Network error while deploying Binance settings."),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSaving = false);
     }
   }
 }

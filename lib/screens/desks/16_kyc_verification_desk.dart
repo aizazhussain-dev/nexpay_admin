@@ -1,10 +1,10 @@
-import '../../widgets/institutional_scroll.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/institutional_scroll.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class KycVerificationDeskScreen extends StatefulWidget {
   const KycVerificationDeskScreen({super.key});
@@ -14,656 +14,306 @@ class KycVerificationDeskScreen extends StatefulWidget {
 }
 
 class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
-  final ApiClient _api = ApiClient();
-  String _searchQuery = "";
-  String _statusFilter = "PENDING"; // ALL, PENDING, APPROVED, REJECTED, NOT_SUBMITTED
-  bool _isActionBusy = false;
+  final TextEditingController _searchCtrl = TextEditingController();
+  String _statusFilter = 'PENDING';
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
-    final usersMap = admin.users;
+    final List allCustomers = [];
 
-    // Build user list with KYC metadata
-    final List userList = [];
     int pendingCount = 0;
-    int approvedCount = 0;
-    int rejectedCount = 0;
+    int verifiedCount = 0;
+    int unverifiedCount = 0;
 
-    usersMap.forEach((mob, u) {
-    if (u is Map) {
-    final isVerified = u['isKycVerified'] == true || u['is_kyc_verified'] == 1 || u['is_kyc_verified'] == '1';
-    final kycDocs = u['kycDocuments'] ?? u['kycDocs'];
-    final hasSubmitted = (kycDocs is Map && (kycDocs['hasSubmitted'] == true || kycDocs['submittedAt'] != null));
-    String status = (u['kycStatus'] ?? u['kyc_status'] ?? '').toString().toUpperCase();
+    admin.users.forEach((mobile, raw) {
+    if (raw is! Map) return;
+    final u = Map<String, dynamic>.from(raw);
+    u['mobile'] = (u['mobile'] ?? mobile).toString();
+    allCustomers.add(u);
 
-    if (status.isEmpty || status == 'NULL') {
-    status = isVerified ? 'APPROVED' : (hasSubmitted ? 'PENDING' : 'NOT_SUBMITTED');
-    }
+    final isVerified = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
 
-    if (status == 'PENDING') pendingCount++;
-    if (status == 'APPROVED' || isVerified) approvedCount++;
-    if (status == 'REJECTED') rejectedCount++;
-
-    userList.add(Map<String, dynamic>.from(u)
-    ..['mobile'] = mob
-    ..['computedKycStatus'] = status
-    ..['isVerified'] = isVerified
-    ..['hasDocs'] = hasSubmitted || (status == 'PENDING'));
+    if (st == 'PENDING') {
+    pendingCount++;
+    } else if (isVerified || st == 'VERIFIED') {
+    verifiedCount++;
+    } else {
+    unverifiedCount++;
     }
     });
 
-    // Filter Logic
-    final filteredList = userList.where((u) {
-    final status = u['computedKycStatus'].toString();
+    final filtered = allCustomers.where((u) {
+    final isVerified = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
 
-    if (_statusFilter == "PENDING" && status != "PENDING") return false;
-    if (_statusFilter == "APPROVED" && status != "APPROVED") return false;
-    if (_statusFilter == "REJECTED" && status != "REJECTED") return false;
-    if (_statusFilter == "NOT_SUBMITTED" && status != "NOT_SUBMITTED") return false;
+    if (_statusFilter == 'PENDING' && st != 'PENDING') return false;
+    if (_statusFilter == 'VERIFIED' && !(isVerified || st == 'VERIFIED')) return false;
+    if (_statusFilter == 'UNVERIFIED' && (isVerified || st == 'VERIFIED' || st == 'PENDING')) return false;
 
-    if (_searchQuery.isNotEmpty) {
-    final q = _searchQuery.toLowerCase();
-    final name = (u['name'] ?? '').toString().toLowerCase();
-    final mob = (u['mobile'] ?? '').toString().toLowerCase();
-    final cnic = (u['cnic'] ?? '').toString().toLowerCase();
-    final email = (u['email'] ?? '').toString().toLowerCase();
-    return name.contains(q) || mob.contains(q) || cnic.contains(q) || email.contains(q);
-    }
-    return true;
+    if (_query.isEmpty) return true;
+    final hay = '${u['name']} ${u['mobile']} ${u['cnic']} ${u['email']}'.toLowerCase();
+    return hay.contains(_query);
     }).toList();
 
-    return Padding(
-    padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    // Header Bar
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    Expanded(
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Row(
-    children: [
-    Text(
-    "Biometric KYC & National Identity Center",
-    style: TextStyle(
-    color: Color(0xFF0F172A),
-    fontSize: isDesktop ? 22 : 18,
-    fontWeight: FontWeight.w700,
-    ),
-    ),
-    if (pendingCount > 0) ...[
-    const SizedBox(width: 10),
-    Container(
-    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-    decoration: BoxDecoration(
-    color: AppConstants.dangerRed.withValues(alpha: 0.15),
-    borderRadius: BorderRadius.circular(12),
-    border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
-    ),
-    child: Text(
-    "$pendingCount PENDING VERIFICATION",
-    style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
-    ),
-    ),
-    ],
-    ],
-    ),
-    const SizedBox(height: 4),
-    const Text(
-    "Inspect CNIC Front, Back, live facial tokens and verify Tier-2 spending limits",
-    style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-    ),
-    ],
-    ),
-    ),
+    return NexPayDeskScaffold(
+    header: NexPayDeskHeader(
+    title: 'Biometric KYC & NADRA Identity Compliance Desk',
+    subtitle: 'Inspect CNIC front/back scans, live selfie liveness proofs, and approve or reset customer verification',
+    badgeText: 'AML / KYC COMPLIANCE',
+    badgeColor: AppConstants.accentGold,
+    actions: [
     ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-    backgroundColor: AppConstants.accentGreen,
-    foregroundColor: Colors.white,
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
     onPressed: () => admin.fetchAllData(),
-    icon: const Icon(Icons.sync_rounded, size: 18),
-    label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+    icon: const Icon(Icons.refresh_rounded, size: 17),
+    label: const Text('Sync KYC Queue'),
     ),
     ],
     ),
-    const SizedBox(height: 20),
-
-    // Operational Metric Cards
-    Wrap(
-    spacing: 14,
-    runSpacing: 10,
-    children: [
-    _buildMetricCard("PENDING VERIFICATION", "$pendingCount Dossiers", pendingCount > 0 ? AppConstants.dangerRed : AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("TIER-2 VIP APPROVED", "$approvedCount Verified", AppConstants.accentGreen, isDesktop),
-    _buildMetricCard("REJECTED SUBMISSIONS", "$rejectedCount Rejected", AppConstants.accentGold, isDesktop),
-    _buildMetricCard("TOTAL CUSTOMERS", "${userList.length} Accounts", AppConstants.accentBlue, isDesktop),
+    statStrip: NexPayStatStrip(
+    items: [
+    NexPayStatItem(
+    label: 'Pending KYC Queue',
+    value: '$pendingCount Applicants',
+    sublabel: 'Awaiting document & selfie review',
+    icon: Icons.pending_actions_rounded,
+    color: AppConstants.accentGold,
+    ),
+    NexPayStatItem(
+    label: 'Verified Level-2 Accounts',
+    value: '$verifiedCount Verified',
+    sublabel: 'Full daily transaction limits unlocked',
+    icon: Icons.verified_user_rounded,
+    color: AppConstants.accentGreen,
+    ),
+    NexPayStatItem(
+    label: 'Unverified / Rejected',
+    value: '$unverifiedCount Accounts',
+    sublabel: 'Basic tier or resubmission required',
+    icon: Icons.person_search_rounded,
+    color: AppConstants.dangerRed,
+    ),
+    NexPayStatItem(
+    label: 'Total Customer Base',
+    value: '${allCustomers.length} Profiles',
+    sublabel: 'Live identity database',
+    icon: Icons.shield_outlined,
+    color: AppConstants.accentBlue,
+    ),
     ],
     ),
-    const SizedBox(height: 20),
+    filterBar: NexPayFilterBar(
+    searchController: _searchCtrl,
+    searchHint: 'Search applicant by name, mobile, or CNIC number...',
+    onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+    filters: const ['PENDING', 'VERIFIED', 'UNVERIFIED', 'ALL'],
+    selectedFilter: _statusFilter,
+    onFilterChanged: (f) => setState(() => _statusFilter = f),
+    resultSummary: 'Showing ${filtered.length} of ${allCustomers.length} profiles',
+    ),
+    body: NexPayFullWidthTable(
+    minTableWidth: 1120,
+    emptyState: const InstitutionalEmptyState(
+    icon: Icons.verified_user_outlined,
+    title: 'No KYC Applications In This Queue',
+    subtitle: 'Switch filter tabs above (e.g., VERIFIED or ALL) to inspect other customer records.',
+    ),
+    columns: const [
+    DataColumn(label: Text('APPLICANT NAME')),
+    DataColumn(label: Text('MOBILE NUMBER')),
+    DataColumn(label: Text('SUBMITTED CNIC')),
+    DataColumn(label: Text('RESIDENTIAL ADDRESS')),
+    DataColumn(label: Text('KYC STATUS')),
+    DataColumn(label: Text('DOCUMENT AUDIT')),
+    ],
+    rows: filtered.map((u) {
+    final mobile = u['mobile'].toString();
+    final name = (u['name'] ?? 'Applicant').toString();
+    final cnic = (u['cnic'] ?? 'Not Provided').toString();
+    final address = (u['address'] ?? '-').toString();
+    final isVerified = u['isKycVerified'] == true ||
+    u['isKycVerified'] == 1 ||
+    (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
 
-    // Filters & Search
-    Wrap(
-    spacing: 12,
-    runSpacing: 10,
-    crossAxisAlignment: WrapCrossAlignment.center,
-    children: [
+    return DataRow(
+    cells: [
+    DataCell(Text(name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5))),
+    DataCell(Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontWeight: FontWeight.w600))),
+    DataCell(Text(cnic, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700))),
+    DataCell(
     SizedBox(
-    width: isDesktop ? 340 : double.infinity,
-    child: TextField(
-    style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-    decoration: InputDecoration(
-    hintText: "Search Mobile, Name, CNIC, Email...",
-    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-    filled: true,
-    fillColor: AppConstants.surface,
-    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-    ),
-    onChanged: (val) => setState(() => _searchQuery = val.trim()),
+    width: 240,
+    child: Text(address, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5)),
     ),
     ),
-    _buildFilterChip("PENDING", "Pending Review ($pendingCount)"),
-    _buildFilterChip("APPROVED", "Tier-2 Approved ($approvedCount)"),
-    _buildFilterChip("REJECTED", "Rejected ($rejectedCount)"),
-    _buildFilterChip("NOT_SUBMITTED", "Not Submitted"),
-    _buildFilterChip("ALL", "All Customers (${userList.length})"),
-    ],
+    DataCell(NexPayStatusBadge(status: st)),
+    DataCell(
+    ElevatedButton.icon(
+    onPressed: () => _openKycAuditDrawer(context, admin, u),
+    icon: const Icon(Icons.badge_outlined, size: 16),
+    label: Text(st == 'PENDING' ? 'Inspect & Approve' : 'View Proofs'),
     ),
-    const SizedBox(height: 18),
-
-    // Content Area
-    Expanded(
-    child: filteredList.isEmpty
-    ? const Center(
-    child: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-    Icon(Icons.badge_outlined, size: 54, color: AppConstants.textMuted),
-    SizedBox(height: 12),
-    Text(
-    "No customer KYC dossiers found in this filter",
-    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
     ),
     ],
-    ),
-    )
-        : isDesktop
-    ? _buildDesktopTable(filteredList, admin)
-        : _buildMobileCards(filteredList, admin),
-    ),
-    ],
+    );
+    }).toList(),
     ),
     );
   }
 
-  Widget _buildMetricCard(String title, String value, Color color, bool isDesktop) {
+  void _openKycAuditDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> u) {
+    final mobile = u['mobile'].toString();
+    final name = (u['name'] ?? '').toString();
+    final email = (u['email'] ?? '').toString();
+    final cnic = (u['cnic'] ?? '').toString();
+    final address = (u['address'] ?? '').toString();
+    final isVerified = u['isKycVerified'] == true ||
+        u['isKycVerified'] == 1 ||
+        (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
+    final status = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+
+    showNexPayInspectorDrawer(
+      context: context,
+      width: 640,
+      title: 'Biometric KYC Dossier: $name',
+      subtitle: 'Mobile: $mobile • CNIC: $cnic',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppConstants.borderColor),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    NexPayStatusBadge(status: status),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text('CNIC Number: $cnic', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700)),
+                Text('Email: $email   •   Address: $address', style: const TextStyle(color: AppConstants.textMuted, fontSize: 12)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          const Text(
+            'SUBMITTED IDENTITY DOCUMENTS (SCROLL / PINCH TO ZOOM)',
+            style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          FutureBuilder(
+          future: admin.getKycProof(mobile),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 48),
+                child: Center(child: CircularProgressIndicator(color: AppConstants.accentGreen)),
+              );
+            }
+            final docs = snap.data ?? {};
+            final front = (docs['cnicFront'] ?? docs['front'] ?? u['cnicFront'] ?? '').toString();
+            final back = (docs['cnicBack'] ?? docs['back'] ?? u['cnicBack'] ?? '').toString();
+            final selfie = (docs['selfie'] ?? docs['liveSelfie'] ?? u['selfie'] ?? '').toString();
+
+            return Column(
+              children: [
+                _docCard('CNIC Front Scan', front),
+                const SizedBox(height: 14),
+                _docCard('CNIC Back Scan', back),
+                const SizedBox(height: 14),
+                _docCard('Biometric Live Selfie', selfie),
+              ],
+            );
+          },
+          ),
+        ],
+      ),
+      footerActions: [
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.resetUserKyc(mobile);
+            if (context.mounted) {
+              _toast(context, ok ? 'KYC rejected & reset for resubmission.' : 'Reset failed.', ok);
+            }
+          },
+          icon: const Icon(Icons.close_rounded, size: 17),
+          label: const Text('Reject & Reset KYC'),
+        ),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () async {
+            Navigator.pop(context);
+            final ok = await admin.updateUserFullProfile(
+              oldMobile: mobile,
+              newMobile: mobile,
+              name: name,
+              email: email,
+              cnic: cnic,
+              address: address,
+              isKycVerified: true,
+              kycStatus: 'VERIFIED',
+            );
+            if (context.mounted) {
+              _toast(context, ok ? 'Customer $name KYC Verified!' : 'Approval failed.', ok);
+            }
+          },
+          icon: const Icon(Icons.verified_rounded, size: 17),
+          label: const Text('Approve Level-2 KYC'),
+        ),
+      ],
+    );
+  }
+
+  Widget _docCard(String title, String rawImg) {
     return Container(
-      width: isDesktop ? 220 : 160,
-      padding: const EdgeInsets.all(14),
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFE2E8F0)),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppConstants.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.w700)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _statusFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
-      ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _statusFilter = key),
-    );
-  }
-
-  Widget _buildDesktopTable(List list, AdminProvider admin) {
-  return Container(
-  decoration: BoxDecoration(
-  color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: Color(0xFFE2E8F0)),
-  ),
-  child: ClipRRect(
-  borderRadius: BorderRadius.circular(18),
-  child: InstitutionalVScroll(
-  scrollDirection: Axis.vertical,
-  child: InstitutionalHScroll(
-  child: DataTable(
-  headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-  dataRowColor: WidgetStateProperty.all(Colors.transparent),
-  horizontalMargin: 20,
-  columnSpacing: 26,
-  columns: const [
-  DataColumn(label: Text("CUSTOMER", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("NATIONAL CNIC", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("RESIDENTIAL LOCATION", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("KYC DOSSIER STATUS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("LIMIT ALLOWANCE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  DataColumn(label: Text("INSPECTION CONSOLE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-  ],
-  rows: list.map((u) {
-  final mob = (u['mobile'] ?? '').toString();
-  final name = (u['name'] ?? 'Customer').toString();
-  final cnic = (u['cnic'] ?? 'Pending Update').toString();
-  final address = (u['address'] ?? 'Not Recorded').toString();
-  final status = u['computedKycStatus'].toString();
-  final isVerified = u['isVerified'] == true;
-
-  return DataRow(
-  cells: [
-  DataCell(
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13.5)),
-  Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
-  ],
-  ),
-  ),
-  DataCell(Text(cnic, style: const TextStyle(color: Color(0xFF64748B), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12.5))),
-  DataCell(
-  Container(
-  constraints: const BoxConstraints(maxWidth: 240),
-  child: Text(
-  address,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5),
-  ),
-  ),
-  ),
-  DataCell(_buildKycBadge(status)),
-  DataCell(
-  Text(
-  isVerified ? "Tier-2 (₨ 10 Lakh Monthly)" : "Tier-1 (₨ 50k Monthly)",
-  style: TextStyle(
-  color: isVerified ? AppConstants.accentGreen : Colors.amber,
-  fontWeight: FontWeight.w800,
-  fontSize: 12,
-  ),
-  ),
-  ),
-  DataCell(
-  ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(
-  backgroundColor: status == 'PENDING' ? AppConstants.accentGreen : AppConstants.surfaceCard,
-  foregroundColor: status == 'PENDING' ? Color(0xFF021A13) : Color(0xFF0F172A),
-  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  ),
-  onPressed: () => _openTriDocumentInspectionModal(context, mob, u, admin),
-  icon: const Icon(Icons.document_scanner_rounded, size: 15),
-  label: Text(
-  status == 'PENDING' ? "Review Dossier" : "Inspect Dossier",
-  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5),
-  ),
-  ),
-  ),
-  ],
-  );
-  }).toList(),
-  ),
-  ),
-  ),
-  ),
-  );
-  }
-
-  Widget _buildMobileCards(List list, AdminProvider admin) {
-  return ListView.builder(
-  itemCount: list.length,
-  itemBuilder: (context, idx) {
-  final u = list[idx];
-  final mob = (u['mobile'] ?? '').toString();
-  final name = (u['name'] ?? 'Customer').toString();
-  final cnic = (u['cnic'] ?? 'Pending').toString();
-  final status = u['computedKycStatus'].toString();
-  final isVerified = u['isVerified'] == true;
-
-  return Container(
-  margin: const EdgeInsets.only(bottom: 12),
-  padding: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-  color: AppConstants.surface,
-  borderRadius: BorderRadius.circular(18),
-  border: Border.all(color: status == 'PENDING' ? AppConstants.dangerRed.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-  ),
-  child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  Text(name, style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
-  Text(mob, style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 11.5)),
-  ],
-  ),
-  _buildKycBadge(status),
-  ],
-  ),
-  const SizedBox(height: 8),
-  Row(
-  children: [
-  const Text("CNIC: ", style: TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-  Text(cnic, style: const TextStyle(color: Color(0xFF0F172A), fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
-  ],
-  ),
-  const SizedBox(height: 4),
-  Text("Quota: ${isVerified ? 'Tier-2 (₨ 10 Lakh)' : 'Tier-1 (₨ 50k)'}", style: TextStyle(color: isVerified ? AppConstants.accentGreen : Colors.amber, fontSize: 11.5, fontWeight: FontWeight.bold)),
-  const Divider(color: Color(0xFFE2E8F0), height: 20),
-  SizedBox(
-  width: double.infinity,
-  child: ElevatedButton.icon(
-  style: ElevatedButton.styleFrom(
-  backgroundColor: status == 'PENDING' ? AppConstants.accentGreen : AppConstants.surfaceCard,
-  foregroundColor: status == 'PENDING' ? Color(0xFF021A13) : Color(0xFF0F172A),
-  padding: const EdgeInsets.symmetric(vertical: 9),
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  ),
-  onPressed: () => _openTriDocumentInspectionModal(context, mob, u, admin),
-  icon: const Icon(Icons.document_scanner_rounded, size: 16),
-  label: Text(
-  status == 'PENDING' ? "Review & Verify Documents" : "Inspect Biometric Dossier",
-  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
-  ),
-  ),
-  ),
-  ],
-  ),
-  );
-  },
-  );
-  }
-
-  Widget _buildKycBadge(String status) {
-  Color bg;
-  Color text;
-
-  if (status == 'APPROVED') {
-  bg = AppConstants.accentGreen.withValues(alpha: 0.15);
-  text = AppConstants.accentGreen;
-  } else if (status == 'PENDING') {
-  bg = Colors.amber.withValues(alpha: 0.15);
-  text = Colors.amber;
-  } else if (status == 'REJECTED') {
-  bg = AppConstants.dangerRed.withValues(alpha: 0.15);
-  text = AppConstants.dangerRed;
-  } else {
-  bg = Color(0xFFE2E8F0);
-  text = AppConstants.textMuted;
-  }
-
-  return Container(
-  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-  decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-  child: Text(status, style: TextStyle(color: text, fontSize: 10, fontWeight: FontWeight.w700)),
-  );
-  }
-
-  // =========================================================================
-  // TRI-DOCUMENT INSPECTION CONSOLE MODAL
-  // =========================================================================
-  void _openTriDocumentInspectionModal(BuildContext context, String mobile, Map<String, dynamic> user, AdminProvider admin) {
-  showDialog(
-  context: context,
-  builder: (ctx) => _KycInspectionModal(mobile: mobile, user: user, admin: admin, api: _api),
-  );
-  }
-}
-
-// Dedicated Modal with live document fetch from `get_kyc_proof`
-class _KycInspectionModal extends StatefulWidget {
-  final String mobile;
-  final Map<String, dynamic> user;
-  final AdminProvider admin;
-  final ApiClient api;
-
-  const _KycInspectionModal({
-    required this.mobile,
-    required this.user,
-    required this.admin,
-    required this.api,
-  });
-
-  @override
-  State<_KycInspectionModal> createState() => _KycInspectionModalState();
-}
-
-class _KycInspectionModalState extends State<_KycInspectionModal> {
-  bool _isLoadingDocs = true;
-  Map<String, dynamic> _kycDocs = {};
-  bool _isProcessingDecision = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchKycProof();
-  }
-
-  Future<void> _fetchKycProof() async {
-    try {
-      final res = await widget.api.dio.get(
-        '',
-        queryParameters: {
-          'action': 'get_kyc_proof',
-          'mobile': widget.mobile,
-          '_t': DateTime.now().millisecondsSinceEpoch,
-        },
-      );
-      if (res.data['status'] == 'success') {
-        setState(() {
-          _kycDocs = (res.data['kycDocs'] is Map) ? Map<String, dynamic>.from(res.data['kycDocs']) : {};
-          _isLoadingDocs = false;
-        });
-      } else {
-        setState(() => _isLoadingDocs = false);
-      }
-    } catch (_) {
-      setState(() => _isLoadingDocs = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final name = widget.user['name'] ?? 'Customer';
-    final cnic = widget.user['cnic'] ?? 'Pending';
-    final address = _kycDocs['address'] ?? widget.user['address'] ?? 'Not Recorded';
-    final motherName = _kycDocs['motherName'] ?? 'Not Recorded';
-    final birthCity = _kycDocs['birthCity'] ?? 'Not Recorded';
-    final cnicExpiry = _kycDocs['cnicExpiry'] ?? 'Not Recorded';
-
-    final cnicFront = _kycDocs['cnicFront'] ?? _kycDocs['lCnicFront'];
-    final cnicBack = _kycDocs['cnicBack'] ?? _kycDocs['lCnicBack'];
-    final face = _kycDocs['face'] ?? _kycDocs['selfie'] ?? _kycDocs['liveFace'];
-
-    return Dialog(
-      backgroundColor: AppConstants.surface,
-      insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 780, maxHeight: 850),
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          children: [
-            // Modal Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Identity Dossier: $name", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-                    const SizedBox(height: 2),
-                    Text("Mobile: ${widget.mobile} • CNIC: $cnic", style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
-                  ],
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-            const Divider(color: Color(0xFFE2E8F0), height: 20),
-
-            // Dossier Body
-            Expanded(
-              child: _isLoadingDocs
-                  ? const Center(child: CircularProgressIndicator(color: AppConstants.accentGreen))
-                  : InstitutionalVScroll(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Tri-Document Scans Display
-                    const Text("📸 TRI-DOCUMENT REGULATORY SCANS", style: TextStyle(color: AppConstants.accentGreen, fontSize: 11, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(child: _buildDocCard("CNIC FRONT SIDE", cnicFront)),
-                        const SizedBox(width: 10),
-                        Expanded(child: _buildDocCard("CNIC BACK SIDE", cnicBack)),
-                        const SizedBox(width: 10),
-                        Expanded(child: _buildDocCard("LIVE FACIAL TOKEN", face)),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-
-                    // Biometric Text Attributes Card
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppConstants.surfaceCard,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Color(0xFFE2E8F0)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("NATIONAL IDENTITY REGULATORY ATTRIBUTES", style: TextStyle(color: Color(0xFF0F172A), fontSize: 11.5, fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: _buildInfoTile("MOTHER'S NAME", motherName)),
-                              Expanded(child: _buildInfoTile("CITY OF BIRTH", birthCity)),
-                              Expanded(child: _buildInfoTile("CNIC EXPIRY DATE", cnicExpiry)),
-                            ],
-                          ),
-                          const Divider(color: Color(0xFFE2E8F0), height: 18),
-                          _buildInfoTile("RESIDENTIAL / HOUSE LOCATION", address),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppConstants.accentGreen,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: _isProcessingDecision ? null : () => _executeDecision(true),
-                    icon: const Icon(Icons.check_circle_rounded, size: 18),
-                    label: const Text("✓ Approve & Verify Tier-2", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppConstants.dangerRed,
-                      side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: _isProcessingDecision ? null : () => _executeDecision(false),
-                    icon: const Icon(Icons.cancel_rounded, size: 18),
-                    label: const Text("✕ Reject Dossier", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.amber.withValues(alpha: 0.15),
-                    foregroundColor: Colors.amber,
-                  ),
-                  tooltip: "Wipe KYC (Allow customer to re-submit)",
-                  onPressed: _isProcessingDecision ? null : _wipeKycData,
-                  icon: const Icon(Icons.restart_alt_rounded),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDocCard(String title, dynamic imgData) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppConstants.surfaceCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        children: [
-          Text(title, style: const TextStyle(color: AppConstants.textMuted, fontSize: 9.5, fontWeight: FontWeight.bold)),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
           const SizedBox(height: 8),
           Container(
-            height: 140,
+            height: 210,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Color(0xFFE2E8F0)),
+              color: AppConstants.background,
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: (imgData == null || imgData.toString().isEmpty)
-                  ? const Center(child: Text("Not Attached", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)))
-                  : _renderImage(imgData.toString()),
+            child: rawImg.trim().isEmpty
+                ? const Center(child: Text('No image uploaded for this slot.', style: TextStyle(color: AppConstants.textMuted, fontSize: 12)))
+                : InteractiveViewer(
+              minScale: 0.8,
+              maxScale: 4.0,
+              child: _decodeImg(rawImg),
             ),
           ),
         ],
@@ -671,108 +321,21 @@ class _KycInspectionModalState extends State<_KycInspectionModal> {
     );
   }
 
-  Widget _renderImage(String data) {
-    if (data.startsWith("http://") || data.startsWith("https://")) {
-      return Image.network(
-        data,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Color(0xFF94A3B8))),
-      );
-    }
+  Widget _decodeImg(String src) {
     try {
-      String clean = data;
-      if (data.contains(",")) clean = data.split(",").last;
-      final bytes = base64Decode(clean.replaceAll(RegExp(r'\s+'), ''));
-      return Image.memory(
-        bytes,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Color(0xFF94A3B8))),
-      );
+      if (src.startsWith('http://') || src.startsWith('https://')) {
+        return Image.network(src, fit: BoxFit.contain);
+      }
+      final clean = src.contains(',') ? src.split(',').last : src;
+      return Image.memory(base64Decode(clean), fit: BoxFit.contain);
     } catch (_) {
-      return const Center(child: Text("Corrupted Scan", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10)));
+      return const Center(child: Text('Invalid image encoding', style: TextStyle(color: AppConstants.dangerRed)));
     }
   }
 
-  Widget _buildInfoTile(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(color: AppConstants.textMuted, fontSize: 10, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 3),
-        Text(value, style: const TextStyle(color: Color(0xFF0F172A), fontSize: 12.5, fontWeight: FontWeight.bold)),
-      ],
+  void _toast(BuildContext context, String msg, bool ok) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
-  }
-
-  // Execute Decision (Approve / Reject)
-  Future<void> _executeDecision(bool approved) async {
-    setState(() => _isProcessingDecision = true);
-
-    try {
-      final userRaw = widget.admin.users[widget.mobile];
-      if (userRaw != null) {
-        final userCopy = Map<String, dynamic>.from(userRaw);
-        userCopy['isKycVerified'] = approved;
-        userCopy['kycStatus'] = approved ? 'APPROVED' : 'REJECTED';
-
-        final res = await widget.api.dio.post(
-          '',
-          queryParameters: {'action': 'save_all'},
-          data: {
-            'users': {widget.mobile: userCopy}
-          },
-        );
-
-        if (res.data['status'] == 'success') {
-          await widget.admin.fetchAllData();
-          if (mounted) {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
-                content: Text(
-                  approved ? "✓ KYC Approved! Customer upgraded to Tier-2 VIP." : "✕ KYC Dossier marked as Rejected.",
-                  style: TextStyle(color: approved ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
-                ),
-              ),
-            );
-          }
-        }
-      }
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(backgroundColor: AppConstants.dangerRed, content: Text("Failed to save KYC decision.")),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isProcessingDecision = false);
-    }
-  }
-
-  // Wipe KYC
-  Future<void> _wipeKycData() async {
-    setState(() => _isProcessingDecision = true);
-    try {
-      final res = await widget.api.dio.post(
-        '',
-        queryParameters: {'action': 'admin_reset_kyc'},
-        data: {'mobile': widget.mobile},
-      );
-      if (res.data['status'] == 'success') {
-        await widget.admin.fetchAllData();
-        if (mounted) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: AppConstants.accentGreen,
-              content: Text("✓ KYC data wiped! Customer can now re-submit from mobile app.", style: TextStyle(color: Color(0xFF021A13), fontWeight: FontWeight.bold)),
-            ),
-          );
-        }
-      }
-    } catch (_) {} finally {
-      if (mounted) setState(() => _isProcessingDecision = false);
-    }
   }
 }
