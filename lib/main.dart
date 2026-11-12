@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/constants.dart';
@@ -9,6 +10,16 @@ import 'screens/main_layout.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const NexPayAdminApp());
+}
+
+class DesktopScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.stylus,
+  };
 }
 
 class NexPayAdminApp extends StatelessWidget {
@@ -24,6 +35,7 @@ class NexPayAdminApp extends StatelessWidget {
       child: MaterialApp(
         title: 'NexPay Core — Institutional Admin Console',
         debugShowCheckedModeBanner: false,
+        scrollBehavior: DesktopScrollBehavior(),
         theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.light,
@@ -38,6 +50,20 @@ class NexPayAdminApp extends StatelessWidget {
             surface: AppConstants.surface,
             onSurface: AppConstants.textPrimary,
             error: AppConstants.dangerRed,
+          ),
+          scrollbarTheme: ScrollbarThemeData(
+            thumbVisibility: WidgetStateProperty.all(true),
+            trackVisibility: WidgetStateProperty.all(true),
+            interactive: true,
+            thickness: WidgetStateProperty.all(8),
+            radius: const Radius.circular(6),
+            thumbColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.hovered) || states.contains(WidgetState.dragged)) {
+                return AppConstants.textMuted;
+              }
+              return AppConstants.borderStrong;
+            }),
+            trackColor: WidgetStateProperty.all(AppConstants.surfaceCard),
           ),
           appBarTheme: const AppBarTheme(
             backgroundColor: AppConstants.surface,
