@@ -135,7 +135,7 @@ class InstitutionalEmptyState extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppConstants.textPrimary,
               fontSize: 14.5,
               fontWeight: FontWeight.w700,
@@ -145,7 +145,7 @@ class InstitutionalEmptyState extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppConstants.textMuted,
               fontSize: 12.5,
             ),

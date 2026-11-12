@@ -82,7 +82,7 @@ class _NexPayImageUploaderState extends State<NexPayImageUploader> {
       children: [
         Text(
           widget.label.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppConstants.textMuted,
             fontSize: 10.5,
             fontWeight: FontWeight.w700,
@@ -104,11 +104,11 @@ class _NexPayImageUploaderState extends State<NexPayImageUploader> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Upload from Gallery or paste https:// image link',
-                  prefixIcon: const Icon(Icons.image_outlined, size: 18),
+                  prefixIcon: Icon(Icons.image_outlined, size: 18),
                   suffixIcon: _currentValue.isNotEmpty
                       ? IconButton(
                     tooltip: 'Clear Image',
-                    icon: const Icon(Icons.close_rounded, size: 16),
+                    icon: Icon(Icons.close_rounded, size: 16),
                     onPressed: () {
                       setState(() {
                         _currentValue = '';
@@ -130,8 +130,8 @@ class _NexPayImageUploaderState extends State<NexPayImageUploader> {
                 height: 15,
                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
               )
-                  : const Icon(Icons.photo_library_rounded, size: 17),
-              label: const Text('Upload Gallery'),
+                  : Icon(Icons.photo_library_rounded, size: 17),
+              label: Text('Upload Gallery'),
             ),
           ],
         ),
@@ -173,7 +173,7 @@ class NexPaySmartImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = source.trim();
     if (s.isEmpty) {
-      return fallback ?? const Icon(Icons.image_outlined, color: AppConstants.textMuted);
+      return fallback ?? Icon(Icons.image_outlined, color: AppConstants.textMuted);
     }
     try {
       if (s.startsWith('data:image')) {
@@ -185,12 +185,12 @@ class NexPaySmartImage extends StatelessWidget {
           s,
           fit: fit,
           errorBuilder: (_, __, ___) =>
-          fallback ?? const Icon(Icons.broken_image_outlined, color: AppConstants.textMuted),
+          fallback ?? Icon(Icons.broken_image_outlined, color: AppConstants.textMuted),
         );
       }
       return Image.memory(base64Decode(s), fit: fit);
     } catch (_) {
-      return fallback ?? const Icon(Icons.broken_image_outlined, color: AppConstants.textMuted);
+      return fallback ?? Icon(Icons.broken_image_outlined, color: AppConstants.textMuted);
     }
   }
 }
