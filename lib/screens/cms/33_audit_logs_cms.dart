@@ -23,7 +23,7 @@ class _AuditLogsCmsScreenState extends State<AuditLogsCmsScreen> {
     super.dispose();
   }
 
-  List> _logs(AdminProvider admin) {
+  List _logs(AdminProvider admin) {
     final raw = admin.cmsConfig['auditLogs'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }

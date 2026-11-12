@@ -23,7 +23,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
     super.dispose();
   }
 
-  List> _list(AdminProvider admin) {
+  List _list(AdminProvider admin) {
     final raw = admin.cmsConfig['savingsTiers'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -111,7 +111,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
     );
   }
 
-  void _openDrawer(BuildContext context, AdminProvider admin, List> items, Map<String, dynamic>? existing) {
+  void _openDrawer(BuildContext context, AdminProvider admin, List items, Map<String, dynamic>? existing) {
     final isEdit = existing != null;
     final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
     final rateCtrl = TextEditingController(text: (existing?['annualRate'] ?? '14.5').toString());
@@ -183,7 +183,7 @@ class _SavingsTiersCmsScreenState extends State<SavingsTiersCmsScreen> {
               'description': descCtrl.text.trim(),
               'status': active ? 'ACTIVE' : 'DISABLED',
             };
-            final updated = List>.from(items);
+            final updated = List.from(items);
             if (isEdit) {
               final idx = updated.indexWhere((x) => x['id'] == existing['id']);
               if (idx != -1) updated[idx] = obj;

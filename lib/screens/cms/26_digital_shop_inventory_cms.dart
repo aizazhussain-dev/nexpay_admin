@@ -24,7 +24,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
     super.dispose();
   }
 
-  List> _list(AdminProvider admin) {
+  List _list(AdminProvider admin) {
     final raw = admin.cmsConfig['digitalShopProducts'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -125,7 +125,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
     );
   }
 
-  void _openDrawer(BuildContext context, AdminProvider admin, List> items, Map<String, dynamic>? existing) {
+  void _openDrawer(BuildContext context, AdminProvider admin, List items, Map<String, dynamic>? existing) {
     final isEdit = existing != null;
     final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
     final catCtrl = TextEditingController(text: (existing?['category'] ?? 'Subscriptions').toString());
@@ -202,7 +202,7 @@ class _DigitalShopInventoryCmsScreenState extends State<DigitalShopInventoryCmsS
               'keys': keyList,
               'status': active ? 'ACTIVE' : 'DISABLED',
             };
-            final updated = List>.from(items);
+            final updated = List.from(items);
             if (isEdit) {
               final idx = updated.indexWhere((x) => x['id'] == existing['id']);
               if (idx != -1) updated[idx] = obj;

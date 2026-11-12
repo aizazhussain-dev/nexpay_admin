@@ -41,7 +41,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
     super.dispose();
   }
 
-  List> _ips(AdminProvider admin) {
+  List _ips(AdminProvider admin) {
     final raw = admin.cmsConfig['whitelistedIps'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -173,7 +173,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
     );
   }
 
-  void _openAddIpDrawer(BuildContext context, AdminProvider admin, List> ips) {
+  void _openAddIpDrawer(BuildContext context, AdminProvider admin, List ips) {
     final ipCtrl = TextEditingController();
     final labelCtrl = TextEditingController();
     showNexPayInspectorDrawer(
@@ -194,7 +194,7 @@ class _SecurityIpWhitelistCmsScreenState extends State<SecurityIpWhitelistCmsScr
           onPressed: () async {
             if (ipCtrl.text.trim().isEmpty) return;
             Navigator.pop(context);
-            final updated = List>.from(ips)
+            final updated = List.from(ips)
               ..add({
                 'id': 'ip_${DateTime.now().millisecondsSinceEpoch}',
                 'ipAddress': ipCtrl.text.trim(),
