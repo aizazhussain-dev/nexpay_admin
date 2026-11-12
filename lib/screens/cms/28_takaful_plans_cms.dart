@@ -8,6 +8,7 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class TakafulPlansCmsScreen extends StatefulWidget {
   const TakafulPlansCmsScreen({super.key});
+
   @override
   State<TakafulPlansCmsScreen> createState() => _TakafulPlansCmsScreenState();
 }
@@ -23,7 +24,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
     super.dispose();
   }
 
-  List> _list(AdminProvider admin) {
+  List _list(AdminProvider admin) {
     final raw = admin.cmsConfig['takafulPlans'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -81,7 +82,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
           DataColumn(label: Text('CONTROLS')),
         ],
         rows: filtered.map((p) {
-          final iconVal = (p['icon'] ?? '???').toString();
+          final iconVal = (p['icon'] ?? '🛡️').toString();
           final isImg = iconVal.startsWith('data:image') || iconVal.startsWith('http');
           return DataRow(
             cells: [
@@ -97,7 +98,7 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
               DataCell(Text((p['name'] ?? '').toString(), style: const TextStyle(fontWeight: FontWeight.w700))),
               DataCell(Text((p['category'] ?? 'Health').toString())),
               DataCell(Text('Rs. ${p['coverageAmount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGreen))),
-              DataCell(Text('Rs. ${p['monthlyPremium'] ?? 0}/mo � Rs. ${p['annualPremium'] ?? 0}/yr', style: const TextStyle(fontSize: 12))),
+              DataCell(Text('Rs. ${p['monthlyPremium'] ?? 0}/mo • Rs. ${p['annualPremium'] ?? 0}/yr', style: const TextStyle(fontSize: 12))),
               DataCell(Text((p['underwriter'] ?? 'Pak-Qatar Takaful').toString())),
               DataCell(NexPayStatusBadge(status: (p['status'] ?? 'ACTIVE').toString())),
               DataCell(
@@ -123,95 +124,95 @@ class _TakafulPlansCmsScreenState extends State<TakafulPlansCmsScreen> {
     );
   }
 
-  void _openDrawer(BuildContext context, AdminProvider admin, List> items, Map<String, dynamic>? existing) {
-    final isEdit = existing != null;
-    final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
-    final catCtrl = TextEditingController(text: (existing?['category'] ?? 'Health').toString());
-    final covCtrl = TextEditingController(text: (existing?['coverageAmount'] ?? '500000').toString());
-    final moCtrl = TextEditingController(text: (existing?['monthlyPremium'] ?? '499').toString());
-    final yrCtrl = TextEditingController(text: (existing?['annualPremium'] ?? '5499').toString());
-    final uwCtrl = TextEditingController(text: (existing?['underwriter'] ?? 'Pak-Qatar Family Takaful').toString());
-    final benCtrl = TextEditingController(text: (existing?['benefits'] ?? '24/7 Hospitalization & Emergency Coverage').toString());
-    String iconVal = (existing?['icon'] ?? '???').toString();
-    bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
+  void _openDrawer(BuildContext context, AdminProvider admin, List items, Map<String, dynamic>? existing) {
+  final isEdit = existing != null;
+  final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
+  final catCtrl = TextEditingController(text: (existing?['category'] ?? 'Health').toString());
+  final covCtrl = TextEditingController(text: (existing?['coverageAmount'] ?? '500000').toString());
+  final moCtrl = TextEditingController(text: (existing?['monthlyPremium'] ?? '499').toString());
+  final yrCtrl = TextEditingController(text: (existing?['annualPremium'] ?? '5499').toString());
+  final uwCtrl = TextEditingController(text: (existing?['underwriter'] ?? 'Pak-Qatar Family Takaful').toString());
+  final benCtrl = TextEditingController(text: (existing?['benefits'] ?? '24/7 Hospitalization & Emergency Coverage').toString());
+  String iconVal = (existing?['icon'] ?? '🛡️').toString();
+  bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
 
-    showNexPayInspectorDrawer(
-      context: context,
-      title: isEdit ? 'Edit Takaful Plan' : 'Add Islamic Takaful Plan',
-      subtitle: 'Upload plan badge from gallery and configure coverage limits',
-      child: StatefulBuilder(
-        builder: (ctx, setS) => Column(
-          children: [
-            NexPayImageUploader(
-              label: 'Plan Icon / Badge (Upload From Gallery - Optional)',
-              initialValue: (iconVal.startsWith('data:image') || iconVal.startsWith('http')) ? iconVal : '',
-              previewHeight: 110,
-              onChanged: (v) => iconVal = v.isEmpty ? '???' : v,
-            ),
-            const SizedBox(height: 12),
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Takaful Plan Name')),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: catCtrl, decoration: const InputDecoration(labelText: 'Category (Health/Life/Travel)'))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: covCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Coverage Limit (PKR)', prefixText: 'Rs. '))),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: moCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Monthly Contribution', prefixText: 'Rs. '))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: yrCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Annual Contribution', prefixText: 'Rs. '))),
-              ],
-            ),
-            const SizedBox(height: 12),
-            TextField(controller: uwCtrl, decoration: const InputDecoration(labelText: 'Takaful Operator / Underwriter')),
-            const SizedBox(height: 12),
-            TextField(controller: benCtrl, maxLines: 2, decoration: const InputDecoration(labelText: 'Key Policy Benefits')),
-            const SizedBox(height: 12),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Plan Active in Customer App', style: TextStyle(fontWeight: FontWeight.w600)),
-              value: active,
-              activeThumbColor: AppConstants.accentGreen,
-              onChanged: (v) => setS(() => active = v),
-            ),
-          ],
-        ),
-      ),
-      footerActions: [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-        const SizedBox(width: 12),
-        ElevatedButton(
-          onPressed: () async {
-            if (nameCtrl.text.trim().isEmpty) return;
-            Navigator.pop(context);
-            final obj = {
-              'id': isEdit ? existing['id'] : 'tkf_${DateTime.now().millisecondsSinceEpoch}',
-              'name': nameCtrl.text.trim(),
-              'category': catCtrl.text.trim(),
-              'coverageAmount': double.tryParse(covCtrl.text.trim()) ?? 500000,
-              'monthlyPremium': double.tryParse(moCtrl.text.trim()) ?? 499,
-              'annualPremium': double.tryParse(yrCtrl.text.trim()) ?? 5499,
-              'underwriter': uwCtrl.text.trim(),
-              'benefits': benCtrl.text.trim(),
-              'icon': iconVal,
-              'status': active ? 'ACTIVE' : 'DISABLED',
-            };
-            final updated = List>.from(items);
-            if (isEdit) {
-              final idx = updated.indexWhere((x) => x['id'] == existing['id']);
-              if (idx != -1) updated[idx] = obj;
-            } else {
-              updated.add(obj);
-            }
-            await admin.saveCmsConfig({'takafulPlans': updated});
-          },
-          child: const Text('Save Plan'),
-        ),
-      ],
-    );
+  showNexPayInspectorDrawer(
+  context: context,
+  title: isEdit ? 'Edit Takaful Plan' : 'Add Islamic Takaful Plan',
+  subtitle: 'Upload plan badge from gallery and configure coverage limits',
+  child: StatefulBuilder(
+  builder: (ctx, setS) => Column(
+  children: [
+  NexPayImageUploader(
+  label: 'Plan Icon / Badge (Upload From Gallery - Optional)',
+  initialValue: (iconVal.startsWith('data:image') || iconVal.startsWith('http')) ? iconVal : '',
+  previewHeight: 110,
+  onChanged: (v) => iconVal = v.isEmpty ? '🛡️' : v,
+  ),
+  const SizedBox(height: 12),
+  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Takaful Plan Name')),
+  const SizedBox(height: 12),
+  Row(
+  children: [
+  Expanded(child: TextField(controller: catCtrl, decoration: const InputDecoration(labelText: 'Category (Health/Life/Travel)'))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: covCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Coverage Limit (PKR)', prefixText: 'Rs. '))),
+  ],
+  ),
+  const SizedBox(height: 12),
+  Row(
+  children: [
+  Expanded(child: TextField(controller: moCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Monthly Contribution', prefixText: 'Rs. '))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: yrCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Annual Contribution', prefixText: 'Rs. '))),
+  ],
+  ),
+  const SizedBox(height: 12),
+  TextField(controller: uwCtrl, decoration: const InputDecoration(labelText: 'Takaful Operator / Underwriter')),
+  const SizedBox(height: 12),
+  TextField(controller: benCtrl, maxLines: 2, decoration: const InputDecoration(labelText: 'Key Policy Benefits')),
+  const SizedBox(height: 12),
+  SwitchListTile(
+  contentPadding: EdgeInsets.zero,
+  title: const Text('Plan Active in Customer App', style: TextStyle(fontWeight: FontWeight.w600)),
+  value: active,
+  activeThumbColor: AppConstants.accentGreen,
+  onChanged: (v) => setS(() => active = v),
+  ),
+  ],
+  ),
+  ),
+  footerActions: [
+  OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+  const SizedBox(width: 12),
+  ElevatedButton(
+  onPressed: () async {
+  if (nameCtrl.text.trim().isEmpty) return;
+  Navigator.pop(context);
+  final obj = {
+  'id': isEdit ? existing['id'] : 'tkf_${DateTime.now().millisecondsSinceEpoch}',
+  'name': nameCtrl.text.trim(),
+  'category': catCtrl.text.trim(),
+  'coverageAmount': double.tryParse(covCtrl.text.trim()) ?? 500000,
+  'monthlyPremium': double.tryParse(moCtrl.text.trim()) ?? 499,
+  'annualPremium': double.tryParse(yrCtrl.text.trim()) ?? 5499,
+  'underwriter': uwCtrl.text.trim(),
+  'benefits': benCtrl.text.trim(),
+  'icon': iconVal,
+  'status': active ? 'ACTIVE' : 'DISABLED',
+  };
+  final updated = List.from(items);
+  if (isEdit) {
+  final idx = updated.indexWhere((x) => x['id'] == existing['id']);
+  if (idx != -1) updated[idx] = obj;
+  } else {
+  updated.add(obj);
+  }
+  await admin.saveCmsConfig({'takafulPlans': updated});
+  },
+  child: const Text('Save Plan'),
+  ),
+  ],
+  );
   }
 }

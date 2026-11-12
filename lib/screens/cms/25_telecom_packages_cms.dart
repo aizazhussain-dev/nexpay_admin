@@ -7,6 +7,7 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class TelecomPackagesCmsScreen extends StatefulWidget {
   const TelecomPackagesCmsScreen({super.key});
+
   @override
   State<TelecomPackagesCmsScreen> createState() => _TelecomPackagesCmsScreenState();
 }
@@ -22,7 +23,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
     super.dispose();
   }
 
-  List> _list(AdminProvider admin) {
+  List _list(AdminProvider admin) {
     final raw = admin.cmsConfig['telecomPackages'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -82,7 +83,7 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
             cells: [
               DataCell(Text((p['network'] ?? 'JAZZ').toString().toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
               DataCell(Text((p['name'] ?? '').toString(), style: const TextStyle(fontWeight: FontWeight.w700))),
-              DataCell(Text('${p['data'] ?? '-'} • ${p['onNet'] ?? '-'} On-Net • ${p['offNet'] ?? '-'} Off-Net', style: const TextStyle(fontSize: 12))),
+              DataCell(Text('${p['data'] ?? '-'} â€¢ ${p['onNet'] ?? '-'} On-Net â€¢ ${p['offNet'] ?? '-'} Off-Net', style: const TextStyle(fontSize: 12))),
               DataCell(Text((p['validity'] ?? '30 Days').toString())),
               DataCell(Text('Rs. ${p['price'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGreen))),
               DataCell(NexPayStatusBadge(status: (p['status'] ?? 'ACTIVE').toString())),
@@ -109,94 +110,94 @@ class _TelecomPackagesCmsScreenState extends State<TelecomPackagesCmsScreen> {
     );
   }
 
-  void _openDrawer(BuildContext context, AdminProvider admin, List> items, Map<String, dynamic>? existing) {
-    final isEdit = existing != null;
-    final netCtrl = TextEditingController(text: (existing?['network'] ?? 'JAZZ').toString());
-    final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
-    final validCtrl = TextEditingController(text: (existing?['validity'] ?? '30 Days').toString());
-    final priceCtrl = TextEditingController(text: (existing?['price'] ?? '').toString());
-    final dataCtrl = TextEditingController(text: (existing?['data'] ?? '25 GB').toString());
-    final onNetCtrl = TextEditingController(text: (existing?['onNet'] ?? '1000').toString());
-    final offNetCtrl = TextEditingController(text: (existing?['offNet'] ?? '250').toString());
-    final smsCtrl = TextEditingController(text: (existing?['sms'] ?? '1000').toString());
-    bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
+  void _openDrawer(BuildContext context, AdminProvider admin, List items, Map<String, dynamic>? existing) {
+  final isEdit = existing != null;
+  final netCtrl = TextEditingController(text: (existing?['network'] ?? 'JAZZ').toString());
+  final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
+  final validCtrl = TextEditingController(text: (existing?['validity'] ?? '30 Days').toString());
+  final priceCtrl = TextEditingController(text: (existing?['price'] ?? '').toString());
+  final dataCtrl = TextEditingController(text: (existing?['data'] ?? '25 GB').toString());
+  final onNetCtrl = TextEditingController(text: (existing?['onNet'] ?? '1000').toString());
+  final offNetCtrl = TextEditingController(text: (existing?['offNet'] ?? '250').toString());
+  final smsCtrl = TextEditingController(text: (existing?['sms'] ?? '1000').toString());
+  bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
 
-    showNexPayInspectorDrawer(
-      context: context,
-      title: isEdit ? 'Edit Telecom Bundle' : 'Add Telecom Bundle',
-      subtitle: 'Configure network package quotas and retail price',
-      child: StatefulBuilder(
-        builder: (ctx, setS) => Column(
-          children: [
-            Row(
-              children: [
-                Expanded(child: TextField(controller: netCtrl, decoration: const InputDecoration(labelText: 'Network (JAZZ/ZONG/TELENOR/UFONE)'))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: validCtrl, decoration: const InputDecoration(labelText: 'Validity (e.g. 30 Days)'))),
-              ],
-            ),
-            const SizedBox(height: 12),
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Package Title')),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: priceCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Price (PKR)', prefixText: 'Rs. '))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: dataCtrl, decoration: const InputDecoration(labelText: 'Internet Data (e.g. 30 GB)'))),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: onNetCtrl, decoration: const InputDecoration(labelText: 'On-Net Mins'))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: offNetCtrl, decoration: const InputDecoration(labelText: 'Off-Net Mins'))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: smsCtrl, decoration: const InputDecoration(labelText: 'SMS'))),
-              ],
-            ),
-            const SizedBox(height: 14),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Package Active', style: TextStyle(fontWeight: FontWeight.w600)),
-              value: active,
-              activeThumbColor: AppConstants.accentGreen,
-              onChanged: (v) => setS(() => active = v),
-            ),
-          ],
-        ),
-      ),
-      footerActions: [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-        const SizedBox(width: 12),
-        ElevatedButton(
-          onPressed: () async {
-            if (nameCtrl.text.trim().isEmpty) return;
-            Navigator.pop(context);
-            final obj = {
-              'id': isEdit ? existing['id'] : 'tel_${DateTime.now().millisecondsSinceEpoch}',
-              'network': netCtrl.text.trim().toUpperCase(),
-              'name': nameCtrl.text.trim(),
-              'validity': validCtrl.text.trim(),
-              'price': double.tryParse(priceCtrl.text.trim()) ?? 0,
-              'data': dataCtrl.text.trim(),
-              'onNet': onNetCtrl.text.trim(),
-              'offNet': offNetCtrl.text.trim(),
-              'sms': smsCtrl.text.trim(),
-              'status': active ? 'ACTIVE' : 'DISABLED',
-            };
-            final updated = List>.from(items);
-            if (isEdit) {
-              final idx = updated.indexWhere((x) => x['id'] == existing['id']);
-              if (idx != -1) updated[idx] = obj;
-            } else {
-              updated.add(obj);
-            }
-            await admin.saveCmsConfig({'telecomPackages': updated});
-          },
-          child: const Text('Save Package'),
-        ),
-      ],
-    );
+  showNexPayInspectorDrawer(
+  context: context,
+  title: isEdit ? 'Edit Telecom Bundle' : 'Add Telecom Bundle',
+  subtitle: 'Configure network package quotas and retail price',
+  child: StatefulBuilder(
+  builder: (ctx, setS) => Column(
+  children: [
+  Row(
+  children: [
+  Expanded(child: TextField(controller: netCtrl, decoration: const InputDecoration(labelText: 'Network (JAZZ/ZONG/TELENOR/UFONE)'))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: validCtrl, decoration: const InputDecoration(labelText: 'Validity (e.g. 30 Days)'))),
+  ],
+  ),
+  const SizedBox(height: 12),
+  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Package Title')),
+  const SizedBox(height: 12),
+  Row(
+  children: [
+  Expanded(child: TextField(controller: priceCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Price (PKR)', prefixText: 'Rs. '))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: dataCtrl, decoration: const InputDecoration(labelText: 'Internet Data (e.g. 30 GB)'))),
+  ],
+  ),
+  const SizedBox(height: 12),
+  Row(
+  children: [
+  Expanded(child: TextField(controller: onNetCtrl, decoration: const InputDecoration(labelText: 'On-Net Mins'))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: offNetCtrl, decoration: const InputDecoration(labelText: 'Off-Net Mins'))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: smsCtrl, decoration: const InputDecoration(labelText: 'SMS'))),
+  ],
+  ),
+  const SizedBox(height: 14),
+  SwitchListTile(
+  contentPadding: EdgeInsets.zero,
+  title: const Text('Package Active', style: TextStyle(fontWeight: FontWeight.w600)),
+  value: active,
+  activeThumbColor: AppConstants.accentGreen,
+  onChanged: (v) => setS(() => active = v),
+  ),
+  ],
+  ),
+  ),
+  footerActions: [
+  OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+  const SizedBox(width: 12),
+  ElevatedButton(
+  onPressed: () async {
+  if (nameCtrl.text.trim().isEmpty) return;
+  Navigator.pop(context);
+  final obj = {
+  'id': isEdit ? existing['id'] : 'tel_${DateTime.now().millisecondsSinceEpoch}',
+  'network': netCtrl.text.trim().toUpperCase(),
+  'name': nameCtrl.text.trim(),
+  'validity': validCtrl.text.trim(),
+  'price': double.tryParse(priceCtrl.text.trim()) ?? 0,
+  'data': dataCtrl.text.trim(),
+  'onNet': onNetCtrl.text.trim(),
+  'offNet': offNetCtrl.text.trim(),
+  'sms': smsCtrl.text.trim(),
+  'status': active ? 'ACTIVE' : 'DISABLED',
+  };
+  final updated = List.from(items);
+  if (isEdit) {
+  final idx = updated.indexWhere((x) => x['id'] == existing['id']);
+  if (idx != -1) updated[idx] = obj;
+  } else {
+  updated.add(obj);
+  }
+  await admin.saveCmsConfig({'telecomPackages': updated});
+  },
+  child: const Text('Save Package'),
+  ),
+  ],
+  );
   }
 }

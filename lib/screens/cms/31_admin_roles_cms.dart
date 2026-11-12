@@ -7,6 +7,7 @@ import '../../widgets/nexpay_ui_kit.dart';
 
 class AdminRolesCmsScreen extends StatefulWidget {
   const AdminRolesCmsScreen({super.key});
+
   @override
   State<AdminRolesCmsScreen> createState() => _AdminRolesCmsScreenState();
 }
@@ -22,7 +23,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
     super.dispose();
   }
 
-  List> _list(AdminProvider admin) {
+  List _list(AdminProvider admin) {
     final raw = admin.cmsConfig['adminStaff'];
     return raw is List ? raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList() : [];
   }
@@ -81,7 +82,7 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
           return DataRow(
             cells: [
               DataCell(Text((s['name'] ?? '').toString(), style: const TextStyle(fontWeight: FontWeight.w700))),
-              DataCell(Text('${s['username'] ?? '-'} • ${s['email'] ?? '-'}', style: const TextStyle(fontSize: 12.5))),
+              DataCell(Text('${s['username'] ?? '-'} â€¢ ${s['email'] ?? '-'}', style: const TextStyle(fontSize: 12.5))),
               DataCell(Text((s['role'] ?? 'TREASURY_OFFICER').toString(), style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
               DataCell(Text((s['lastLogin'] ?? 'Never').toString(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
               DataCell(NexPayStatusBadge(status: (s['status'] ?? 'ACTIVE').toString())),
@@ -108,89 +109,89 @@ class _AdminRolesCmsScreenState extends State<AdminRolesCmsScreen> {
     );
   }
 
-  void _openDrawer(BuildContext context, AdminProvider admin, List> staff, Map<String, dynamic>? existing) {
-    final isEdit = existing != null;
-    final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
-    final userCtrl = TextEditingController(text: (existing?['username'] ?? '').toString());
-    final emailCtrl = TextEditingController(text: (existing?['email'] ?? '').toString());
-    final roleCtrl = TextEditingController(text: (existing?['role'] ?? 'COMPLIANCE_OFFICER').toString());
-    final perms = (existing?['permissions'] is Map) ? Map<String, dynamic>.from(existing!['permissions']) : <String, dynamic>{};
+  void _openDrawer(BuildContext context, AdminProvider admin, List staff, Map<String, dynamic>? existing) {
+  final isEdit = existing != null;
+  final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
+  final userCtrl = TextEditingController(text: (existing?['username'] ?? '').toString());
+  final emailCtrl = TextEditingController(text: (existing?['email'] ?? '').toString());
+  final roleCtrl = TextEditingController(text: (existing?['role'] ?? 'COMPLIANCE_OFFICER').toString());
+  final perms = (existing?['permissions'] is Map) ? Map<String, dynamic>.from(existing!['permissions']) : <String, dynamic>{};
 
-    bool canPayouts = perms['canApprovePayouts'] == true;
-    bool canBalances = perms['canAdjustBalances'] == true;
-    bool canKyc = perms['canReviewKyc'] != false;
-    bool canFreeze = perms['canFreezeUsers'] == true;
-    bool canCms = perms['canEditCms'] == true;
-    bool canAudit = perms['canClearAuditLogs'] == true;
-    bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
+  bool canPayouts = perms['canApprovePayouts'] == true;
+  bool canBalances = perms['canAdjustBalances'] == true;
+  bool canKyc = perms['canReviewKyc'] != false;
+  bool canFreeze = perms['canFreezeUsers'] == true;
+  bool canCms = perms['canEditCms'] == true;
+  bool canAudit = perms['canClearAuditLogs'] == true;
+  bool active = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
 
-    showNexPayInspectorDrawer(
-      context: context,
-      title: isEdit ? 'Edit Staff RBAC: ${nameCtrl.text}' : 'Provision Admin Staff Operator',
-      subtitle: 'Configure role credentials and module-level security permissions',
-      child: StatefulBuilder(
-        builder: (ctx, setS) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full Name')),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Operator Username'))),
-                const SizedBox(width: 12),
-                Expanded(child: TextField(controller: roleCtrl, decoration: const InputDecoration(labelText: 'Role Title'))),
-              ],
-            ),
-            const SizedBox(height: 12),
-            TextField(controller: emailCtrl, decoration: const InputDecoration(labelText: 'Official Email')),
-            const Divider(height: 24),
-            const Text('GRANULAR SECURITY PERMISSIONS', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppConstants.textMuted)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Approve IBFT Payouts & Deposits'), value: canPayouts, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canPayouts = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Credit / Debit Customer Wallets'), value: canBalances, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canBalances = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Review & Approve Biometric KYC'), value: canKyc, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canKyc = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Freeze / Unfreeze User Accounts'), value: canFreeze, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canFreeze = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Modify System CMS & Rates'), value: canCms, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canCms = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Clear Forensic Audit Logs'), value: canAudit, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canAudit = v)),
-            SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Account Active (Uncheck to Suspend)'), value: active, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => active = v)),
-          ],
-        ),
-      ),
-      footerActions: [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-        const SizedBox(width: 12),
-        ElevatedButton(
-          onPressed: () async {
-            if (nameCtrl.text.trim().isEmpty) return;
-            Navigator.pop(context);
-            final obj = {
-              'id': isEdit ? existing['id'] : 'staff_${DateTime.now().millisecondsSinceEpoch}',
-              'name': nameCtrl.text.trim(),
-              'username': userCtrl.text.trim(),
-              'email': emailCtrl.text.trim(),
-              'role': roleCtrl.text.trim(),
-              'lastLogin': existing?['lastLogin'] ?? 'Never',
-              'status': active ? 'ACTIVE' : 'SUSPENDED',
-              'permissions': {
-                'canApprovePayouts': canPayouts,
-                'canAdjustBalances': canBalances,
-                'canReviewKyc': canKyc,
-                'canFreezeUsers': canFreeze,
-                'canEditCms': canCms,
-                'canClearAuditLogs': canAudit,
-              },
-            };
-            final updated = List>.from(staff);
-            if (isEdit) {
-              final idx = updated.indexWhere((x) => x['id'] == existing['id']);
-              if (idx != -1) updated[idx] = obj;
-            } else {
-              updated.add(obj);
-            }
-            await admin.saveCmsConfig({'adminStaff': updated});
-          },
-          child: const Text('Save Operator'),
-        ),
-      ],
-    );
+  showNexPayInspectorDrawer(
+  context: context,
+  title: isEdit ? 'Edit Staff RBAC: ${nameCtrl.text}' : 'Provision Admin Staff Operator',
+  subtitle: 'Configure role credentials and module-level security permissions',
+  child: StatefulBuilder(
+  builder: (ctx, setS) => Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full Name')),
+  const SizedBox(height: 12),
+  Row(
+  children: [
+  Expanded(child: TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Operator Username'))),
+  const SizedBox(width: 12),
+  Expanded(child: TextField(controller: roleCtrl, decoration: const InputDecoration(labelText: 'Role Title'))),
+  ],
+  ),
+  const SizedBox(height: 12),
+  TextField(controller: emailCtrl, decoration: const InputDecoration(labelText: 'Official Email')),
+  const Divider(height: 24),
+  const Text('GRANULAR SECURITY PERMISSIONS', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppConstants.textMuted)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Approve IBFT Payouts & Deposits'), value: canPayouts, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canPayouts = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Credit / Debit Customer Wallets'), value: canBalances, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canBalances = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Review & Approve Biometric KYC'), value: canKyc, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canKyc = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Freeze / Unfreeze User Accounts'), value: canFreeze, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canFreeze = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Modify System CMS & Rates'), value: canCms, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canCms = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Clear Forensic Audit Logs'), value: canAudit, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => canAudit = v)),
+  SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Account Active (Uncheck to Suspend)'), value: active, activeThumbColor: AppConstants.accentGreen, onChanged: (v) => setS(() => active = v)),
+  ],
+  ),
+  ),
+  footerActions: [
+  OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+  const SizedBox(width: 12),
+  ElevatedButton(
+  onPressed: () async {
+  if (nameCtrl.text.trim().isEmpty) return;
+  Navigator.pop(context);
+  final obj = {
+  'id': isEdit ? existing['id'] : 'staff_${DateTime.now().millisecondsSinceEpoch}',
+  'name': nameCtrl.text.trim(),
+  'username': userCtrl.text.trim(),
+  'email': emailCtrl.text.trim(),
+  'role': roleCtrl.text.trim(),
+  'lastLogin': existing?['lastLogin'] ?? 'Never',
+  'status': active ? 'ACTIVE' : 'SUSPENDED',
+  'permissions': {
+  'canApprovePayouts': canPayouts,
+  'canAdjustBalances': canBalances,
+  'canReviewKyc': canKyc,
+  'canFreezeUsers': canFreeze,
+  'canEditCms': canCms,
+  'canClearAuditLogs': canAudit,
+  },
+  };
+  final updated = List.from(staff);
+  if (isEdit) {
+  final idx = updated.indexWhere((x) => x['id'] == existing['id']);
+  if (idx != -1) updated[idx] = obj;
+  } else {
+  updated.add(obj);
+  }
+  await admin.saveCmsConfig({'adminStaff': updated});
+  },
+  child: const Text('Save Operator'),
+  ),
+  ],
+  );
   }
 }
