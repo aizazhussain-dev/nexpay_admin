@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class OutwardLedgerDeskScreen extends StatefulWidget {
   const OutwardLedgerDeskScreen({super.key});
 
   @override
-  State<OutwardLedgerDeskScreen> createState() => _OutwardLedgerDeskScreenState();
+  State<OutwardLedgerDeskScreen> createState() =>
+      _OutwardLedgerDeskScreenState();
 }
 
 class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
@@ -39,12 +38,26 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     for (final item in txRaw) {
     if (item is! Map) continue;
     final tid = (item['tid'] ?? item['id'] ?? '').toString();
-    final type = (item['type'] ?? item['category'] ?? 'TRANSFER').toString().toUpperCase();
-    final amount = double.tryParse(item['amount']?.toString() ?? '0') ?? 0;
-    final recipient = (item['recipientMobile'] ?? item['to'] ?? item['recipient'] ?? '-').toString();
-    final date = (item['date'] ?? item['created_at'] ?? item['timestamp'] ?? '-').toString();
-    final status = (item['status'] ?? 'COMPLETED').toString().toUpperCase();
-    final note = (item['note'] ?? item['title'] ?? item['description'] ?? type).toString();
+    final type = (item['type'] ?? item['category'] ?? 'TRANSFER')
+        .toString()
+        .toUpperCase();
+    final amount =
+    double.tryParse(item['amount']?.toString() ?? '0') ?? 0;
+    final recipient = (item['recipientMobile'] ??
+    item['to'] ??
+    item['recipient'] ??
+    '-')
+        .toString();
+    final date = (item['date'] ??
+    item['created_at'] ??
+    item['timestamp'] ??
+    '-')
+        .toString();
+    final status =
+    (item['status'] ?? 'COMPLETED').toString().toUpperCase();
+    final note =
+    (item['note'] ?? item['title'] ?? item['description'] ?? type)
+        .toString();
 
     final key = '${tid}_${mobile}_$amount';
     if (tid.isNotEmpty) seenTids.add(tid);
@@ -75,7 +88,8 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     'tid': tid,
     'senderMobile': (p['sender_mobile'] ?? '-').toString(),
     'senderName': (p['beneficiary_title'] ?? 'IBFT Payout').toString(),
-    'recipientMobile': '${p['target_bank'] ?? 'Bank'} (${p['beneficiary_account'] ?? '-'})',
+    'recipientMobile':
+    '${p['target_bank'] ?? 'Bank'} (${p['beneficiary_account'] ?? '-'})',
     'type': 'BANK_PAYOUT',
     'amount': double.tryParse(p['amount']?.toString() ?? '0') ?? 0,
     'date': (p['created_at'] ?? p['date'] ?? '-').toString(),
@@ -102,7 +116,11 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
       final tp = (e['type'] ?? '').toString();
       totalVolume += amt;
       if (st.contains('REVERS')) reversedCount++;
-      if (tp.contains('SEND') || tp.contains('TRANSFER') || tp.contains('P2P')) p2pCount++;
+      if (tp.contains('SEND') ||
+          tp.contains('TRANSFER') ||
+          tp.contains('P2P')) {
+        p2pCount++;
+      }
     }
 
     final filtered = entries.where((e) {
@@ -110,11 +128,15 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
       final st = (e['status'] ?? '').toString();
       if (_typeFilter == 'REVERSED' && !st.contains('REVERS')) return false;
       if (_typeFilter == 'PAYOUT' && !tp.contains('PAYOUT')) return false;
-      if (_typeFilter == 'P2P' && !(tp.contains('SEND') || tp.contains('TRANSFER') || tp.contains('P2P'))) {
+      if (_typeFilter == 'P2P' &&
+          !(tp.contains('SEND') ||
+              tp.contains('TRANSFER') ||
+              tp.contains('P2P'))) {
         return false;
       }
       if (_query.isEmpty) return true;
-      final hay = '${e['tid']} ${e['senderMobile']} ${e['senderName']} ${e['recipientMobile']} ${e['note']}'
+      final hay =
+      '${e['tid']} ${e['senderMobile']} ${e['senderName']} ${e['recipientMobile']} ${e['note']}'
           .toLowerCase();
       return hay.contains(_query);
     }).toList();
@@ -122,7 +144,8 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Master Outward Ledger & Transaction Reversals',
-        subtitle: 'Forensic stream of P2P transfers, outward bank settlements, and dispute chargeback reversals',
+        subtitle:
+        'Forensic stream of P2P transfers, outward bank settlements, and dispute chargeback reversals',
         badgeText: 'IMMUTABLE LEDGER',
         badgeColor: AppConstants.accentBlue,
         actions: [
@@ -167,19 +190,22 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
       ),
       filterBar: NexPayFilterBar(
         searchController: _searchCtrl,
-        searchHint: 'Search by TID, sender mobile, name, recipient, or note...',
+        searchHint:
+        'Search by TID, sender mobile, name, recipient, or note...',
         onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         filters: const ['ALL', 'P2P', 'PAYOUT', 'REVERSED'],
         selectedFilter: _typeFilter,
         onFilterChanged: (f) => setState(() => _typeFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${entries.length} ledger rows',
+        resultSummary:
+        'Showing ${filtered.length} of ${entries.length} ledger rows',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1180,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.receipt_long_rounded,
           title: 'No Ledger Transactions Found',
-          subtitle: 'No live wallet transactions match your search or filter criteria.',
+          subtitle:
+          'No live wallet transactions match your search or filter criteria.',
         ),
         columns: const [
           DataColumn(label: Text('TID / REFERENCE')),
@@ -191,7 +217,7 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
           DataColumn(label: Text('STATUS')),
           DataColumn(label: Text('FORENSIC ACTION')),
         ],
-        rows: filtered.take(250).map((e) {
+        rows: filtered.map((e) {
           final tid = e['tid'].toString();
           final senderMobile = e['senderMobile'].toString();
           final senderName = e['senderName'].toString();
@@ -204,56 +230,70 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
 
           return DataRow(
             cells: [
-              DataCell(
-                Text(
-                  tid,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontWeight: FontWeight.w700,
-                    color: AppConstants.accentBlue,
-                  ),
-                ),
-              ),
+              DataCell(NexPayCopyableId(text: tid, label: 'TID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(senderName, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                    Text(senderMobile, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(senderName,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13)),
+                    Text(senderMobile,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
-              DataCell(Text(recipient, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12.5))),
+              DataCell(Text(recipient,
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.5))),
               DataCell(
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                   decoration: BoxDecoration(
                     color: AppConstants.surfaceCard,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: AppConstants.borderColor),
                   ),
-                  child: Text(type, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+                  child: Text(type,
+                      style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700)),
                 ),
               ),
               DataCell(
                 Text(
                   'Rs. ${_money.format(amt)}',
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: AppConstants.textPrimary,
                     fontWeight: FontWeight.w700,
-                    fontFeatures: [FontFeature.tabularFigures()],
+                    fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),
               ),
-              DataCell(Text(date, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(Text(date,
+                  style: TextStyle(
+                      color: AppConstants.textMuted, fontSize: 12))),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 OutlinedButton.icon(
-                  onPressed: () => _openTransactionInspector(context, admin, e),
+                  onPressed: () =>
+                      _openTransactionInspector(context, admin, e),
                   icon: Icon(
-                    isReversed ? Icons.visibility_outlined : Icons.undo_rounded,
+                    isReversed
+                        ? Icons.visibility_outlined
+                        : Icons.undo_rounded,
                     size: 15,
-                    color: isReversed ? AppConstants.textSecondary : AppConstants.dangerRed,
+                    color: isReversed
+                        ? AppConstants.textSecondary
+                        : AppConstants.dangerRed,
                   ),
                   label: Text(isReversed ? 'Details' : 'Inspect / Reverse'),
                 ),
@@ -265,7 +305,8 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
     );
   }
 
-  void _openTransactionInspector(BuildContext context, AdminProvider admin, Map<String, dynamic> e) {
+  void _openTransactionInspector(
+      BuildContext context, AdminProvider admin, Map<String, dynamic> e) {
     final tid = e['tid'].toString();
     final senderMobile = e['senderMobile'].toString();
     final senderName = e['senderName'].toString();
@@ -292,57 +333,83 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('SETTLED TRANSACTION VALUE', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+                Text('SETTLED TRANSACTION VALUE',
+                    style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text('Rs. ${_money.format(amt)}', style: const TextStyle(color: AppConstants.textPrimary, fontSize: 26, fontWeight: FontWeight.w700)),
+                Text('Rs. ${_money.format(amt)}',
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
                 NexPayStatusBadge(status: status),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Row(
+          const SizedBox(height: 18),
+          NexPayDetailSection(
+            title: 'Settlement Audit Trail',
             children: [
-              Expanded(child: _detailRow('Transaction ID (TID)', tid)),
-              IconButton(
-                icon: const Icon(Icons.copy_rounded, size: 18, color: AppConstants.accentBlue),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: tid));
-                  _toast(context, 'TID copied to clipboard.', true);
-                },
-              ),
+              NexPayKeyValueRow(
+                  label: 'Transaction TID', value: tid, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Sender Name', value: senderName),
+              NexPayKeyValueRow(
+                  label: 'Sender Mobile', value: senderMobile, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Recipient / Target', value: recipient, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Ledger Narration', value: e['note'].toString()),
+              NexPayKeyValueRow(
+                  label: 'Timestamp', value: e['date'].toString()),
             ],
           ),
-          _detailRow('Originating Customer', '$senderName ($senderMobile)'),
-          _detailRow('Recipient / Target', recipient),
-          _detailRow('Ledger Narration', e['note'].toString()),
-          _detailRow('Timestamp', e['date'].toString()),
-          if (!isReversed) ...[
-            const SizedBox(height: 12),
+          if (!isReversed)
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: AppConstants.dangerRedLight,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
+                border: Border.all(
+                    color: AppConstants.dangerRed.withValues(alpha: 0.3)),
               ),
-              child: const Text(
+              child: Text(
                 'Warning: Reversing this transaction will debit the recipient (if internal P2P) and restore the principal amount back to the sender wallet.',
-                style: TextStyle(color: AppConstants.dangerRed, fontSize: 12, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: AppConstants.dangerRed,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600),
               ),
             ),
-          ],
         ],
       ),
       footerActions: [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
-        if (!isReversed && amt > 0) ...[
-          const SizedBox(width: 12),
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
+        if (!isReversed && amt > 0)
           ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: AppConstants.dangerRed),
             onPressed: () async {
+              final confirmed = await showNexPayConfirmDialog(
+                context: context,
+                title: 'Execute Ledger Reversal',
+                message:
+                'Reverse transaction $tid for Rs. ${_money.format(amt)} and restore funds to $senderMobile?',
+                confirmLabel: 'Confirm Reversal',
+                confirmColor: AppConstants.dangerRed,
+                icon: Icons.undo_rounded,
+              );
+              if (!confirmed || !context.mounted) return;
               Navigator.pop(context);
-              final recipientMob = RegExp(r'^03\d{9}$').hasMatch(recipient.trim()) ? recipient.trim() : '';
+              final recipientMob =
+              RegExp(r'^03\d{9}$').hasMatch(recipient.trim())
+                  ? recipient.trim()
+                  : '';
               final ok = await admin.reverseTransaction(
                 senderMobile: senderMobile,
                 tid: tid,
@@ -350,34 +417,27 @@ class _OutwardLedgerDeskScreenState extends State<OutwardLedgerDeskScreen> {
                 recipientMobile: recipientMob,
               );
               if (context.mounted) {
-                _toast(context, ok ? 'Transaction $tid reversed successfully.' : 'Reversal rejected by server.', ok);
+                _toast(
+                    context,
+                    ok
+                        ? 'Transaction $tid reversed successfully.'
+                        : 'Reversal rejected by server.',
+                    ok);
               }
             },
             icon: const Icon(Icons.undo_rounded, size: 17),
             label: const Text('Execute Reversal'),
           ),
-        ],
       ],
-    );
-  }
-
-  Widget _detailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 3),
-          Text(value, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 14, fontWeight: FontWeight.w600)),
-        ],
-      ),
     );
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

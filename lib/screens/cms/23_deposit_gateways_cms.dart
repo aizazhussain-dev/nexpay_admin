@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_image_picker.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
@@ -10,7 +9,8 @@ class DepositGatewaysCmsScreen extends StatefulWidget {
   const DepositGatewaysCmsScreen({super.key});
 
   @override
-  State<DepositGatewaysCmsScreen> createState() => _DepositGatewaysCmsScreenState();
+  State<DepositGatewaysCmsScreen> createState() =>
+      _DepositGatewaysCmsScreenState();
 }
 
 class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
@@ -27,7 +27,10 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   List _getLiveGateways(AdminProvider admin) {
     final raw = admin.cmsConfig['depositGateways'];
     if (raw is List) {
-      return raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList();
+      return raw
+          .whereType()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     }
     return [];
   }
@@ -37,22 +40,30 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
     final admin = context.watch<AdminProvider>();
     final gateways = _getLiveGateways(admin);
 
-    final activeCount = gateways.where((g) => (g['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE').length;
-    final qrCount = gateways.where((g) => (g['qrUrl'] ?? '').toString().trim().isNotEmpty).length;
+    final activeCount = gateways
+        .where((g) =>
+    (g['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE')
+        .length;
+    final qrCount = gateways
+        .where((g) => (g['qrUrl'] ?? '').toString().trim().isNotEmpty)
+        .length;
 
     final filtered = gateways.where((g) {
       final st = (g['status'] ?? 'ACTIVE').toString().toUpperCase();
       if (_filter == 'ACTIVE' && st != 'ACTIVE') return false;
       if (_filter == 'INACTIVE' && st == 'ACTIVE') return false;
       if (_query.isEmpty) return true;
-      final hay = '${g['name']} ${g['accountTitle']} ${g['accountNumber']} ${g['iban']}'.toLowerCase();
+      final hay =
+      '${g['name']} ${g['accountTitle']} ${g['accountNumber']} ${g['iban']}'
+          .toLowerCase();
       return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Deposit Gateways, IBFT Accounts & Raast QR Codes',
-        subtitle: 'Configure receiving bank accounts, mobile wallets, limits, and upload Raast/Bank QR codes from gallery',
+        subtitle:
+        'Configure receiving bank accounts, mobile wallets, limits, and upload Raast/Bank QR codes from gallery',
         badgeText: '$activeCount ACTIVE CHANNELS',
         badgeColor: AppConstants.accentGreen,
         actions: [
@@ -62,7 +73,8 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
             label: const Text('Sync Gateways'),
           ),
           ElevatedButton.icon(
-            onPressed: () => _openGatewayDrawer(context, admin, gateways, null),
+            onPressed: () =>
+                _openGatewayDrawer(context, admin, gateways, null),
             icon: const Icon(Icons.add_card_rounded, size: 18),
             label: const Text('Add Deposit Channel'),
           ),
@@ -91,7 +103,7 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
             icon: Icons.account_balance_rounded,
             color: AppConstants.accentGold,
           ),
-          const NexPayStatItem(
+          NexPayStatItem(
             label: 'QR Media Upload',
             value: 'Gallery Enabled',
             sublabel: 'Upload QR screenshots directly from device',
@@ -102,19 +114,22 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
       ),
       filterBar: NexPayFilterBar(
         searchController: _searchCtrl,
-        searchHint: 'Search by bank name, account title, account number, or IBAN...',
+        searchHint:
+        'Search by bank name, account title, account number, or IBAN...',
         onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         filters: const ['ALL', 'ACTIVE', 'INACTIVE'],
         selectedFilter: _filter,
         onFilterChanged: (f) => setState(() => _filter = f),
-        resultSummary: 'Showing ${filtered.length} of ${gateways.length} gateways',
+        resultSummary:
+        'Showing ${filtered.length} of ${gateways.length} gateways',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1140,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.account_balance_wallet_outlined,
           title: 'No Deposit Gateways Configured',
-          subtitle: 'Click "Add Deposit Channel" above to add a receiving bank account or Raast QR code.',
+          subtitle:
+          'Click "Add Deposit Channel" above to add a receiving bank account or Raast QR code.',
         ),
         columns: const [
           DataColumn(label: Text('QR / ICON')),
@@ -149,33 +164,63 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
                     borderRadius: BorderRadius.circular(7),
                     child: qrSrc.isNotEmpty
                         ? NexPaySmartImage(source: qrSrc, fit: BoxFit.cover)
-                        : const Icon(Icons.qr_code_2_rounded, color: AppConstants.textMuted, size: 22),
+                        : Icon(Icons.qr_code_2_rounded,
+                        color: AppConstants.textMuted, size: 22),
                   ),
                 ),
               ),
-              DataCell(Text(name, style: const TextStyle(fontWeight: FontWeight.w700))),
-              DataCell(Text(title, style: const TextStyle(fontWeight: FontWeight.w600))),
-              DataCell(Text(acct, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w600))),
-              DataCell(Text('Rs. $minAmt – Rs. $maxAmt', style: const TextStyle(fontSize: 12))),
+              DataCell(Text(name,
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w700))),
+              DataCell(Text(title,
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w600))),
+              DataCell(
+                  NexPayCopyableId(text: acct, label: 'Account Number')),
+              DataCell(Text('Rs. $minAmt – Rs. $maxAmt',
+                  style: TextStyle(
+                      color: AppConstants.textSecondary, fontSize: 12))),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     OutlinedButton.icon(
-                      onPressed: () => _openGatewayDrawer(context, admin, gateways, g),
+                      onPressed: () =>
+                          _openGatewayDrawer(context, admin, gateways, g),
                       icon: const Icon(Icons.edit_outlined, size: 15),
                       label: const Text('Edit'),
                     ),
                     const SizedBox(width: 6),
                     IconButton(
                       tooltip: 'Delete Gateway',
-                      icon: const Icon(Icons.delete_outline_rounded, color: AppConstants.dangerRed, size: 19),
+                      icon: Icon(Icons.delete_outline_rounded,
+                          color: AppConstants.dangerRed, size: 19),
                       onPressed: () async {
-                        final updated = gateways.where((item) => item['id'] != g['id']).toList();
-                        final ok = await admin.saveCmsConfig({'depositGateways': updated});
+                        final confirmed = await showNexPayConfirmDialog(
+                          context: context,
+                          title: 'Delete Deposit Channel',
+                          message:
+                          'Remove "$name ($acct)" from customer deposit options?',
+                          confirmLabel: 'Remove Channel',
+                          confirmColor: AppConstants.dangerRed,
+                          icon: Icons.delete_outline_rounded,
+                        );
+                        if (!confirmed || !context.mounted) return;
+                        final updated = gateways
+                            .where((item) => item['id'] != g['id'])
+                            .toList();
+                        final ok = await admin
+                            .saveCmsConfig({'depositGateways': updated});
                         if (context.mounted) {
-                          _toast(context, ok ? 'Deposit channel removed.' : 'Delete failed.', ok);
+                          _toast(
+                              context,
+                              ok
+                                  ? 'Deposit channel removed.'
+                                  : 'Delete failed.',
+                              ok);
                         }
                       },
                     ),
@@ -196,21 +241,34 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   Map<String, dynamic>? existing,
   ) {
   final isEdit = existing != null;
-  final nameCtrl = TextEditingController(text: (existing?['name'] ?? '').toString());
-  final titleCtrl = TextEditingController(text: (existing?['accountTitle'] ?? '').toString());
-  final acctCtrl = TextEditingController(text: (existing?['accountNumber'] ?? '').toString());
-  final ibanCtrl = TextEditingController(text: (existing?['iban'] ?? '').toString());
-  final minCtrl = TextEditingController(text: (existing?['minAmount'] ?? '100').toString());
-  final maxCtrl = TextEditingController(text: (existing?['maxAmount'] ?? '500000').toString());
-  final instructionsCtrl = TextEditingController(text: (existing?['instructions'] ?? 'Transfer exact amount and upload receipt screenshot.').toString());
+  final nameCtrl =
+  TextEditingController(text: (existing?['name'] ?? '').toString());
+  final titleCtrl = TextEditingController(
+  text: (existing?['accountTitle'] ?? '').toString());
+  final acctCtrl = TextEditingController(
+  text: (existing?['accountNumber'] ?? '').toString());
+  final ibanCtrl =
+  TextEditingController(text: (existing?['iban'] ?? '').toString());
+  final minCtrl =
+  TextEditingController(text: (existing?['minAmount'] ?? '100').toString());
+  final maxCtrl = TextEditingController(
+  text: (existing?['maxAmount'] ?? '500000').toString());
+  final instructionsCtrl = TextEditingController(
+  text: (existing?['instructions'] ??
+  'Transfer exact amount and upload receipt screenshot.')
+      .toString());
   String qrValue = (existing?['qrUrl'] ?? '').toString();
-  bool isActive = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
+  bool isActive = existing == null ||
+  (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
 
   showNexPayInspectorDrawer(
   context: context,
   width: 560,
-  title: isEdit ? 'Edit Deposit Channel: ${nameCtrl.text}' : 'Add Receiving Bank / Wallet',
-  subtitle: 'Upload Raast/Bank QR image from gallery and configure account credentials',
+  title: isEdit
+  ? 'Edit Deposit Channel: ${nameCtrl.text}'
+      : 'Add Receiving Bank / Wallet',
+  subtitle:
+  'Upload Raast/Bank QR image from gallery and configure account credentials',
   child: StatefulBuilder(
   builder: (ctx, setDrawerState) {
   return Column(
@@ -225,11 +283,15 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   const SizedBox(height: 16),
   TextField(
   controller: nameCtrl,
-  decoration: const InputDecoration(labelText: 'Bank or Wallet Name (e.g. Meezan Bank / SadaPay / Raast)'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText:
+  'Bank or Wallet Name (e.g. Meezan Bank / SadaPay / Raast)'),
   ),
   const SizedBox(height: 14),
   TextField(
   controller: titleCtrl,
+  style: TextStyle(color: AppConstants.textPrimary),
   decoration: const InputDecoration(labelText: 'Account Title'),
   ),
   const SizedBox(height: 14),
@@ -238,14 +300,18 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   Expanded(
   child: TextField(
   controller: acctCtrl,
-  decoration: const InputDecoration(labelText: 'Account / Mobile Number'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'Account / Mobile Number'),
   ),
   ),
   const SizedBox(width: 12),
   Expanded(
   child: TextField(
   controller: ibanCtrl,
-  decoration: const InputDecoration(labelText: 'IBAN (Optional)'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration:
+  const InputDecoration(labelText: 'IBAN (Optional)'),
   ),
   ),
   ],
@@ -257,7 +323,9 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   child: TextField(
   controller: minCtrl,
   keyboardType: TextInputType.number,
-  decoration: const InputDecoration(labelText: 'Min Deposit (PKR)', prefixText: 'Rs. '),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'Min Deposit (PKR)', prefixText: 'Rs. '),
   ),
   ),
   const SizedBox(width: 12),
@@ -265,7 +333,9 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   child: TextField(
   controller: maxCtrl,
   keyboardType: TextInputType.number,
-  decoration: const InputDecoration(labelText: 'Max Deposit (PKR)', prefixText: 'Rs. '),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'Max Deposit (PKR)', prefixText: 'Rs. '),
   ),
   ),
   ],
@@ -274,12 +344,18 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   TextField(
   controller: instructionsCtrl,
   maxLines: 2,
-  decoration: const InputDecoration(labelText: 'Customer Payment Instructions'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'Customer Payment Instructions'),
   ),
   const SizedBox(height: 14),
   SwitchListTile(
   contentPadding: EdgeInsets.zero,
-  title: const Text('Channel Active for Customer Deposits', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5)),
+  title: Text('Channel Active for Customer Deposits',
+  style: TextStyle(
+  color: AppConstants.textPrimary,
+  fontWeight: FontWeight.w600,
+  fontSize: 13.5)),
   value: isActive,
   activeThumbColor: AppConstants.accentGreen,
   onChanged: (v) => setDrawerState(() => isActive = v),
@@ -289,19 +365,25 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   },
   ),
   footerActions: [
-  OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-  const SizedBox(width: 12),
+  OutlinedButton(
+  onPressed: () => Navigator.pop(context),
+  child: const Text('Cancel')),
   ElevatedButton.icon(
   onPressed: () async {
   final name = nameCtrl.text.trim();
   final acct = acctCtrl.text.trim();
   if (name.isEmpty || acct.isEmpty) {
-  _toast(context, 'Bank name and account number are required.', false);
+  _toast(
+  context,
+  'Bank name and account number are required.',
+  false);
   return;
   }
   Navigator.pop(context);
   final gwObj = {
-  'id': isEdit ? existing['id'] : 'gw_${DateTime.now().millisecondsSinceEpoch}',
+  'id': isEdit
+  ? existing['id']
+      : 'gw_${DateTime.now().millisecondsSinceEpoch}',
   'name': name,
   'accountTitle': titleCtrl.text.trim(),
   'accountNumber': acct,
@@ -325,7 +407,10 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
   }
   final ok = await admin.saveCmsConfig({'depositGateways': updated});
   if (context.mounted) {
-  _toast(context, ok ? 'Deposit gateway saved live!' : 'Save failed.', ok);
+  _toast(
+  context,
+  ok ? 'Deposit gateway saved live!' : 'Save failed.',
+  ok);
   }
   },
   icon: const Icon(Icons.save_rounded, size: 17),
@@ -337,7 +422,10 @@ class _DepositGatewaysCmsScreenState extends State<DepositGatewaysCmsScreen> {
 
   void _toast(BuildContext context, String msg, bool ok) {
   ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+  SnackBar(
+  content: Text(msg),
+  backgroundColor:
+  ok ? AppConstants.accentGreen : AppConstants.dangerRed),
   );
   }
 }

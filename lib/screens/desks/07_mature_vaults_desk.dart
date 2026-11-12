@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class MatureVaultsDeskScreen extends StatefulWidget {
@@ -30,22 +29,33 @@ class _MatureVaultsDeskScreenState extends State<MatureVaultsDeskScreen> {
     admin.users.forEach((mobile, rawUser) {
     if (rawUser is! Map) return;
     final userName = (rawUser['name'] ?? 'Saver').toString();
-    final vaultsRaw = rawUser['vaults'] ?? rawUser['savingsVaults'] ?? rawUser['lockedVaults'] ?? [];
+    final vaultsRaw = rawUser['vaults'] ??
+    rawUser['savingsVaults'] ??
+    rawUser['lockedVaults'] ??
+    [];
     if (vaultsRaw is List) {
     for (final v in vaultsRaw) {
     if (v is! Map) continue;
-    final principal = double.tryParse(v['amount']?.toString() ?? v['principal']?.toString() ?? '0') ?? 0;
-    final profit = double.tryParse(v['profit']?.toString() ?? v['expectedProfit']?.toString() ?? '0') ?? 0;
+    final principal = double.tryParse(v['amount']?.toString() ??
+    v['principal']?.toString() ??
+    '0') ??
+    0;
+    final profit = double.tryParse(v['profit']?.toString() ??
+    v['expectedProfit']?.toString() ??
+    '0') ??
+    0;
     final status = (v['status'] ?? 'ACTIVE').toString().toUpperCase();
     list.add({
     'id': (v['id'] ?? 'VLT-${list.length + 1}').toString(),
     'mobile': mobile,
     'userName': userName,
-    'title': (v['title'] ?? v['planName'] ?? 'Halal Term Vault').toString(),
+    'title':
+    (v['title'] ?? v['planName'] ?? 'Halal Term Vault').toString(),
     'principal': principal,
     'profit': profit,
     'apy': (v['apy'] ?? v['rate'] ?? '-').toString(),
-    'maturityDate': (v['maturityDate'] ?? v['unlockDate'] ?? '-').toString(),
+    'maturityDate':
+    (v['maturityDate'] ?? v['unlockDate'] ?? '-').toString(),
     'status': status,
     });
     }
@@ -76,14 +86,16 @@ class _MatureVaultsDeskScreenState extends State<MatureVaultsDeskScreen> {
       if (_filter == 'REDEEMED' && !st.contains('REDEEM')) return false;
 
       if (_query.isEmpty) return true;
-      final hay = '${v['id']} ${v['userName']} ${v['mobile']} ${v['title']}'.toLowerCase();
+      final hay = '${v['id']} ${v['userName']} ${v['mobile']} ${v['title']}'
+          .toLowerCase();
       return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Matured Savings Vaults & Halal Profit Pools',
-        subtitle: 'Monitor customer term-locked Mudarabah vaults, maturity schedules, and accrued profit liabilities',
+        subtitle:
+        'Monitor customer term-locked Mudarabah vaults, maturity schedules, and accrued profit liabilities',
         badgeText: 'SAVINGS TREASURY',
         badgeColor: AppConstants.accentGreen,
         actions: [
@@ -133,14 +145,16 @@ class _MatureVaultsDeskScreenState extends State<MatureVaultsDeskScreen> {
         filters: const ['ALL', 'ACTIVE', 'MATURED', 'REDEEMED'],
         selectedFilter: _filter,
         onFilterChanged: (f) => setState(() => _filter = f),
-        resultSummary: 'Showing ${filtered.length} of ${vaults.length} vaults',
+        resultSummary:
+        'Showing ${filtered.length} of ${vaults.length} vaults',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1120,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.lock_clock_rounded,
           title: 'No Savings Vaults Found',
-          subtitle: 'No active or matured customer savings vaults exist in the live database for this filter.',
+          subtitle:
+          'No active or matured customer savings vaults exist in the live database for this filter.',
         ),
         columns: const [
           DataColumn(label: Text('VAULT ID')),
@@ -153,44 +167,131 @@ class _MatureVaultsDeskScreenState extends State<MatureVaultsDeskScreen> {
           DataColumn(label: Text('INSPECT')),
         ],
         rows: filtered.map((v) {
+          final vaultId = v['id'].toString();
+          final principal = (v['principal'] as double);
+          final profit = (v['profit'] as double);
+
           return DataRow(
             cells: [
-              DataCell(Text(v['id'].toString(), style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(NexPayCopyableId(text: vaultId, label: 'Vault ID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(v['userName'].toString(), style: const TextStyle(fontWeight: FontWeight.w700)),
-                    Text(v['mobile'].toString(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(v['userName'].toString(),
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700)),
+                    Text(v['mobile'].toString(),
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
-              DataCell(Text(v['title'].toString(), style: const TextStyle(fontWeight: FontWeight.w600))),
-              DataCell(Text('Rs. ${_money.format(v['principal'])}', style: const TextStyle(fontWeight: FontWeight.w700))),
-              DataCell(Text('+Rs. ${_money.format(v['profit'])}', style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGreen))),
-              DataCell(Text(v['maturityDate'].toString(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(
+                Text(v['title'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
+              DataCell(
+                Text('Rs. ${_money.format(principal)}',
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontFeatures: const [FontFeature.tabularFigures()])),
+              ),
+              DataCell(
+                Text('+Rs. ${_money.format(profit)}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppConstants.accentGreen,
+                        fontFeatures: const [FontFeature.tabularFigures()])),
+              ),
+              DataCell(
+                Text(v['maturityDate'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textMuted, fontSize: 12)),
+              ),
               DataCell(NexPayStatusBadge(status: v['status'].toString())),
               DataCell(
                 OutlinedButton.icon(
                   onPressed: () {
                     showNexPayInspectorDrawer(
                       context: context,
-                      title: 'Savings Vault ${v['id']}',
+                      title: 'Savings Vault $vaultId',
                       subtitle: '${v['userName']} (${v['mobile']})',
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _kv('Vault Plan', v['title'].toString()),
-                          _kv('Locked Principal', 'Rs. ${_money.format(v['principal'])}'),
-                          _kv('Projected Halal Profit', 'Rs. ${_money.format(v['profit'])}'),
-                          _kv('Expected Rate / APY', v['apy'].toString()),
-                          _kv('Maturity Date', v['maturityDate'].toString()),
-                          _kv('Current Status', v['status'].toString()),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: AppConstants.surfaceCard,
+                              borderRadius: BorderRadius.circular(10),
+                              border:
+                              Border.all(color: AppConstants.borderColor),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('TOTAL MATURITY PAYOUT',
+                                    style: TextStyle(
+                                        color: AppConstants.textMuted,
+                                        fontSize: 10.5,
+                                        fontWeight: FontWeight.w700)),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Rs. ${_money.format(principal + profit)}',
+                                  style: TextStyle(
+                                      color: AppConstants.accentGreen,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                const SizedBox(height: 8),
+                                NexPayStatusBadge(
+                                    status: v['status'].toString()),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          NexPayDetailSection(
+                            title: 'Mudarabah Term Certificate',
+                            children: [
+                              NexPayKeyValueRow(
+                                  label: 'Vault ID',
+                                  value: vaultId,
+                                  copyable: true),
+                              NexPayKeyValueRow(
+                                  label: 'Saver Mobile',
+                                  value: v['mobile'].toString(),
+                                  copyable: true),
+                              NexPayKeyValueRow(
+                                  label: 'Vault Plan',
+                                  value: v['title'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'Locked Principal',
+                                  value: 'Rs. ${_money.format(principal)}'),
+                              NexPayKeyValueRow(
+                                  label: 'Projected Profit',
+                                  value: '+Rs. ${_money.format(profit)}',
+                                  valueColor: AppConstants.accentGreen),
+                              NexPayKeyValueRow(
+                                  label: 'Expected APY',
+                                  value: v['apy'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'Maturity Date',
+                                  value: v['maturityDate'].toString()),
+                            ],
+                          ),
                         ],
                       ),
                       footerActions: [
-                        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+                        OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Close')),
                       ],
                     );
                   },
@@ -201,20 +302,6 @@ class _MatureVaultsDeskScreenState extends State<MatureVaultsDeskScreen> {
             ],
           );
         }).toList(),
-      ),
-    );
-  }
-
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 14, fontWeight: FontWeight.w600)),
-        ],
       ),
     );
   }

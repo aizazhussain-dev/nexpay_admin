@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class GoldDispatchDeskScreen extends StatefulWidget {
@@ -38,8 +36,11 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     if (txs is List) {
     for (final item in txs) {
     if (item is! Map) continue;
-    final type = (item['type'] ?? item['category'] ?? '').toString().toUpperCase();
-    final title = (item['title'] ?? item['note'] ?? '').toString().toLowerCase();
+    final type = (item['type'] ?? item['category'] ?? '')
+        .toString()
+        .toUpperCase();
+    final title =
+    (item['title'] ?? item['note'] ?? '').toString().toLowerCase();
     final isGoldDispatch = type.contains('GOLD_DELIV') ||
     type.contains('GOLD_DISPATCH') ||
     type.contains('PHYSICAL_GOLD') ||
@@ -50,12 +51,29 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     if (!isGoldDispatch) continue;
 
     final tid = (item['tid'] ?? item['id'] ?? '').toString();
-    final grams = double.tryParse(item['grams']?.toString() ?? item['goldGrams']?.toString() ?? '0') ?? 0;
-    final fee = double.tryParse(item['fee']?.toString() ?? item['deliveryFee']?.toString() ?? item['amount']?.toString() ?? '0') ?? 0;
-    final address = (item['deliveryAddress'] ?? item['shipping_address'] ?? item['address'] ?? defaultAddress).toString();
-    final tracking = (item['tracking'] ?? item['trackingId'] ?? item['courier_tracking'] ?? '').toString();
-    final status = (item['status'] ?? 'PENDING').toString().toUpperCase();
-    final date = (item['date'] ?? item['created_at'] ?? '-').toString();
+    final grams = double.tryParse(item['grams']?.toString() ??
+    item['goldGrams']?.toString() ??
+    '0') ??
+    0;
+    final fee = double.tryParse(item['fee']?.toString() ??
+    item['deliveryFee']?.toString() ??
+    item['amount']?.toString() ??
+    '0') ??
+    0;
+    final address = (item['deliveryAddress'] ??
+    item['shipping_address'] ??
+    item['address'] ??
+    defaultAddress)
+        .toString();
+    final tracking = (item['tracking'] ??
+    item['trackingId'] ??
+    item['courier_tracking'] ??
+    '')
+        .toString();
+    final status =
+    (item['status'] ?? 'PENDING').toString().toUpperCase();
+    final date =
+    (item['date'] ?? item['created_at'] ?? '-').toString();
 
     orders.add({
     'tid': tid,
@@ -63,7 +81,8 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     'customerName': customerName,
     'grams': grams,
     'fee': fee.abs(),
-    'address': address.isEmpty ? 'Address not specified' : address,
+    'address':
+    address.isEmpty ? 'Address not specified' : address,
     'tracking': tracking,
     'status': status,
     'date': date,
@@ -83,7 +102,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     double totalVaultGrams = 0;
     admin.users.forEach((_, u) {
       if (u is Map) {
-        totalVaultGrams += double.tryParse(u['goldGrams']?.toString() ?? u['gold']?.toString() ?? '0') ?? 0;
+        totalVaultGrams += double.tryParse(
+            u['goldGrams']?.toString() ?? u['gold']?.toString() ?? '0') ??
+            0;
       }
     });
 
@@ -98,7 +119,9 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       if (st == 'PENDING' || st == 'PROCESSING') {
         pendingCount++;
         pendingGrams += g;
-      } else if (st == 'DISPATCHED' || st == 'COMPLETED' || st == 'DELIVERED') {
+      } else if (st == 'DISPATCHED' ||
+          st == 'COMPLETED' ||
+          st == 'DELIVERED') {
         dispatchedCount++;
         dispatchedGrams += g;
       }
@@ -106,19 +129,30 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
 
     final filtered = orders.where((o) {
       final st = o['status'].toString();
-      if (_statusFilter == 'PENDING' && !(st == 'PENDING' || st == 'PROCESSING')) return false;
-      if (_statusFilter == 'DISPATCHED' && !(st == 'DISPATCHED' || st == 'COMPLETED' || st == 'DELIVERED')) return false;
+      if (_statusFilter == 'PENDING' &&
+          !(st == 'PENDING' || st == 'PROCESSING')) {
+        return false;
+      }
+      if (_statusFilter == 'DISPATCHED' &&
+          !(st == 'DISPATCHED' ||
+              st == 'COMPLETED' ||
+              st == 'DELIVERED')) {
+        return false;
+      }
       if (_statusFilter == 'REJECTED' && !st.contains('REJECT')) return false;
 
       if (_query.isEmpty) return true;
-      final hay = '${o['tid']} ${o['customerName']} ${o['mobile']} ${o['address']} ${o['tracking']}'.toLowerCase();
+      final hay =
+      '${o['tid']} ${o['customerName']} ${o['mobile']} ${o['address']} ${o['tracking']}'
+          .toLowerCase();
       return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: '24K Physical Gold Mint & Courier Dispatch',
-        subtitle: 'Fulfill physical 999.9 bullion redemption requests, assign insured courier tracking, or refund grams',
+        subtitle:
+        'Fulfill physical 999.9 bullion redemption requests, assign insured courier tracking, or refund grams',
         badgeText: 'BULLION LOGISTICS',
         badgeColor: AppConstants.accentGold,
         actions: [
@@ -134,14 +168,16 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
           NexPayStatItem(
             label: 'Pending Mint Dispatch',
             value: '$pendingCount Parcels',
-            sublabel: '${pendingGrams.toStringAsFixed(3)} g 24K gold awaiting courier',
+            sublabel:
+            '${pendingGrams.toStringAsFixed(3)} g 24K gold awaiting courier',
             icon: Icons.inventory_2_outlined,
             color: AppConstants.accentGold,
           ),
           NexPayStatItem(
             label: 'Dispatched & Insured',
             value: '$dispatchedCount Shipped',
-            sublabel: '${dispatchedGrams.toStringAsFixed(3)} g delivered via armored post',
+            sublabel:
+            '${dispatchedGrams.toStringAsFixed(3)} g delivered via armored post',
             icon: Icons.local_shipping_outlined,
             color: AppConstants.accentGreen,
           ),
@@ -163,19 +199,22 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       ),
       filterBar: NexPayFilterBar(
         searchController: _searchCtrl,
-        searchHint: 'Search by TID, customer name, mobile, city/address, or tracking ID...',
+        searchHint:
+        'Search by TID, customer name, mobile, city/address, or tracking ID...',
         onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         filters: const ['ALL', 'PENDING', 'DISPATCHED', 'REJECTED'],
         selectedFilter: _statusFilter,
         onFilterChanged: (f) => setState(() => _statusFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${orders.length} bullion orders',
+        resultSummary:
+        'Showing ${filtered.length} of ${orders.length} bullion orders',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1160,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.diamond_outlined,
           title: 'No Physical Gold Dispatch Orders',
-          subtitle: 'There are no physical 24K bullion delivery requests matching your filter in the live database.',
+          subtitle:
+          'There are no physical 24K bullion delivery requests matching your filter in the live database.',
         ),
         columns: const [
           DataColumn(label: Text('ORDER TID')),
@@ -200,39 +239,56 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
 
           return DataRow(
             cells: [
-              DataCell(Text(tid, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(NexPayCopyableId(text: tid, label: 'Order TID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    Text(mobile, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(name,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700)),
+                    Text(mobile,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
               DataCell(
                 Text(
                   '${grams.toStringAsFixed(3)} g (24K)',
-                  style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentGold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppConstants.accentGold,
+                      fontFeatures: const [FontFeature.tabularFigures()]),
                 ),
               ),
-              DataCell(Text('Rs. ${_money.format(fee)}', style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(
+                Text('Rs. ${_money.format(fee)}',
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
               DataCell(
                 SizedBox(
                   width: 240,
-                  child: Text(address, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5)),
+                  child: Text(address,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: AppConstants.textSecondary, fontSize: 12.5)),
                 ),
               ),
               DataCell(
-                Text(
-                  tracking.isEmpty ? 'Awaiting Dispatch' : tracking,
+                tracking.isEmpty
+                    ? Text(
+                  'Awaiting Dispatch',
                   style: TextStyle(
-                    fontFamily: tracking.isEmpty ? null : 'monospace',
-                    fontWeight: FontWeight.w600,
-                    color: tracking.isEmpty ? AppConstants.textMuted : AppConstants.accentGreen,
-                  ),
-                ),
+                      fontWeight: FontWeight.w600,
+                      color: AppConstants.textMuted),
+                )
+                    : NexPayCopyableId(text: tracking, label: 'Tracking ID'),
               ),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
@@ -249,7 +305,8 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     );
   }
 
-  void _openDispatchDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> o) {
+  void _openDispatchDrawer(
+      BuildContext context, AdminProvider admin, Map<String, dynamic> o) {
     final tid = o['tid'].toString();
     final mobile = o['mobile'].toString();
     final name = o['customerName'].toString();
@@ -258,7 +315,8 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
     final address = o['address'].toString();
     final status = o['status'].toString();
     final isPending = status == 'PENDING' || status == 'PROCESSING';
-    final trackingCtrl = TextEditingController(text: o['tracking'].toString());
+    final trackingCtrl =
+    TextEditingController(text: o['tracking'].toString());
 
     showNexPayInspectorDrawer(
       context: context,
@@ -278,36 +336,51 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('MINT BAR ALLOCATION', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+                Text('MINT BAR ALLOCATION',
+                    style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text('${grams.toStringAsFixed(3)} Grams 24K Bullion', style: const TextStyle(color: AppConstants.accentGold, fontSize: 22, fontWeight: FontWeight.w700)),
+                Text('${grams.toStringAsFixed(3)} Grams 24K Bullion',
+                    style: TextStyle(
+                        color: AppConstants.accentGold,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 6),
-                Text('Courier & Minting Fee Paid: Rs. ${_money.format(fee)}', style: const TextStyle(color: AppConstants.textSecondary, fontSize: 12.5, fontWeight: FontWeight.w600)),
+                Text('Courier & Minting Fee Paid: Rs. ${_money.format(fee)}',
+                    style: TextStyle(
+                        color: AppConstants.textSecondary,
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600)),
               ],
             ),
           ),
           const SizedBox(height: 18),
-          Row(
+          NexPayDetailSection(
+            title: 'Recipient & Logistics Coordinates',
             children: [
-              Expanded(child: _kv('Delivery Destination Address', address)),
-              IconButton(
-                tooltip: 'Copy Address',
-                icon: const Icon(Icons.copy_rounded, size: 18, color: AppConstants.accentBlue),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: address));
-                  _toast(context, 'Shipping address copied.', true);
-                },
-              ),
+              NexPayKeyValueRow(
+                  label: 'Order TID', value: tid, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Client Mobile', value: mobile, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Shipping Address', value: address, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Order Date', value: o['date'].toString()),
+              NexPayKeyValueRow(label: 'Current Status', value: status),
             ],
           ),
-          _kv('Order Date', o['date'].toString()),
-          _kv('Current Logistics Status', status),
-          const SizedBox(height: 12),
-          const Text('INSURED COURIER TRACKING NUMBER (TCS / LEOPARDS / M&P)', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+          Text('INSURED COURIER TRACKING NUMBER (TCS / LEOPARDS / M&P)',
+              style: TextStyle(
+                  color: AppConstants.textMuted,
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           TextField(
             controller: trackingCtrl,
             readOnly: !isPending,
+            style: TextStyle(color: AppConstants.textPrimary),
             decoration: const InputDecoration(
               hintText: 'Enter courier tracking ID e.g. TCS-884920192',
               prefixIcon: Icon(Icons.qr_code_rounded, size: 18),
@@ -318,29 +391,63 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
       footerActions: isPending
           ? [
         OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.dangerRed),
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Reject & Refund Bullion',
+              message:
+              'Reject dispatch $tid and restore ${grams.toStringAsFixed(3)}g 24K gold + Rs. ${_money.format(fee)} back to $mobile?',
+              confirmLabel: 'Reject & Refund',
+              confirmColor: AppConstants.dangerRed,
+              icon: Icons.replay_rounded,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
-            final ok = await admin.rejectGoldDelivery(mobile, tid, grams, fee);
+            final ok =
+            await admin.rejectGoldDelivery(mobile, tid, grams, fee);
             if (context.mounted) {
-              _toast(context, ok ? 'Dispatch rejected; ${grams.toStringAsFixed(3)}g + Rs. ${_money.format(fee)} refunded.' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Dispatch rejected; ${grams.toStringAsFixed(3)}g + Rs. ${_money.format(fee)} refunded.'
+                      : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.replay_rounded, size: 17),
           label: const Text('Reject & Refund Gold'),
         ),
-        const SizedBox(width: 12),
         ElevatedButton.icon(
           onPressed: () async {
             final trk = trackingCtrl.text.trim();
             if (trk.isEmpty) {
-              _toast(context, 'Please enter a valid courier tracking number first.', false);
+              _toast(
+                  context,
+                  'Please enter a valid courier tracking number first.',
+                  false);
               return;
             }
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Confirm Insured Dispatch',
+              message:
+              'Mark ${grams.toStringAsFixed(3)}g 24K gold parcel ($tid) as DISPATCHED under tracking ID $trk?',
+              confirmLabel: 'Confirm Dispatch',
+              icon: Icons.local_shipping_rounded,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
-            final ok = await admin.dispatchGoldDelivery(mobile, tid, trk);
+            final ok =
+            await admin.dispatchGoldDelivery(mobile, tid, trk);
             if (context.mounted) {
-              _toast(context, ok ? 'Bullion dispatched with tracking $trk!' : 'Dispatch update failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Bullion dispatched with tracking $trk!'
+                      : 'Dispatch update failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.local_shipping_rounded, size: 17),
@@ -348,28 +455,19 @@ class _GoldDispatchDeskScreenState extends State<GoldDispatchDeskScreen> {
         ),
       ]
           : [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
       ],
-    );
-  }
-
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600)),
-        ],
-      ),
     );
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

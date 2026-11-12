@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class AuditTrailDeskScreen extends StatefulWidget {
@@ -27,17 +26,21 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
     final List logs = [];
 
     // 1. Live CMS Audit Logs if stored in backend config
-    final rawCmsLogs = admin.cmsConfig['auditLogs'] ?? admin.cmsConfig['adminLogs'];
+    final rawCmsLogs =
+    admin.cmsConfig['auditLogs'] ?? admin.cmsConfig['adminLogs'];
     if (rawCmsLogs is List) {
     for (final item in rawCmsLogs) {
     if (item is! Map) continue;
     logs.add({
     'eventId': (item['id'] ?? 'LOG-${logs.length + 1}').toString(),
-    'actor': (item['admin'] ?? item['actor'] ?? 'aizaz_admin').toString(),
+    'actor':
+    (item['admin'] ?? item['actor'] ?? 'aizaz_admin').toString(),
     'module': (item['module'] ?? 'SYSTEM').toString().toUpperCase(),
-    'action': (item['action'] ?? item['event'] ?? 'Config Update').toString(),
+    'action':
+    (item['action'] ?? item['event'] ?? 'Config Update').toString(),
     'target': (item['target'] ?? '-').toString(),
-    'timestamp': (item['timestamp'] ?? item['date'] ?? '-').toString(),
+    'timestamp':
+    (item['timestamp'] ?? item['date'] ?? '-').toString(),
     'status': (item['status'] ?? 'LOGGED').toString().toUpperCase(),
     });
     }
@@ -54,7 +57,8 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
     'module': 'TREASURY',
     'action': 'Manual Payout $st (Rs. ${p['amount']})',
     'target': '${p['sender_mobile']} -> ${p['target_bank']}',
-    'timestamp': (p['updated_at'] ?? p['created_at'] ?? '-').toString(),
+    'timestamp':
+    (p['updated_at'] ?? p['created_at'] ?? '-').toString(),
     'status': st,
     });
     }
@@ -70,7 +74,8 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
     'module': 'TREASURY',
     'action': 'Deposit Receipt $st (Rs. ${d['amount']})',
     'target': '${d['user_mobile']} (${d['channel'] ?? 'Bank'})',
-    'timestamp': (d['updated_at'] ?? d['created_at'] ?? '-').toString(),
+    'timestamp':
+    (d['updated_at'] ?? d['created_at'] ?? '-').toString(),
     'status': st,
     });
     }
@@ -86,7 +91,8 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
     'module': 'TAKAFUL',
     'action': 'Takaful Claim $st',
     'target': (c['user_mobile'] ?? '-').toString(),
-    'timestamp': (c['updated_at'] ?? c['created_at'] ?? '-').toString(),
+    'timestamp':
+    (c['updated_at'] ?? c['created_at'] ?? '-').toString(),
     'status': st,
     });
     }
@@ -100,16 +106,21 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
     final allLogs = _buildLiveAuditStream(admin);
 
     final filtered = allLogs.where((l) {
-      if (_categoryFilter != 'ALL' && l['module'] != _categoryFilter) return false;
+      if (_categoryFilter != 'ALL' && l['module'] != _categoryFilter) {
+        return false;
+      }
       if (_query.isEmpty) return true;
-      final hay = '${l['eventId']} ${l['actor']} ${l['module']} ${l['action']} ${l['target']}'.toLowerCase();
+      final hay =
+      '${l['eventId']} ${l['actor']} ${l['module']} ${l['action']} ${l['target']}'
+          .toLowerCase();
       return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Forensic Administrative Audit Trail',
-        subtitle: 'Immutable live record of treasury approvals, rejections, KYC decisions, and system configuration events',
+        subtitle:
+        'Immutable live record of treasury approvals, rejections, KYC decisions, and system configuration events',
         badgeText: 'SBP AUDIT COMPLIANT',
         badgeColor: AppConstants.accentBlue,
         actions: [
@@ -131,19 +142,21 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
           ),
           NexPayStatItem(
             label: 'Treasury Actions',
-            value: '${allLogs.where((l) => l['module'] == 'TREASURY').length} Settlements',
+            value:
+            '${allLogs.where((l) => l['module'] == 'TREASURY').length} Settlements',
             sublabel: 'Deposit & IBFT payout decisions',
             icon: Icons.account_balance_rounded,
             color: AppConstants.accentGreen,
           ),
           NexPayStatItem(
             label: 'Insurance & Risk',
-            value: '${allLogs.where((l) => l['module'] == 'TAKAFUL').length} Reviews',
+            value:
+            '${allLogs.where((l) => l['module'] == 'TAKAFUL').length} Reviews',
             sublabel: 'Takaful & compliance adjudications',
             icon: Icons.verified_user_rounded,
             color: AppConstants.accentGold,
           ),
-          const NexPayStatItem(
+          NexPayStatItem(
             label: 'Integrity Status',
             value: '100% Live',
             sublabel: 'Zero synthetic or dummy entries',
@@ -154,19 +167,22 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
       ),
       filterBar: NexPayFilterBar(
         searchController: _searchCtrl,
-        searchHint: 'Search by event ID, operator, target account, or action...',
+        searchHint:
+        'Search by event ID, operator, target account, or action...',
         onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         filters: const ['ALL', 'TREASURY', 'TAKAFUL', 'SYSTEM'],
         selectedFilter: _categoryFilter,
         onFilterChanged: (f) => setState(() => _categoryFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${allLogs.length} audit logs',
+        resultSummary:
+        'Showing ${filtered.length} of ${allLogs.length} audit logs',
       ),
       body: NexPayFullWidthTable(
-        minTableWidth: 1100,
-        emptyState: const InstitutionalEmptyState(
+        minTableWidth: 1140,
+        emptyState: const NexPayEmptyState(
           icon: Icons.policy_outlined,
           title: 'No Audit Events Found',
-          subtitle: 'No completed administrative decisions match your current filter.',
+          subtitle:
+          'No completed administrative decisions match your current filter.',
         ),
         columns: const [
           DataColumn(label: Text('EVENT ID')),
@@ -176,27 +192,104 @@ class _AuditTrailDeskScreenState extends State<AuditTrailDeskScreen> {
           DataColumn(label: Text('TARGET ACCOUNT / REF')),
           DataColumn(label: Text('TIMESTAMP')),
           DataColumn(label: Text('OUTCOME')),
+          DataColumn(label: Text('INSPECT')),
         ],
         rows: filtered.map((l) {
+          final eventId = l['eventId'].toString();
           return DataRow(
             cells: [
-              DataCell(Text(l['eventId'].toString(), style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
-              DataCell(Text(l['actor'].toString(), style: const TextStyle(fontWeight: FontWeight.w700))),
+              DataCell(NexPayCopyableId(text: eventId, label: 'Event ID')),
+              DataCell(
+                Text(l['actor'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w700)),
+              ),
               DataCell(
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                   decoration: BoxDecoration(
                     color: AppConstants.surfaceCard,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: AppConstants.borderColor),
                   ),
-                  child: Text(l['module'].toString(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+                  child: Text(l['module'].toString(),
+                      style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700)),
                 ),
               ),
-              DataCell(Text(l['action'].toString(), style: const TextStyle(fontWeight: FontWeight.w600))),
-              DataCell(Text(l['target'].toString(), style: const TextStyle(fontSize: 12.5))),
-              DataCell(Text(l['timestamp'].toString(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(
+                Text(l['action'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
+              DataCell(
+                Text(l['target'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textSecondary, fontSize: 12.5)),
+              ),
+              DataCell(
+                Text(l['timestamp'].toString(),
+                    style: TextStyle(
+                        color: AppConstants.textMuted, fontSize: 12)),
+              ),
               DataCell(NexPayStatusBadge(status: l['status'].toString())),
+              DataCell(
+                OutlinedButton.icon(
+                  onPressed: () {
+                    showNexPayInspectorDrawer(
+                      context: context,
+                      title: 'Forensic Event $eventId',
+                      subtitle:
+                      '${l['module']} • Executed by ${l['actor']}',
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          NexPayDetailSection(
+                            title: 'Immutable Audit Record',
+                            children: [
+                              NexPayKeyValueRow(
+                                  label: 'Event Reference',
+                                  value: eventId,
+                                  copyable: true),
+                              NexPayKeyValueRow(
+                                  label: 'Admin Operator',
+                                  value: l['actor'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'System Module',
+                                  value: l['module'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'Action Performed',
+                                  value: l['action'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'Target Account',
+                                  value: l['target'].toString(),
+                                  copyable: true),
+                              NexPayKeyValueRow(
+                                  label: 'Timestamp',
+                                  value: l['timestamp'].toString()),
+                              NexPayKeyValueRow(
+                                  label: 'Outcome',
+                                  value: l['status'].toString()),
+                            ],
+                          ),
+                        ],
+                      ),
+                      footerActions: [
+                        OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Close')),
+                      ],
+                    );
+                  },
+                  icon: const Icon(Icons.visibility_outlined, size: 15),
+                  label: const Text('Log'),
+                ),
+              ),
             ],
           );
         }).toList(),

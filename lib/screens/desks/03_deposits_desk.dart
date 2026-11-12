@@ -1,4 +1,3 @@
-import '../../widgets/institutional_scroll.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class DepositsDeskScreen extends StatefulWidget {
   const DepositsDeskScreen({super.key});
@@ -15,18 +15,45 @@ class DepositsDeskScreen extends StatefulWidget {
 }
 
 class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
+  final TextEditingController _searchCtrl = TextEditingController();
   String _searchQuery = "";
   String _statusFilter = "ALL"; // ALL, PENDING, APPROVED, REJECTED
   final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
 
   @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
     final deposits = admin.deposits;
 
-    // Filter Logic
+    int pendingCount = 0;
+    double pendingVolume = 0;
+    int approvedCount = 0;
+    double approvedVolume = 0;
+    int rejectedCount = 0;
+
+    for (final d in deposits) {
+      if (d is! Map) continue;
+      final st = (d['status'] ?? 'PENDING').toString().toUpperCase();
+      final amt = double.tryParse(d['amount']?.toString() ?? '0') ?? 0;
+      if (st == 'PENDING') {
+        pendingCount++;
+        pendingVolume += amt;
+      } else if (st == 'APPROVED') {
+        approvedCount++;
+        approvedVolume += amt;
+      } else {
+        rejectedCount++;
+      }
+    }
+
     final filteredList = deposits.where((d) {
+      if (d is! Map) return false;
       final status = (d['status'] ?? '').toString().toUpperCase();
       if (_statusFilter == "PENDING" && status != "PENDING") return false;
       if (_statusFilter == "APPROVED" && status != "APPROVED") return false;
@@ -38,419 +65,225 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
         final name = (d['user_name'] ?? '').toString().toLowerCase();
         final channel = (d['channel'] ?? '').toString().toLowerCase();
         final id = (d['id'] ?? '').toString();
-        return mob.contains(q) || name.contains(q) || channel.contains(q) || id.contains(q);
+        return mob.contains(q) ||
+            name.contains(q) ||
+            channel.contains(q) ||
+            id.contains(q);
       }
       return true;
     }).toList();
 
-    final pendingCount = deposits.where((d) => (d['status'] ?? '').toString().toUpperCase() == "PENDING").length;
-
-    return Padding(
-      padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Bar
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Add Money & Deposits Desk",
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        if (pendingCount > 0) ...[
-                          const SizedBox(width: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: AppConstants.accentGold.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              "$pendingCount PENDING REVIEW",
-                              style: const TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Inspect payment proofs, verify bank transaction receipts and credit wallets",
-                      style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                onPressed: () => admin.fetchAllData(),
-                icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Filters and Search
-          Wrap(
-            spacing: 12,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SizedBox(
-                width: isDesktop ? 360 : double.infinity,
-                child: TextField(
-                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-                  decoration: InputDecoration(
-                    hintText: "Search Mobile, Customer, Channel, ID...",
-                    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-                    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-                    filled: true,
-                    fillColor: AppConstants.surface,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                  ),
-                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                ),
-              ),
-              _buildFilterChip("ALL", "All Deposits"),
-              _buildFilterChip("PENDING", "Pending ($pendingCount)"),
-              _buildFilterChip("APPROVED", "Approved"),
-              _buildFilterChip("REJECTED", "Rejected"),
-            ],
-          ),
-          const SizedBox(height: 18),
-
-          // Content Area
-          Expanded(
-            child: filteredList.isEmpty
-                ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.move_to_inbox_outlined, size: 54, color: AppConstants.textMuted),
-                  const SizedBox(height: 12),
-                  const Text(
-                    "No deposits found in this category",
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Active filter: $_statusFilter",
-                    style: const TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                  ),
-                ],
-              ),
-            )
-                : isDesktop
-                ? _buildDesktopTable(filteredList, admin)
-                : _buildMobileCards(filteredList, admin),
+    return NexPayDeskScaffold(
+      header: NexPayDeskHeader(
+        title: 'Add Money & Deposits Clearing Desk',
+        subtitle:
+        'Inspect payment proofs, zoom & rotate bank transaction receipts, and credit verified customer wallets',
+        badgeText:
+        pendingCount > 0 ? '$pendingCount PENDING REVIEW' : 'ALL CLEARED',
+        badgeColor: pendingCount > 0
+            ? AppConstants.accentGold
+            : AppConstants.accentGreen,
+        actions: [
+          ElevatedButton.icon(
+            onPressed: () => admin.fetchAllData(),
+            icon: const Icon(Icons.sync_rounded, size: 17),
+            label: const Text('Sync Deposits'),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _statusFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
-      ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _statusFilter = key),
-    );
-  }
-
-  Widget _buildDesktopTable(List<dynamic> list, AdminProvider admin) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: InstitutionalVScroll(
-          scrollDirection: Axis.vertical,
-          child: InstitutionalHScroll(
-            child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-              dataRowColor: WidgetStateProperty.all(Colors.transparent),
-              horizontalMargin: 20,
-              columnSpacing: 26,
-              columns: const [
-                DataColumn(label: Text("REF ID", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("CUSTOMER", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("AMOUNT (PKR)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("PAYMENT CHANNEL", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("PROOF RECEIPT", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("DATE / TIME", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("STATUS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("DECISION ACTION", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-              ],
-              rows: list.map((d) {
-                final status = (d['status'] ?? 'PENDING').toString().toUpperCase();
-                final isPending = status == 'PENDING';
-                final amount = double.tryParse(d['amount']?.toString() ?? '0') ?? 0.0;
-                final id = int.tryParse(d['id']?.toString() ?? '0') ?? 0;
-                final dateStr = _formatTimestamp(d['created_at']);
-
-                return DataRow(
-                  cells: [
-                    DataCell(Text("#$id", style: const TextStyle(color: AppConstants.textMuted, fontFamily: 'monospace', fontWeight: FontWeight.w700))),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
-                          Text(d['user_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppConstants.accentGold.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppConstants.accentGold.withValues(alpha: 0.3)),
-                        ),
-                        child: Text(
-                          d['channel'] ?? 'Gateway',
-                          style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 11.5),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.surfaceCard,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        onPressed: () => _openProofViewerDialog(context, id, d['user_name'] ?? 'Customer', amount),
-                        icon: const Icon(Icons.photo_library_outlined, size: 14, color: AppConstants.accentBlue),
-                        label: const Text("View Proof", style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700)),
-                      ),
-                    ),
-                    DataCell(Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5))),
-                    DataCell(_buildStatusBadge(status)),
-                    DataCell(
-                      isPending
-                          ? Row(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmDepositDecision(context, id, true, amount, d['user_name'] ?? 'Customer', admin),
-                            child: const Text("✓ Approve", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
-                          ),
-                          const SizedBox(width: 8),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppConstants.dangerRed,
-                              side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmDepositDecision(context, id, false, amount, d['user_name'] ?? 'Customer', admin),
-                            child: const Text("✕ Reject", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5)),
-                          ),
-                        ],
-                      )
-                          : Text(
-                        status == 'APPROVED' ? "✓ Credited to Wallet" : "✕ Rejected",
-                        style: TextStyle(
-                          color: status == 'APPROVED' ? AppConstants.accentGreen : AppConstants.dangerRed,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
+      statStrip: NexPayStatStrip(
+        items: [
+          NexPayStatItem(
+            label: 'Pending Verification',
+            value: '$pendingCount Slips',
+            sublabel: 'Rs. ${_currencyFormat.format(pendingVolume)} awaiting',
+            icon: Icons.move_to_inbox_rounded,
+            color: AppConstants.accentGold,
           ),
+          NexPayStatItem(
+            label: 'Approved & Credited',
+            value: '$approvedCount Deposits',
+            sublabel:
+            'Rs. ${_currencyFormat.format(approvedVolume)} settled in',
+            icon: Icons.verified_rounded,
+            color: AppConstants.accentGreen,
+          ),
+          NexPayStatItem(
+            label: 'Rejected Submissions',
+            value: '$rejectedCount Declined',
+            sublabel: 'Invalid or duplicate payment proofs',
+            icon: Icons.cancel_outlined,
+            color: AppConstants.dangerRed,
+          ),
+          NexPayStatItem(
+            label: 'Total Deposit Volume',
+            value:
+            'Rs. ${_currencyFormat.format(pendingVolume + approvedVolume)}',
+            sublabel: '${deposits.length} total cash-in records',
+            icon: Icons.account_balance_wallet_rounded,
+            color: AppConstants.accentBlue,
+          ),
+        ],
+      ),
+      filterBar: NexPayFilterBar(
+        searchController: _searchCtrl,
+        searchHint: 'Search Reference ID, Mobile, Customer, or Channel...',
+        onSearchChanged: (v) => setState(() => _searchQuery = v.trim()),
+        filters: const ['ALL', 'PENDING', 'APPROVED', 'REJECTED'],
+        selectedFilter: _statusFilter,
+        onFilterChanged: (f) => setState(() => _statusFilter = f),
+        resultSummary:
+        'Showing ${filteredList.length} of ${deposits.length} deposits',
+      ),
+      body: NexPayFullWidthTable(
+        minTableWidth: 1160,
+        emptyState: NexPayEmptyState(
+          icon: Icons.move_to_inbox_outlined,
+          title: 'No Deposits Found',
+          subtitle: 'No deposit proofs match your active filter ($_statusFilter).',
         ),
-      ),
-    );
-  }
+        columns: const [
+          DataColumn(label: Text('REF ID')),
+          DataColumn(label: Text('CUSTOMER')),
+          DataColumn(label: Text('AMOUNT (PKR)'), numeric: true),
+          DataColumn(label: Text('PAYMENT CHANNEL')),
+          DataColumn(label: Text('PROOF RECEIPT')),
+          DataColumn(label: Text('DATE / TIME')),
+          DataColumn(label: Text('STATUS')),
+          DataColumn(label: Text('DECISION ACTION')),
+        ],
+        rows: filteredList.map((raw) {
+          final d = Map<String, dynamic>.from(raw as Map);
+          final status = (d['status'] ?? 'PENDING').toString().toUpperCase();
+          final isPending = status == 'PENDING';
+          final amount =
+              double.tryParse(d['amount']?.toString() ?? '0') ?? 0.0;
+          final id = int.tryParse(d['id']?.toString() ?? '0') ?? 0;
+          final dateStr = _formatTimestamp(d['created_at']);
+          final customerName = (d['user_name'] ?? 'Customer').toString();
 
-  Widget _buildMobileCards(List<dynamic> list, AdminProvider admin) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, idx) {
-        final d = list[idx];
-        final status = (d['status'] ?? 'PENDING').toString().toUpperCase();
-        final isPending = status == 'PENDING';
-        final amount = double.tryParse(d['amount']?.toString() ?? '0') ?? 0.0;
-        final id = int.tryParse(d['id']?.toString() ?? '0') ?? 0;
-        final dateStr = _formatTimestamp(d['created_at']);
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppConstants.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? AppConstants.accentGold.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text("#$id", style: const TextStyle(color: AppConstants.textMuted, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppConstants.accentGold.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          d['channel'] ?? 'Gateway',
-                          style: const TextStyle(color: AppConstants.accentGold, fontWeight: FontWeight.w800, fontSize: 11),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _buildStatusBadge(status),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(d['user_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
-                      const SizedBox(height: 2),
-                      Text(d['user_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontFamily: 'monospace', fontSize: 12)),
-                    ],
-                  ),
-                  Text(
-                    "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.accentGreen, fontWeight: FontWeight.w700, fontSize: 17),
-                  ),
-                ],
-              ),
-              const Divider(color: Color(0xFFE2E8F0), height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppConstants.accentBlue,
-                      padding: EdgeInsets.zero,
-                    ),
-                    onPressed: () => _openProofViewerDialog(context, id, d['user_name'] ?? 'Customer', amount),
-                    icon: const Icon(Icons.fullscreen_rounded, size: 18),
-                    label: const Text("Inspect Proof Slip", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                  ),
-                ],
-              ),
-              if (isPending) ...[
-                const SizedBox(height: 10),
-                Row(
+          return DataRow(
+            cells: [
+              DataCell(NexPayCopyableId(text: '#$id', label: 'Deposit ID')),
+              DataCell(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmDepositDecision(context, id, true, amount, d['user_name'] ?? 'Customer', admin),
-                        child: const Text("Approve & Credit", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
-                      ),
+                    Text(
+                      customerName,
+                      style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppConstants.dangerRed,
-                          side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmDepositDecision(context, id, false, amount, d['user_name'] ?? 'Customer', admin),
-                        child: const Text("Reject", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5)),
-                      ),
+                    Text(
+                      (d['user_mobile'] ?? '-').toString(),
+                      style: TextStyle(
+                          color: AppConstants.accentBlue,
+                          fontSize: 11.5,
+                          fontFamily: 'Consolas'),
                     ),
                   ],
                 ),
-              ],
+              ),
+              DataCell(
+                Text(
+                  'Rs. ${_currencyFormat.format(amount)}',
+                  style: TextStyle(
+                    color: AppConstants.accentGreen,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13.5,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+              DataCell(
+                Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppConstants.accentGoldLight,
+                    borderRadius: BorderRadius.circular(7),
+                    border: Border.all(
+                        color: AppConstants.accentGold.withValues(alpha: 0.3)),
+                  ),
+                  child: Text(
+                    (d['channel'] ?? 'Gateway').toString(),
+                    style: TextStyle(
+                        color: AppConstants.accentGold,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11.5),
+                  ),
+                ),
+              ),
+              DataCell(
+                OutlinedButton.icon(
+                  onPressed: () => _openProofViewerDialog(
+                      context, id, customerName, amount, isPending, admin),
+                  icon: Icon(Icons.photo_library_outlined,
+                      size: 15, color: AppConstants.accentBlue),
+                  label: const Text('Inspect Slip',
+                      style: TextStyle(fontSize: 12)),
+                ),
+              ),
+              DataCell(Text(dateStr,
+                  style: TextStyle(
+                      color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(NexPayStatusBadge(status: status)),
+              DataCell(
+                isPending
+                    ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppConstants.accentGreen,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
+                      ),
+                      onPressed: () => _confirmDepositDecision(
+                          context, id, true, amount, customerName, admin),
+                      icon: const Icon(Icons.check_rounded, size: 15),
+                      label: const Text('Approve',
+                          style: TextStyle(fontSize: 12)),
+                    ),
+                    const SizedBox(width: 6),
+                    OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppConstants.dangerRed,
+                        side: BorderSide(
+                            color: AppConstants.dangerRed
+                                .withValues(alpha: 0.45)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
+                      ),
+                      onPressed: () => _confirmDepositDecision(context,
+                          id, false, amount, customerName, admin),
+                      icon: const Icon(Icons.close_rounded, size: 15),
+                      label: const Text('Reject',
+                          style: TextStyle(fontSize: 12)),
+                    ),
+                  ],
+                )
+                    : Text(
+                  status == 'APPROVED'
+                      ? '✓ Credited to Wallet'
+                      : '✕ Rejected',
+                  style: TextStyle(
+                    color: status == 'APPROVED'
+                        ? AppConstants.accentGreen
+                        : AppConstants.dangerRed,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
             ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildStatusBadge(String status) {
-    Color bg;
-    Color text;
-
-    if (status == 'PENDING') {
-      bg = Colors.amber.withValues(alpha: 0.15);
-      text = Colors.amber;
-    } else if (status == 'APPROVED') {
-      bg = AppConstants.accentGreen.withValues(alpha: 0.15);
-      text = AppConstants.accentGreen;
-    } else {
-      bg = AppConstants.dangerRed.withValues(alpha: 0.15);
-      text = AppConstants.dangerRed;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Text(status, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -458,82 +291,76 @@ class _DepositsDeskScreenState extends State<DepositsDeskScreen> {
     if (timestamp == null) return "-";
     try {
       final date = DateTime.parse(timestamp.toString());
-      return DateFormat("dd MMM, hh:mm a").format(date);
+      return DateFormat("dd MMM yyyy, hh:mm a").format(date);
     } catch (_) {
       return timestamp.toString();
     }
   }
 
-  // Confirmation Alert Dialog
-  void _confirmDepositDecision(BuildContext context, int id, bool approved, double amount, String customerName, AdminProvider admin) {
-    showDialog(
+  Future<void> _confirmDepositDecision(BuildContext context, int id,
+      bool approved, double amount, String customerName, AdminProvider admin) async {
+    final confirmed = await showNexPayConfirmDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: Row(
-          children: [
-            Icon(approved ? Icons.verified_rounded : Icons.cancel_rounded, color: approved ? AppConstants.accentGreen : AppConstants.dangerRed),
-            const SizedBox(width: 8),
-            Text(approved ? "Approve Deposit" : "Reject Deposit", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          approved
-              ? "Deposit #$id tasdeeq karein? ₨ ${_currencyFormat.format(amount)} $customerName ke primary wallet me credit ho jayenge."
-              : "Kya aap Deposit #$id ko reject karna chahte hain?",
-          style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: approved ? AppConstants.accentGreen : AppConstants.dangerRed,
-              foregroundColor: approved ? Color(0xFF021A13) : Color(0xFF0F172A),
-            ),
-            onPressed: () async {
-              Navigator.pop(ctx);
-              final success = await admin.reviewDeposit(id, approved);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: success ? AppConstants.accentGreen : AppConstants.dangerRed,
-                    content: Text(
-                      success
-                          ? (approved ? "Deposit #$id approved! Balance credited." : "Deposit #$id rejected.")
-                          : "Process failed. Please try again.",
-                      style: TextStyle(color: success ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                );
-              }
-            },
-            child: Text(approved ? "Yes, Approve & Credit" : "Yes, Reject", style: const TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+      title: approved ? 'Approve & Credit Deposit' : 'Reject Deposit Proof',
+      message: approved
+          ? 'Verify Deposit #$id? Rs. ${_currencyFormat.format(amount)} will be credited immediately into $customerName\'s primary wallet.'
+          : 'Are you sure you want to reject Deposit #$id from $customerName?',
+      confirmLabel: approved ? 'Yes, Approve & Credit' : 'Yes, Reject',
+      confirmColor:
+      approved ? AppConstants.accentGreen : AppConstants.dangerRed,
+      icon: approved ? Icons.verified_rounded : Icons.cancel_rounded,
     );
+    if (!confirmed || !context.mounted) return;
+
+    final success = await admin.reviewDeposit(id, approved);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor:
+          success ? AppConstants.accentGreen : AppConstants.dangerRed,
+          content: Text(
+            success
+                ? (approved
+                ? 'Deposit #$id approved! Balance credited.'
+                : 'Deposit #$id rejected.')
+                : 'Process failed. Please try again.',
+          ),
+        ),
+      );
+    }
   }
 
-  // Interactive Pan / Zoom / Rotate Receipt Dialog
-  void _openProofViewerDialog(BuildContext context, int id, String name, double amount) {
+  void _openProofViewerDialog(BuildContext context, int id, String name,
+      double amount, bool isPending, AdminProvider admin) {
     showDialog(
       context: context,
-      builder: (ctx) => _ProofViewerModal(depositId: id, customerName: name, amount: amount),
+      builder: (ctx) => _ProofViewerModal(
+        depositId: id,
+        customerName: name,
+        amount: amount,
+        isPending: isPending,
+        onDecision: (approved) {
+          Navigator.pop(ctx);
+          _confirmDepositDecision(context, id, approved, amount, name, admin);
+        },
+      ),
     );
   }
 }
 
-// Dedicated Modal with Fetch, Rotate & Pinch-to-Zoom
 class _ProofViewerModal extends StatefulWidget {
   final int depositId;
   final String customerName;
   final double amount;
+  final bool isPending;
+  final ValueChanged<bool> onDecision;
 
   const _ProofViewerModal({
     required this.depositId,
     required this.customerName,
     required this.amount,
+    required this.isPending,
+    required this.onDecision,
   });
 
   @override
@@ -542,6 +369,8 @@ class _ProofViewerModal extends StatefulWidget {
 
 class _ProofViewerModalState extends State<_ProofViewerModal> {
   final ApiClient _api = ApiClient();
+  final TransformationController _transformController =
+  TransformationController();
   bool _isLoading = true;
   String? _screenshotData;
   String? _error;
@@ -553,11 +382,27 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
     _fetchProof();
   }
 
+  @override
+  void dispose() {
+    _transformController.dispose();
+    super.dispose();
+  }
+
+  void _adjustZoom(double factor) {
+    final current = _transformController.value.clone();
+    current.scale(factor);
+    _transformController.value = current;
+  }
+
   Future<void> _fetchProof() async {
     try {
       final res = await _api.dio.get(
         '',
-        queryParameters: {'action': 'get_deposit_proof', 'id': widget.depositId, '_t': DateTime.now().millisecondsSinceEpoch},
+        queryParameters: {
+          'action': 'get_deposit_proof',
+          'id': widget.depositId,
+          '_t': DateTime.now().millisecondsSinceEpoch
+        },
       );
       if (res.data['status'] == 'success') {
         setState(() {
@@ -580,12 +425,16 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
 
   @override
   Widget build(BuildContext context) {
+    final money = NumberFormat("#,##0.00", "en_US");
     return Dialog(
       backgroundColor: AppConstants.surface,
-      insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
+      insetPadding: const EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: AppConstants.borderColor),
+      ),
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 680, maxHeight: 800),
+        constraints: const BoxConstraints(maxWidth: 740, maxHeight: 820),
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -593,63 +442,139 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Payment Receipt Proof #${widget.depositId}", style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 16)),
-                    const SizedBox(height: 2),
-                    Text("${widget.customerName} • ₨ ${widget.amount.toStringAsFixed(2)}", style: const TextStyle(color: AppConstants.accentGreen, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Payment Receipt Proof #${widget.depositId}",
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        "${widget.customerName} • Rs. ${money.format(widget.amount)}",
+                        style: TextStyle(
+                            color: AppConstants.accentGreen,
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
+                Wrap(
+                  spacing: 4,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.rotate_left_rounded, color: AppConstants.accentBlue),
-                      tooltip: "Rotate Counter-Clockwise",
-                      onPressed: () => setState(() => _rotationQuarterTurns = (_rotationQuarterTurns - 1) % 4),
+                      icon: Icon(Icons.zoom_in_rounded,
+                          color: AppConstants.textSecondary),
+                      tooltip: "Zoom In",
+                      onPressed: () => _adjustZoom(1.25),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.rotate_right_rounded, color: AppConstants.accentBlue),
-                      tooltip: "Rotate Clockwise",
-                      onPressed: () => setState(() => _rotationQuarterTurns = (_rotationQuarterTurns + 1) % 4),
+                      icon: Icon(Icons.zoom_out_rounded,
+                          color: AppConstants.textSecondary),
+                      tooltip: "Zoom Out",
+                      onPressed: () => _adjustZoom(0.8),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
+                      icon: Icon(Icons.restart_alt_rounded,
+                          color: AppConstants.textSecondary),
+                      tooltip: "Reset View",
+                      onPressed: () {
+                        setState(() => _rotationQuarterTurns = 0);
+                        _transformController.value = Matrix4.identity();
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.rotate_left_rounded,
+                          color: AppConstants.accentBlue),
+                      tooltip: "Rotate Left",
+                      onPressed: () => setState(() =>
+                      _rotationQuarterTurns = (_rotationQuarterTurns - 1) % 4),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.rotate_right_rounded,
+                          color: AppConstants.accentBlue),
+                      tooltip: "Rotate Right",
+                      onPressed: () => setState(() =>
+                      _rotationQuarterTurns = (_rotationQuarterTurns + 1) % 4),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close_rounded,
+                          color: AppConstants.textMuted),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 ),
               ],
             ),
-            const Divider(color: Color(0xFFE2E8F0), height: 20),
+            Divider(color: AppConstants.borderColor, height: 20),
 
             // Image Container with Interactive Pan & Zoom
             Expanded(
               child: Container(
-                decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(16)),
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12)),
                 child: Center(
                   child: _isLoading
-                      ? const CircularProgressIndicator(color: AppConstants.accentGreen)
+                      ? CircularProgressIndicator(
+                      color: AppConstants.accentGreen)
                       : _error != null
-                      ? Text(_error!, style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.bold))
-                      : (_screenshotData == null || _screenshotData!.isEmpty)
-                      ? const Text("No screenshot attached by customer", style: TextStyle(color: Color(0xFF64748B)))
+                      ? Text(_error!,
+                      style: TextStyle(
+                          color: AppConstants.dangerRed,
+                          fontWeight: FontWeight.bold))
+                      : (_screenshotData == null ||
+                      _screenshotData!.isEmpty)
+                      ? const Text("No screenshot attached by customer",
+                      style: TextStyle(color: Colors.white70))
                       : RotatedBox(
                     quarterTurns: _rotationQuarterTurns,
                     child: InteractiveViewer(
+                      transformationController:
+                      _transformController,
                       panEnabled: true,
                       minScale: 0.5,
-                      maxScale: 4.0,
+                      maxScale: 5.0,
                       child: _buildProofImage(_screenshotData!),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-            const Text(
-              "Tip: Pinch or double-click to Zoom in / Drag to pan image",
-              style: TextStyle(color: AppConstants.textMuted, fontSize: 11),
+            const SizedBox(height: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Scroll, pinch, or use toolbar controls to zoom & rotate slip",
+                  style:
+                  TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
+                ),
+                if (widget.isPending)
+                  Row(
+                    children: [
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppConstants.dangerRed,
+                        ),
+                        onPressed: () => widget.onDecision(false),
+                        icon: const Icon(Icons.close_rounded, size: 16),
+                        label: const Text('Reject'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton.icon(
+                        onPressed: () => widget.onDecision(true),
+                        icon: const Icon(Icons.check_rounded, size: 16),
+                        label: const Text('Approve & Credit'),
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ],
         ),
@@ -662,7 +587,9 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
       return Image.network(
         data,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Text("Image link broken or unreachable", style: TextStyle(color: Color(0xFF64748B))),
+        errorBuilder: (_, error, stack) => const Text(
+            "Image link broken or unreachable",
+            style: TextStyle(color: Colors.white70)),
       );
     }
 
@@ -675,10 +602,13 @@ class _ProofViewerModalState extends State<_ProofViewerModal> {
       return Image.memory(
         bytes,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Text("Unable to render Base64 image", style: TextStyle(color: Color(0xFF64748B))),
+        errorBuilder: (_, error, stack) => const Text(
+            "Unable to render Base64 image",
+            style: TextStyle(color: Colors.white70)),
       );
     } catch (_) {
-      return const Text("Corrupted screenshot data", style: TextStyle(color: Color(0xFF64748B)));
+      return const Text("Corrupted screenshot data",
+          style: TextStyle(color: Colors.white70));
     }
   }
 }

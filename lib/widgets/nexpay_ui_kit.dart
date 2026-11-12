@@ -1,7 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../core/constants.dart';
 
-/// 1. Full-Screen Desk Canvas with Guaranteed Right-Edge Vertical Scrollbar
+/// Reusable Light/Dark Mode Switcher Button
+class NexPayThemeToggleButton extends StatelessWidget {
+  final bool compact;
+
+  const NexPayThemeToggleButton({super.key, this.compact = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: NexPayThemeController.instance,
+      builder: (context, _) {
+        final isDark = NexPayThemeController.instance.isDark;
+        if (compact) {
+          return Tooltip(
+            message: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            child: InkWell(
+              onTap: () => NexPayThemeController.instance.toggleTheme(),
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppConstants.surfaceCard,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppConstants.borderColor),
+                ),
+                child: Icon(
+                  isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                  size: 18,
+                  color: isDark ? const Color(0xFFFBBF24) : AppConstants.textSecondary,
+                ),
+              ),
+            ),
+          );
+        }
+
+        return InkWell(
+          onTap: () => NexPayThemeController.instance.toggleTheme(),
+          borderRadius: BorderRadius.circular(9),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6.5),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: AppConstants.borderColor),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                  size: 15,
+                  color: isDark ? const Color(0xFFFBBF24) : AppConstants.accentBlue,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  isDark ? 'Light Mode' : 'Dark Mode',
+                  style: TextStyle(
+                    color: AppConstants.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// 1. Full-Screen Desk Canvas with Guaranteed Right-Edge Vertical Scrollbar & Quick Scroll-to-Top
 class NexPayDeskScaffold extends StatefulWidget {
   final Widget header;
   final Widget? statStrip;
@@ -24,9 +96,25 @@ class NexPayDeskScaffold extends StatefulWidget {
 
 class _NexPayDeskScaffoldState extends State<NexPayDeskScaffold> {
   final ScrollController _verticalController = ScrollController();
+  bool _showScrollTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _verticalController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_verticalController.hasClients) return;
+    final shouldShow = _verticalController.offset > 340;
+    if (shouldShow != _showScrollTop) {
+      setState(() => _showScrollTop = shouldShow);
+    }
+  }
 
   @override
   void dispose() {
+    _verticalController.removeListener(_onScroll);
     _verticalController.dispose();
     super.dispose();
   }
@@ -34,49 +122,99 @@ class _NexPayDeskScaffoldState extends State<NexPayDeskScaffold> {
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: Container(
-        color: AppConstants.background,
-        child: Scrollbar(
-          controller: _verticalController,
-          thumbVisibility: true,
-          trackVisibility: true,
-          interactive: true,
-          thickness: 10,
-          radius: const Radius.circular(6),
-          child: SingleChildScrollView(
-            controller: _verticalController,
-            primary: false,
-            padding: widget.padding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                widget.header,
-                if (widget.statStrip != null) ...[
-                  const SizedBox(height: 18),
-                  widget.statStrip!,
-                ],
-                if (widget.filterBar != null) ...[
-                  const SizedBox(height: 18),
-                  widget.filterBar!,
-                ],
-                const SizedBox(height: 16),
-                widget.body,
-                const SizedBox(height: 24),
-              ],
+      child: Stack(
+        children: [
+          Container(
+            color: AppConstants.background,
+            child: Scrollbar(
+              controller: _verticalController,
+              thumbVisibility: true,
+              trackVisibility: true,
+              interactive: true,
+              thickness: 10,
+              radius: const Radius.circular(6),
+              child: SingleChildScrollView(
+                controller: _verticalController,
+                primary: false,
+                padding: widget.padding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    widget.header,
+                    if (widget.statStrip != null) ...[
+                      const SizedBox(height: 18),
+                      widget.statStrip!,
+                    ],
+                    if (widget.filterBar != null) ...[
+                      const SizedBox(height: 18),
+                      widget.filterBar!,
+                    ],
+                    const SizedBox(height: 16),
+                    widget.body,
+                    const SizedBox(height: 28),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+          if (_showScrollTop)
+            Positioned(
+              right: 24,
+              bottom: 22,
+              child: Material(
+                elevation: 6,
+                borderRadius: BorderRadius.circular(10),
+                color: AppConstants.bgDark,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    _verticalController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 280),
+                      curve: Curves.easeOutCubic,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 9),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFF334155)),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.arrow_upward_rounded,
+                            size: 16, color: Colors.white),
+                        SizedBox(width: 6),
+                        Text(
+                          'Top',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
 }
 
-/// 2. Full-Width Data Table with Permanent Bottom Horizontal Scrollbar
+/// 2. Full-Width Data Table with Built-In Client Pagination & Bottom Scrollbar
 class NexPayFullWidthTable extends StatefulWidget {
   final List<DataColumn> columns;
   final List<DataRow> rows;
   final Widget? emptyState;
   final double minTableWidth;
+  final bool enablePagination;
+  final int initialRowsPerPage;
 
   const NexPayFullWidthTable({
     super.key,
@@ -84,6 +222,8 @@ class NexPayFullWidthTable extends StatefulWidget {
     required this.rows,
     this.emptyState,
     this.minTableWidth = 980,
+    this.enablePagination = true,
+    this.initialRowsPerPage = 15,
   });
 
   @override
@@ -92,6 +232,25 @@ class NexPayFullWidthTable extends StatefulWidget {
 
 class _NexPayFullWidthTableState extends State<NexPayFullWidthTable> {
   final ScrollController _horizontalController = ScrollController();
+  int _currentPage = 0;
+  late int _rowsPerPage;
+
+  @override
+  void initState() {
+    super.initState();
+    _rowsPerPage = widget.initialRowsPerPage;
+  }
+
+  @override
+  void didUpdateWidget(covariant NexPayFullWidthTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final maxPage = widget.rows.isEmpty
+        ? 0
+        : ((widget.rows.length - 1) / _rowsPerPage).floor();
+    if (_currentPage > maxPage) {
+      _currentPage = maxPage;
+    }
+  }
 
   @override
   void dispose() {
@@ -105,6 +264,16 @@ class _NexPayFullWidthTableState extends State<NexPayFullWidthTable> {
       return widget.emptyState!;
     }
 
+    final total = widget.rows.length;
+    final totalPages =
+    total == 0 ? 1 : (total / _rowsPerPage).ceil();
+    final safePage = _currentPage.clamp(0, totalPages - 1);
+    final startIdx = widget.enablePagination ? safePage * _rowsPerPage : 0;
+    final endIdx = widget.enablePagination
+        ? (startIdx + _rowsPerPage).clamp(0, total)
+        : total;
+    final visibleRows = widget.rows.sublist(startIdx, endIdx);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -115,41 +284,201 @@ class _NexPayFullWidthTableState extends State<NexPayFullWidthTable> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final targetWidth = constraints.maxWidth > widget.minTableWidth
-                ? constraints.maxWidth
-                : widget.minTableWidth;
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final targetWidth = constraints.maxWidth > widget.minTableWidth
+                    ? constraints.maxWidth
+                    : widget.minTableWidth;
 
-            return Scrollbar(
-              controller: _horizontalController,
-              thumbVisibility: true,
-              trackVisibility: true,
-              interactive: true,
-              thickness: 10,
-              radius: const Radius.circular(6),
-              child: SingleChildScrollView(
-                controller: _horizontalController,
-                scrollDirection: Axis.horizontal,
-                primary: false,
-                padding: const EdgeInsets.only(bottom: 12),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: targetWidth),
-                  child: DataTable(
-                    headingRowHeight: 46,
-                    dataRowMinHeight: 54,
-                    dataRowMaxHeight: 68,
-                    horizontalMargin: 20,
-                    columnSpacing: 24,
-                    headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-                    dividerThickness: 1,
-                    columns: widget.columns,
-                    rows: widget.rows,
+                return Scrollbar(
+                  controller: _horizontalController,
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  interactive: true,
+                  thickness: 9,
+                  radius: const Radius.circular(6),
+                  child: SingleChildScrollView(
+                    controller: _horizontalController,
+                    scrollDirection: Axis.horizontal,
+                    primary: false,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: targetWidth),
+                      child: DataTable(
+                        headingRowHeight: 46,
+                        dataRowMinHeight: 54,
+                        dataRowMaxHeight: 70,
+                        horizontalMargin: 20,
+                        columnSpacing: 24,
+                        headingRowColor:
+                        WidgetStateProperty.all(AppConstants.surfaceCard),
+                        dataRowColor: WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return AppConstants.surfaceCard
+                                .withValues(alpha: 0.55);
+                          }
+                          return AppConstants.surface;
+                        }),
+                        dividerThickness: 1,
+                        columns: widget.columns,
+                        rows: visibleRows,
+                      ),
+                    ),
                   ),
+                );
+              },
+            ),
+            if (widget.enablePagination && total > 0)
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppConstants.surfaceCard.withValues(alpha: 0.65),
+                  border:
+                  Border(top: BorderSide(color: AppConstants.borderColor)),
+                ),
+                child: Wrap(
+                  spacing: 16,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      'Showing ${startIdx + 1}–$endIdx of $total records',
+                      style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Rows:',
+                          style: TextStyle(
+                            color: AppConstants.textMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: AppConstants.surface,
+                            borderRadius: BorderRadius.circular(6),
+                            border:
+                            Border.all(color: AppConstants.borderColor),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              value: _rowsPerPage,
+                              isDense: true,
+                              dropdownColor: AppConstants.surface,
+                              style: TextStyle(
+                                color: AppConstants.textPrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              items: const [15, 30, 50, 100]
+                                  .map((v) => DropdownMenuItem(
+                                value: v,
+                                child: Text('$v'),
+                              ))
+                                  .toList(),
+                              onChanged: (val) {
+                                if (val != null) {
+                                  setState(() {
+                                    _rowsPerPage = val;
+                                    _currentPage = 0;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Text(
+                          'Page ${safePage + 1} of $totalPages',
+                          style: TextStyle(
+                            color: AppConstants.textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        _PageNavBtn(
+                          icon: Icons.first_page_rounded,
+                          enabled: safePage > 0,
+                          onTap: () => setState(() => _currentPage = 0),
+                        ),
+                        const SizedBox(width: 4),
+                        _PageNavBtn(
+                          icon: Icons.chevron_left_rounded,
+                          enabled: safePage > 0,
+                          onTap: () =>
+                              setState(() => _currentPage = safePage - 1),
+                        ),
+                        const SizedBox(width: 4),
+                        _PageNavBtn(
+                          icon: Icons.chevron_right_rounded,
+                          enabled: safePage < totalPages - 1,
+                          onTap: () =>
+                              setState(() => _currentPage = safePage + 1),
+                        ),
+                        const SizedBox(width: 4),
+                        _PageNavBtn(
+                          icon: Icons.last_page_rounded,
+                          enabled: safePage < totalPages - 1,
+                          onTap: () =>
+                              setState(() => _currentPage = totalPages - 1),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PageNavBtn extends StatelessWidget {
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  const _PageNavBtn({
+    required this.icon,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: enabled ? onTap : null,
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: enabled ? AppConstants.surface : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            color: enabled
+                ? AppConstants.borderColor
+                : AppConstants.borderColor.withValues(alpha: 0.4),
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 17,
+          color: enabled ? AppConstants.textPrimary : AppConstants.textLight,
         ),
       ),
     );
@@ -190,7 +519,7 @@ class NexPayDeskHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppConstants.textPrimary,
                     fontSize: 21,
                     fontWeight: FontWeight.w700,
@@ -200,20 +529,35 @@ class NexPayDeskHeader extends StatelessWidget {
                 if (badgeText != null) ...[
                   const SizedBox(width: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
                     decoration: BoxDecoration(
                       color: accent.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: accent.withValues(alpha: 0.25)),
+                      border: Border.all(color: accent.withValues(alpha: 0.28)),
                     ),
-                    child: Text(
-                      badgeText!,
-                      style: TextStyle(
-                        color: accent,
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: accent,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          badgeText!,
+                          style: TextStyle(
+                            color: accent,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -222,7 +566,7 @@ class NexPayDeskHeader extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppConstants.textMuted,
                 fontSize: 13,
               ),
@@ -289,11 +633,13 @@ class NexPayStatStrip extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
-                      color: item.color.withValues(alpha: 0.12),
+                      color: item.color.withValues(alpha: 0.13),
                       borderRadius: BorderRadius.circular(10),
+                      border:
+                      Border.all(color: item.color.withValues(alpha: 0.22)),
                     ),
                     child: Icon(item.icon, size: 20, color: item.color),
                   ),
@@ -306,7 +652,7 @@ class NexPayStatStrip extends StatelessWidget {
                           item.label.toUpperCase(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppConstants.textMuted,
                             fontSize: 10.5,
                             fontWeight: FontWeight.w700,
@@ -318,11 +664,11 @@ class NexPayStatStrip extends StatelessWidget {
                           item.value,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppConstants.textPrimary,
                             fontSize: 18.5,
                             fontWeight: FontWeight.w700,
-                            fontFeatures: [FontFeature.tabularFigures()],
+                            fontFeatures: const [FontFeature.tabularFigures()],
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -330,7 +676,7 @@ class NexPayStatStrip extends StatelessWidget {
                           item.sublabel,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppConstants.textMuted,
                             fontSize: 11.5,
                           ),
@@ -378,6 +724,7 @@ class NexPayFilterBar extends StatelessWidget {
         color: AppConstants.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppConstants.borderColor),
+        boxShadow: AppConstants.cardShadow,
       ),
       child: Wrap(
         spacing: 14,
@@ -390,10 +737,11 @@ class NexPayFilterBar extends StatelessWidget {
             child: TextField(
               controller: searchController,
               onChanged: onSearchChanged,
-              style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13),
+              style: TextStyle(color: AppConstants.textPrimary, fontSize: 13),
               decoration: InputDecoration(
                 hintText: searchHint,
-                prefixIcon: const Icon(Icons.search_rounded, size: 18, color: AppConstants.textMuted),
+                prefixIcon: Icon(Icons.search_rounded,
+                    size: 18, color: AppConstants.textMuted),
                 suffixIcon: searchController.text.isNotEmpty
                     ? IconButton(
                   icon: const Icon(Icons.close_rounded, size: 16),
@@ -417,18 +765,25 @@ class NexPayFilterBar extends StatelessWidget {
                   onTap: () => onFilterChanged(f),
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                     decoration: BoxDecoration(
-                      color: active ? AppConstants.bgDark : AppConstants.surfaceCard,
+                      color: active
+                          ? AppConstants.accentGreen
+                          : AppConstants.surfaceCard,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: active ? AppConstants.bgDark : AppConstants.borderColor,
+                        color: active
+                            ? AppConstants.accentGreen
+                            : AppConstants.borderColor,
                       ),
                     ),
                     child: Text(
                       f,
                       style: TextStyle(
-                        color: active ? Colors.white : AppConstants.textSecondary,
+                        color: active
+                            ? Colors.white
+                            : AppConstants.textSecondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -437,12 +792,21 @@ class NexPayFilterBar extends StatelessWidget {
                 );
               }),
               const SizedBox(width: 6),
-              Text(
-                resultSummary,
-                style: const TextStyle(
-                  color: AppConstants.textMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppConstants.background,
+                  borderRadius: BorderRadius.circular(7),
+                  border: Border.all(color: AppConstants.borderColor),
+                ),
+                child: Text(
+                  resultSummary,
+                  style: TextStyle(
+                    color: AppConstants.textMuted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -495,19 +859,31 @@ class NexPayStatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: fg.withValues(alpha: 0.24)),
       ),
-      child: Text(
-        s,
-        style: TextStyle(
-          color: fg,
-          fontSize: 10.5,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5.5,
+            height: 5.5,
+            decoration: BoxDecoration(color: fg, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            s,
+            style: TextStyle(
+              color: fg,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -520,33 +896,38 @@ Future<T?> showNexPayInspectorDrawer<T>({
   required String subtitle,
   required Widget child,
   List<Widget> footerActions = const [],
-  double width = 520,
+  double width = 540,
 }) {
   return showGeneralDialog<T>(
     context: context,
     barrierDismissible: true,
     barrierLabel: 'Close Inspector',
-    barrierColor: Colors.black.withValues(alpha: 0.45),
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     transitionDuration: const Duration(milliseconds: 220),
-    pageBuilder: (ctx, _, __) {
+    pageBuilder: (ctx, anim1, anim2) {
       return Align(
         alignment: Alignment.centerRight,
         child: Material(
           color: AppConstants.surface,
-          elevation: 16,
-          child: SizedBox(
+          elevation: 20,
+          child: Container(
             width: MediaQuery.of(ctx).size.width < width
                 ? MediaQuery.of(ctx).size.width * 0.94
                 : width,
             height: double.infinity,
+            decoration: BoxDecoration(
+              color: AppConstants.surface,
+              border: Border(left: BorderSide(color: AppConstants.borderColor)),
+            ),
             child: Column(
               children: [
                 // Drawer Header
                 Container(
                   padding: const EdgeInsets.fromLTRB(24, 20, 16, 18),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppConstants.surface,
-                    border: Border(bottom: BorderSide(color: AppConstants.borderColor)),
+                    border: Border(
+                        bottom: BorderSide(color: AppConstants.borderColor)),
                   ),
                   child: Row(
                     children: [
@@ -556,7 +937,7 @@ Future<T?> showNexPayInspectorDrawer<T>({
                           children: [
                             Text(
                               title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppConstants.textPrimary,
                                 fontSize: 17,
                                 fontWeight: FontWeight.w700,
@@ -565,7 +946,7 @@ Future<T?> showNexPayInspectorDrawer<T>({
                             const SizedBox(height: 2),
                             Text(
                               subtitle,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppConstants.textMuted,
                                 fontSize: 12,
                               ),
@@ -574,8 +955,10 @@ Future<T?> showNexPayInspectorDrawer<T>({
                         ),
                       ),
                       IconButton(
+                        tooltip: 'Close Panel',
                         onPressed: () => Navigator.pop(ctx),
-                        icon: const Icon(Icons.close_rounded, color: AppConstants.textSecondary),
+                        icon: Icon(Icons.close_rounded,
+                            color: AppConstants.textSecondary),
                       ),
                     ],
                   ),
@@ -590,13 +973,17 @@ Future<T?> showNexPayInspectorDrawer<T>({
                 // Drawer Sticky Footer
                 if (footerActions.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                    decoration: const BoxDecoration(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 14),
+                    decoration: BoxDecoration(
                       color: AppConstants.surfaceCard,
-                      border: Border(top: BorderSide(color: AppConstants.borderColor)),
+                      border: Border(
+                          top: BorderSide(color: AppConstants.borderColor)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      alignment: WrapAlignment.end,
                       children: footerActions,
                     ),
                   ),
@@ -606,7 +993,7 @@ Future<T?> showNexPayInspectorDrawer<T>({
         ),
       );
     },
-    transitionBuilder: (ctx, anim, _, child) {
+    transitionBuilder: (ctx, anim, secondaryAnim, child) {
       final offset = Tween<Offset>(
         begin: const Offset(1.0, 0.0),
         end: Offset.zero,
@@ -614,4 +1001,350 @@ Future<T?> showNexPayInspectorDrawer<T>({
       return SlideTransition(position: offset, child: child);
     },
   );
+}
+
+/// 8. One-Click Copyable Reference ID / IBAN Pill
+class NexPayCopyableId extends StatelessWidget {
+  final String text;
+  final String? label;
+
+  const NexPayCopyableId({super.key, required this.text, this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Click to copy ${label ?? text}',
+      child: InkWell(
+        onTap: () async {
+          await Clipboard.setData(ClipboardData(text: text));
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Copied: $text'),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+                width: 320,
+              ),
+            );
+          }
+        },
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppConstants.surfaceCard,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: AppConstants.borderColor),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppConstants.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Consolas',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(Icons.copy_rounded, size: 13, color: AppConstants.textMuted),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 9. Polished Empty State Card
+class NexPayEmptyState extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Widget? action;
+
+  const NexPayEmptyState({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.action,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+      decoration: BoxDecoration(
+        color: AppConstants.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppConstants.borderColor),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 28, color: AppConstants.textMuted),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            title,
+            style: TextStyle(
+              color: AppConstants.textPrimary,
+              fontSize: 15.5,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppConstants.textMuted,
+              fontSize: 13,
+            ),
+          ),
+          if (action != null) ...[
+            const SizedBox(height: 16),
+            action!,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// 10. Structured Inspector Detail Card & Key-Value Row
+class NexPayDetailSection extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+
+  const NexPayDetailSection({
+    super.key,
+    required this.title,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppConstants.background,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppConstants.borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              color: AppConstants.textMuted,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.7,
+            ),
+          ),
+          const SizedBox(height: 12),
+          ...children,
+        ],
+      ),
+    );
+  }
+}
+
+class NexPayKeyValueRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool copyable;
+  final Color? valueColor;
+
+  const NexPayKeyValueRow({
+    super.key,
+    required this.label,
+    required this.value,
+    this.copyable = false,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 145,
+            child: Text(
+              label,
+              style: TextStyle(
+                color: AppConstants.textMuted,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Expanded(
+            child: copyable
+                ? Align(
+              alignment: Alignment.centerLeft,
+              child: NexPayCopyableId(text: value, label: label),
+            )
+                : Text(
+              value,
+              style: TextStyle(
+                color: valueColor ?? AppConstants.textPrimary,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 11. Interactive Receipt / CNIC Zoom Lightbox
+Future<void> showNexPayImageViewer({
+  required BuildContext context,
+  required String title,
+  required String imageUrl,
+}) {
+  return showDialog(
+    context: context,
+    builder: (ctx) {
+      return Dialog(
+        backgroundColor: AppConstants.surface,
+        insetPadding: const EdgeInsets.all(24),
+        child: SizedBox(
+          width: 780,
+          height: 600,
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                child: Row(
+                  children: [
+                    Icon(Icons.zoom_in_rounded,
+                        color: AppConstants.accentGreen, size: 20),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Scroll / Pinch to Zoom',
+                      style: TextStyle(
+                          color: AppConstants.textMuted, fontSize: 12),
+                    ),
+                    const SizedBox(width: 12),
+                    IconButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(height: 1, color: AppConstants.borderColor),
+              Expanded(
+                child: Container(
+                  color: Colors.black,
+                  width: double.infinity,
+                  child: InteractiveViewer(
+                    minScale: 0.5,
+                    maxScale: 5.0,
+                    child: Center(
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, error, stack) => const Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text(
+                            'Unable to load document image.',
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+/// 12. Enterprise Confirmation Dialog for Critical Actions
+Future<bool> showNexPayConfirmDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+  String confirmLabel = 'Confirm Action',
+  Color? confirmColor,
+  IconData icon = Icons.shield_outlined,
+}) async {
+  final btnColor = confirmColor ?? AppConstants.accentGreen;
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: btnColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: btnColor, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(child: Text(title)),
+        ],
+      ),
+      content: Text(
+        message,
+        style: TextStyle(
+            color: AppConstants.textSecondary, fontSize: 13.5, height: 1.5),
+      ),
+      actions: [
+        OutlinedButton(
+          onPressed: () => Navigator.pop(ctx, false),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: btnColor),
+          onPressed: () => Navigator.pop(ctx, true),
+          child: Text(confirmLabel),
+        ),
+      ],
+    ),
+  );
+  return result ?? false;
 }

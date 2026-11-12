@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class LoansDeskScreen extends StatefulWidget {
@@ -54,12 +53,19 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
     final filtered = allLoans.where((raw) {
       if (raw is! Map) return false;
       final st = (raw['status'] ?? 'UNDER_REVIEW').toString().toUpperCase();
-      if (_statusFilter == 'UNDER_REVIEW' && !(st == 'UNDER_REVIEW' || st == 'PENDING')) return false;
-      if (_statusFilter == 'APPROVED' && !(st == 'APPROVED' || st == 'ACTIVE' || st == 'DISBURSED')) return false;
+      if (_statusFilter == 'UNDER_REVIEW' &&
+          !(st == 'UNDER_REVIEW' || st == 'PENDING')) {
+        return false;
+      }
+      if (_statusFilter == 'APPROVED' &&
+          !(st == 'APPROVED' || st == 'ACTIVE' || st == 'DISBURSED')) {
+        return false;
+      }
       if (_statusFilter == 'REJECTED' && st != 'REJECTED') return false;
 
       if (_query.isEmpty) return true;
-      final hay = '${raw['id']} ${raw['user_mobile']} ${raw['mobile']} ${raw['user_name']} ${raw['purpose']}'
+      final hay =
+      '${raw['id']} ${raw['user_mobile']} ${raw['mobile']} ${raw['user_name']} ${raw['purpose']}'
           .toLowerCase();
       return hay.contains(_query);
     }).toList();
@@ -67,7 +73,8 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'EasyCash Micro-Loans & Credit Underwriting',
-        subtitle: 'Evaluate borrower KYC eligibility, review credit applications, and disburse approved loan principals',
+        subtitle:
+        'Evaluate borrower KYC eligibility, review credit applications, and disburse approved loan principals',
         badgeText: 'CREDIT ENGINE',
         badgeColor: AppConstants.accentBlue,
         actions: [
@@ -117,14 +124,16 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
         filters: const ['ALL', 'UNDER_REVIEW', 'APPROVED', 'REJECTED'],
         selectedFilter: _statusFilter,
         onFilterChanged: (f) => setState(() => _statusFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${allLoans.length} loan applications',
+        resultSummary:
+        'Showing ${filtered.length} of ${allLoans.length} loan applications',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1140,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.account_balance_rounded,
           title: 'No Loan Applications Found',
-          subtitle: 'There are no credit requests matching your current filter in the live database.',
+          subtitle:
+          'There are no credit requests matching your current filter in the live database.',
         ),
         columns: const [
           DataColumn(label: Text('LOAN ID')),
@@ -140,33 +149,50 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
           final l = Map<String, dynamic>.from(raw as Map);
           final id = int.tryParse(l['id']?.toString() ?? '0') ?? 0;
           final mobile = (l['user_mobile'] ?? l['mobile'] ?? '-').toString();
-          final userMap = admin.users[mobile] is Map ? Map<String, dynamic>.from(admin.users[mobile]) : <String, dynamic>{};
-          final name = (l['user_name'] ?? userMap['name'] ?? 'Borrower').toString();
+          final userMap = admin.users[mobile] is Map
+              ? Map<String, dynamic>.from(admin.users[mobile])
+              : <String, dynamic>{};
+          final name =
+          (l['user_name'] ?? userMap['name'] ?? 'Borrower').toString();
           final amt = double.tryParse(l['amount']?.toString() ?? '0') ?? 0;
-          final repay = double.tryParse(l['repayment_amount']?.toString() ?? l['total_repay']?.toString() ?? '0') ?? 0;
-          final tenure = (l['tenure_days'] ?? l['tenure'] ?? '30 Days').toString();
+          final repay = double.tryParse(l['repayment_amount']?.toString() ??
+              l['total_repay']?.toString() ??
+              '0') ??
+              0;
+          final tenure =
+          (l['tenure_days'] ?? l['tenure'] ?? '30 Days').toString();
           final purpose = (l['purpose'] ?? 'Personal Cash').toString();
           final date = (l['created_at'] ?? l['date'] ?? '-').toString();
-          final status = (l['status'] ?? 'UNDER_REVIEW').toString().toUpperCase();
+          final status =
+          (l['status'] ?? 'UNDER_REVIEW').toString().toUpperCase();
           final isPending = status == 'UNDER_REVIEW' || status == 'PENDING';
 
           return DataRow(
             cells: [
-              DataCell(Text('#LN-$id', style: const TextStyle(fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(NexPayCopyableId(text: '#LN-$id', label: 'Loan ID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                    Text(mobile, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(name,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13)),
+                    Text(mobile,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
               DataCell(
                 Text(
                   'Rs. ${_money.format(amt)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()]),
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w700,
+                      fontFeatures: const [FontFeature.tabularFigures()]),
                 ),
               ),
               DataCell(
@@ -174,17 +200,31 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(repay > 0 ? 'Rs. ${_money.format(repay)}' : 'Standard Schedule', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12.5)),
-                    Text('Term: $tenure', style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
+                    Text(
+                        repay > 0
+                            ? 'Rs. ${_money.format(repay)}'
+                            : 'Standard Schedule',
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12.5)),
+                    Text('Term: $tenure',
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11)),
                   ],
                 ),
               ),
-              DataCell(Text(purpose, style: const TextStyle(fontSize: 12.5))),
-              DataCell(Text(date, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(Text(purpose,
+                  style: TextStyle(
+                      color: AppConstants.textPrimary, fontSize: 12.5))),
+              DataCell(Text(date,
+                  style: TextStyle(
+                      color: AppConstants.textMuted, fontSize: 12))),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 OutlinedButton.icon(
-                  onPressed: () => _openLoanInspector(context, admin, l, userMap),
+                  onPressed: () =>
+                      _openLoanInspector(context, admin, l, userMap),
                   icon: const Icon(Icons.policy_outlined, size: 15),
                   label: Text(isPending ? 'Underwrite' : 'Inspect'),
                 ),
@@ -196,12 +236,14 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
     );
   }
 
-  void _openLoanInspector(BuildContext context, AdminProvider admin, Map<String, dynamic> l, Map<String, dynamic> userMap) {
+  void _openLoanInspector(BuildContext context, AdminProvider admin,
+      Map<String, dynamic> l, Map<String, dynamic> userMap) {
     final id = int.tryParse(l['id']?.toString() ?? '0') ?? 0;
     final mobile = (l['user_mobile'] ?? l['mobile'] ?? '-').toString();
     final name = (l['user_name'] ?? userMap['name'] ?? 'Borrower').toString();
     final amt = double.tryParse(l['amount']?.toString() ?? '0') ?? 0;
-    final walletBal = double.tryParse(userMap['balance']?.toString() ?? '0') ?? 0;
+    final walletBal =
+        double.tryParse(userMap['balance']?.toString() ?? '0') ?? 0;
     final isKyc = userMap['isKycVerified'] == true ||
         userMap['isKycVerified'] == 1 ||
         (userMap['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
@@ -226,45 +268,110 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('REQUESTED PRINCIPAL', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+                Text('REQUESTED PRINCIPAL',
+                    style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text('Rs. ${_money.format(amt)}', style: const TextStyle(color: AppConstants.textPrimary, fontSize: 25, fontWeight: FontWeight.w700)),
+                Text('Rs. ${_money.format(amt)}',
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
-                NexPayStatusBadge(status: status),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    NexPayStatusBadge(status: status),
+                    NexPayStatusBadge(
+                        status: isKyc ? 'KYC VERIFIED' : 'KYC UNVERIFIED'),
+                  ],
+                ),
               ],
             ),
           ),
           const SizedBox(height: 18),
-          _kv('Borrower Legal Name', name),
-          _kv('Mobile Account', mobile),
-          _kv('CNIC Number', (userMap['cnic'] ?? 'Not on file').toString()),
-          _kv('KYC Verification', isKyc ? 'VERIFIED LEVEL-2' : 'UNVERIFIED'),
-          _kv('Current Wallet Balance', 'Rs. ${_money.format(walletBal)}'),
-          _kv('Loan Purpose', (l['purpose'] ?? 'Personal Cash').toString()),
-          _kv('Submitted Date', (l['created_at'] ?? l['date'] ?? '-').toString()),
+          NexPayDetailSection(
+            title: 'Borrower Risk & Identity Profile',
+            children: [
+              NexPayKeyValueRow(label: 'Legal Name', value: name),
+              NexPayKeyValueRow(
+                  label: 'Mobile Account', value: mobile, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'CNIC Number',
+                  value: (userMap['cnic'] ?? 'Not on file').toString(),
+                  copyable: userMap['cnic'] != null),
+              NexPayKeyValueRow(
+                label: 'KYC Status',
+                value: isKyc ? 'VERIFIED LEVEL-2' : 'UNVERIFIED',
+                valueColor:
+                isKyc ? AppConstants.accentGreen : AppConstants.dangerRed,
+              ),
+              NexPayKeyValueRow(
+                  label: 'Current Wallet Bal',
+                  value: 'Rs. ${_money.format(walletBal)}'),
+            ],
+          ),
+          NexPayDetailSection(
+            title: 'Facility Terms',
+            children: [
+              NexPayKeyValueRow(
+                  label: 'Loan Purpose',
+                  value: (l['purpose'] ?? 'Personal Cash').toString()),
+              NexPayKeyValueRow(
+                  label: 'Submitted Date',
+                  value: (l['created_at'] ?? l['date'] ?? '-').toString()),
+            ],
+          ),
         ],
       ),
       footerActions: isPending
           ? [
         OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.dangerRed),
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Reject Loan Application',
+              message:
+              'Decline loan #LN-$id for $name ($mobile)?',
+              confirmLabel: 'Reject Application',
+              confirmColor: AppConstants.dangerRed,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.reviewLoan(id, false);
             if (context.mounted) {
-              _toast(context, ok ? 'Loan #LN-$id rejected.' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok ? 'Loan #LN-$id rejected.' : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.close_rounded, size: 17),
           label: const Text('Reject Application'),
         ),
-        const SizedBox(width: 12),
         ElevatedButton.icon(
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Approve & Disburse Loan',
+              message:
+              'Approve #LN-$id and disburse Rs. ${_money.format(amt)} directly into $mobile\'s wallet?',
+              confirmLabel: 'Approve & Disburse',
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.reviewLoan(id, true);
             if (context.mounted) {
-              _toast(context, ok ? 'Loan #LN-$id approved & disbursed to $mobile.' : 'Approval failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Loan #LN-$id approved & disbursed to $mobile.'
+                      : 'Approval failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.check_circle_rounded, size: 17),
@@ -272,28 +379,19 @@ class _LoansDeskScreenState extends State<LoansDeskScreen> {
         ),
       ]
           : [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
       ],
-    );
-  }
-
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600)),
-        ],
-      ),
     );
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

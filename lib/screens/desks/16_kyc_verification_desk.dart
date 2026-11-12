@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class KycVerificationDeskScreen extends StatefulWidget {
   const KycVerificationDeskScreen({super.key});
 
   @override
-  State<KycVerificationDeskScreen> createState() => _KycVerificationDeskScreenState();
+  State<KycVerificationDeskScreen> createState() =>
+      _KycVerificationDeskScreenState();
 }
 
 class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
@@ -42,7 +42,9 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     final isVerified = u['isKycVerified'] == true ||
     u['isKycVerified'] == 1 ||
     (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
-    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED'))
+        .toString()
+        .toUpperCase();
 
     if (st == 'PENDING') {
     pendingCount++;
@@ -57,21 +59,30 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     final isVerified = u['isKycVerified'] == true ||
     u['isKycVerified'] == 1 ||
     (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
-    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED'))
+        .toString()
+        .toUpperCase();
 
     if (_statusFilter == 'PENDING' && st != 'PENDING') return false;
-    if (_statusFilter == 'VERIFIED' && !(isVerified || st == 'VERIFIED')) return false;
-    if (_statusFilter == 'UNVERIFIED' && (isVerified || st == 'VERIFIED' || st == 'PENDING')) return false;
+    if (_statusFilter == 'VERIFIED' && !(isVerified || st == 'VERIFIED')) {
+    return false;
+    }
+    if (_statusFilter == 'UNVERIFIED' &&
+    (isVerified || st == 'VERIFIED' || st == 'PENDING')) {
+    return false;
+    }
 
     if (_query.isEmpty) return true;
-    final hay = '${u['name']} ${u['mobile']} ${u['cnic']} ${u['email']}'.toLowerCase();
+    final hay = '${u['name']} ${u['mobile']} ${u['cnic']} ${u['email']}'
+        .toLowerCase();
     return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
     header: NexPayDeskHeader(
     title: 'Biometric KYC & NADRA Identity Compliance Desk',
-    subtitle: 'Inspect CNIC front/back scans, live selfie liveness proofs, and approve or reset customer verification',
+    subtitle:
+    'Inspect CNIC front/back scans, live selfie liveness proofs, and approve or reset customer verification',
     badgeText: 'AML / KYC COMPLIANCE',
     badgeColor: AppConstants.accentGold,
     actions: [
@@ -121,14 +132,16 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     filters: const ['PENDING', 'VERIFIED', 'UNVERIFIED', 'ALL'],
     selectedFilter: _statusFilter,
     onFilterChanged: (f) => setState(() => _statusFilter = f),
-    resultSummary: 'Showing ${filtered.length} of ${allCustomers.length} profiles',
+    resultSummary:
+    'Showing ${filtered.length} of ${allCustomers.length} profiles',
     ),
     body: NexPayFullWidthTable(
     minTableWidth: 1120,
-    emptyState: const InstitutionalEmptyState(
+    emptyState: const NexPayEmptyState(
     icon: Icons.verified_user_outlined,
     title: 'No KYC Applications In This Queue',
-    subtitle: 'Switch filter tabs above (e.g., VERIFIED or ALL) to inspect other customer records.',
+    subtitle:
+    'Switch filter tabs above (e.g., VERIFIED or ALL) to inspect other customer records.',
     ),
     columns: const [
     DataColumn(label: Text('APPLICANT NAME')),
@@ -146,17 +159,32 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     final isVerified = u['isKycVerified'] == true ||
     u['isKycVerified'] == 1 ||
     (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
-    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    final st = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED'))
+        .toString()
+        .toUpperCase();
 
     return DataRow(
     cells: [
-    DataCell(Text(name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5))),
-    DataCell(Text(mobile, style: const TextStyle(color: AppConstants.accentBlue, fontWeight: FontWeight.w600))),
-    DataCell(Text(cnic, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700))),
+    DataCell(Text(name,
+    style: TextStyle(
+    color: AppConstants.textPrimary,
+    fontWeight: FontWeight.w700,
+    fontSize: 13.5))),
+    DataCell(NexPayCopyableId(text: mobile, label: 'Mobile')),
+    DataCell(cnic != 'Not Provided'
+    ? NexPayCopyableId(text: cnic, label: 'CNIC')
+        : Text(cnic,
+    style: TextStyle(
+    color: AppConstants.textMuted,
+    fontWeight: FontWeight.w600))),
     DataCell(
     SizedBox(
     width: 240,
-    child: Text(address, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5)),
+    child: Text(address,
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: TextStyle(
+    color: AppConstants.textSecondary, fontSize: 12.5)),
     ),
     ),
     DataCell(NexPayStatusBadge(status: st)),
@@ -164,7 +192,8 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     ElevatedButton.icon(
     onPressed: () => _openKycAuditDrawer(context, admin, u),
     icon: const Icon(Icons.badge_outlined, size: 16),
-    label: Text(st == 'PENDING' ? 'Inspect & Approve' : 'View Proofs'),
+    label: Text(
+    st == 'PENDING' ? 'Inspect & Approve' : 'View Proofs'),
     ),
     ),
     ],
@@ -174,7 +203,8 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     );
   }
 
-  void _openKycAuditDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> u) {
+  void _openKycAuditDrawer(
+      BuildContext context, AdminProvider admin, Map<String, dynamic> u) {
     final mobile = u['mobile'].toString();
     final name = (u['name'] ?? '').toString();
     final email = (u['email'] ?? '').toString();
@@ -183,11 +213,13 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     final isVerified = u['isKycVerified'] == true ||
         u['isKycVerified'] == 1 ||
         (u['kycStatus'] ?? '').toString().toUpperCase() == 'VERIFIED';
-    final status = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED')).toString().toUpperCase();
+    final status = (u['kycStatus'] ?? (isVerified ? 'VERIFIED' : 'UNVERIFIED'))
+        .toString()
+        .toUpperCase();
 
     showNexPayInspectorDrawer(
       context: context,
-      width: 640,
+      width: 650,
       title: 'Biometric KYC Dossier: $name',
       subtitle: 'Mobile: $mobile • CNIC: $cnic',
       child: Column(
@@ -206,43 +238,75 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Expanded(
+                      child: Text(name,
+                          style: TextStyle(
+                              color: AppConstants.textPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700)),
+                    ),
                     NexPayStatusBadge(status: status),
                   ],
                 ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 8,
+                  children: [
+                    NexPayCopyableId(text: mobile, label: 'Mobile'),
+                    if (cnic.isNotEmpty)
+                      NexPayCopyableId(text: cnic, label: 'CNIC'),
+                  ],
+                ),
                 const SizedBox(height: 8),
-                Text('CNIC Number: $cnic', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700)),
-                Text('Email: $email   •   Address: $address', style: const TextStyle(color: AppConstants.textMuted, fontSize: 12)),
+                Text('Email: $email   •   Address: $address',
+                    style:
+                    TextStyle(color: AppConstants.textMuted, fontSize: 12)),
               ],
             ),
           ),
           const SizedBox(height: 18),
-          const Text(
-            'SUBMITTED IDENTITY DOCUMENTS (SCROLL / PINCH TO ZOOM)',
-            style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700),
+          Text(
+            'SUBMITTED IDENTITY DOCUMENTS (SCROLL / PINCH OR OPEN LIGHTBOX)',
+            style: TextStyle(
+                color: AppConstants.textMuted,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           FutureBuilder(
           future: admin.getKycProof(mobile),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 48),
-                child: Center(child: CircularProgressIndicator(color: AppConstants.accentGreen)),
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 48),
+                child: Center(
+                    child: CircularProgressIndicator(
+                        color: AppConstants.accentGreen)),
               );
             }
             final docs = snap.data ?? {};
-            final front = (docs['cnicFront'] ?? docs['front'] ?? u['cnicFront'] ?? '').toString();
-            final back = (docs['cnicBack'] ?? docs['back'] ?? u['cnicBack'] ?? '').toString();
-            final selfie = (docs['selfie'] ?? docs['liveSelfie'] ?? u['selfie'] ?? '').toString();
+            final front = (docs['cnicFront'] ??
+                docs['front'] ??
+                u['cnicFront'] ??
+                '')
+                .toString();
+            final back =
+            (docs['cnicBack'] ?? docs['back'] ?? u['cnicBack'] ?? '')
+                .toString();
+            final selfie = (docs['selfie'] ??
+                docs['liveSelfie'] ??
+                u['selfie'] ??
+                '')
+                .toString();
 
             return Column(
               children: [
-                _docCard('CNIC Front Scan', front),
+                _docCard(context, 'CNIC Front Scan', front),
                 const SizedBox(height: 14),
-                _docCard('CNIC Back Scan', back),
+                _docCard(context, 'CNIC Back Scan', back),
                 const SizedBox(height: 14),
-                _docCard('Biometric Live Selfie', selfie),
+                _docCard(context, 'Biometric Live Selfie', selfie),
               ],
             );
           },
@@ -251,20 +315,42 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       ),
       footerActions: [
         OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.dangerRed),
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Reject & Reset KYC',
+              message:
+              'Decline submitted documents for $name ($mobile) and require fresh biometric upload?',
+              confirmLabel: 'Reject & Reset',
+              confirmColor: AppConstants.dangerRed,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.resetUserKyc(mobile);
             if (context.mounted) {
-              _toast(context, ok ? 'KYC rejected & reset for resubmission.' : 'Reset failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'KYC rejected & reset for resubmission.'
+                      : 'Reset failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.close_rounded, size: 17),
           label: const Text('Reject & Reset KYC'),
         ),
-        const SizedBox(width: 12),
         ElevatedButton.icon(
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Approve Level-2 KYC',
+              message:
+              'Verify identity for $name ($mobile) and unlock full Tier-2 transaction limits?',
+              confirmLabel: 'Approve Level-2 KYC',
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.updateUserFullProfile(
               oldMobile: mobile,
@@ -277,7 +363,10 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
               kycStatus: 'VERIFIED',
             );
             if (context.mounted) {
-              _toast(context, ok ? 'Customer $name KYC Verified!' : 'Approval failed.', ok);
+              _toast(
+                  context,
+                  ok ? 'Customer $name KYC Verified!' : 'Approval failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.verified_rounded, size: 17),
@@ -287,7 +376,8 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
     );
   }
 
-  Widget _docCard(String title, String rawImg) {
+  Widget _docCard(BuildContext context, String title, String rawImg) {
+    final hasImage = rawImg.trim().isNotEmpty;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -299,7 +389,39 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title,
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12.5)),
+              if (hasImage &&
+                  (rawImg.startsWith('http://') ||
+                      rawImg.startsWith('https://')))
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () => showNexPayImageViewer(
+                    context: context,
+                    title: title,
+                    imageUrl: rawImg,
+                  ),
+                  icon: Icon(Icons.fullscreen_rounded,
+                      size: 16, color: AppConstants.accentBlue),
+                  label: Text('Full Zoom',
+                      style: TextStyle(
+                          color: AppConstants.accentBlue,
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600)),
+                ),
+            ],
+          ),
           const SizedBox(height: 8),
           Container(
             height: 210,
@@ -307,12 +429,16 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
             decoration: BoxDecoration(
               color: AppConstants.background,
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppConstants.borderColor),
             ),
-            child: rawImg.trim().isEmpty
-                ? const Center(child: Text('No image uploaded for this slot.', style: TextStyle(color: AppConstants.textMuted, fontSize: 12)))
+            child: !hasImage
+                ? Center(
+                child: Text('No image uploaded for this slot.',
+                    style: TextStyle(
+                        color: AppConstants.textMuted, fontSize: 12)))
                 : InteractiveViewer(
               minScale: 0.8,
-              maxScale: 4.0,
+              maxScale: 4.5,
               child: _decodeImg(rawImg),
             ),
           ),
@@ -329,13 +455,18 @@ class _KycVerificationDeskScreenState extends State<KycVerificationDeskScreen> {
       final clean = src.contains(',') ? src.split(',').last : src;
       return Image.memory(base64Decode(clean), fit: BoxFit.contain);
     } catch (_) {
-      return const Center(child: Text('Invalid image encoding', style: TextStyle(color: AppConstants.dangerRed)));
+      return Center(
+          child: Text('Invalid image encoding',
+              style: TextStyle(color: AppConstants.dangerRed)));
     }
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

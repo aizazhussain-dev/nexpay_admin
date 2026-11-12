@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class TakafulClaimsDeskScreen extends StatefulWidget {
   const TakafulClaimsDeskScreen({super.key});
 
   @override
-  State<TakafulClaimsDeskScreen> createState() => _TakafulClaimsDeskScreenState();
+  State<TakafulClaimsDeskScreen> createState() =>
+      _TakafulClaimsDeskScreenState();
 }
 
 class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
@@ -39,7 +39,10 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
     for (final raw in claims) {
       if (raw is! Map) continue;
       final st = (raw['status'] ?? 'PENDING').toString().toUpperCase();
-      final amt = double.tryParse(raw['claim_amount']?.toString() ?? raw['amount']?.toString() ?? '0') ?? 0;
+      final amt = double.tryParse(raw['claim_amount']?.toString() ??
+          raw['amount']?.toString() ??
+          '0') ??
+          0;
       if (st == 'PENDING' || st == 'UNDER_REVIEW') {
         pendingCount++;
         pendingClaimAmt += amt;
@@ -54,12 +57,19 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
     final filtered = claims.where((raw) {
       if (raw is! Map) return false;
       final st = (raw['status'] ?? 'PENDING').toString().toUpperCase();
-      if (_statusFilter == 'PENDING' && !(st == 'PENDING' || st == 'UNDER_REVIEW')) return false;
-      if (_statusFilter == 'APPROVED' && !(st == 'APPROVED' || st == 'SETTLED' || st == 'COMPLETED')) return false;
+      if (_statusFilter == 'PENDING' &&
+          !(st == 'PENDING' || st == 'UNDER_REVIEW')) {
+        return false;
+      }
+      if (_statusFilter == 'APPROVED' &&
+          !(st == 'APPROVED' || st == 'SETTLED' || st == 'COMPLETED')) {
+        return false;
+      }
       if (_statusFilter == 'REJECTED' && st != 'REJECTED') return false;
 
       if (_query.isEmpty) return true;
-      final hay = '${raw['id']} ${raw['claim_id']} ${raw['user_mobile']} ${raw['user_name']} ${raw['plan_name']} ${raw['incident_type']}'
+      final hay =
+      '${raw['id']} ${raw['claim_id']} ${raw['user_mobile']} ${raw['user_name']} ${raw['plan_name']} ${raw['incident_type']}'
           .toLowerCase();
       return hay.contains(_query);
     }).toList();
@@ -67,7 +77,8 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Islamic Takaful Claims & Coverage Adjudication',
-        subtitle: 'Review Shariah-compliant Takaful protection claims, verify incident evidence, and disburse settlements',
+        subtitle:
+        'Review Shariah-compliant Takaful protection claims, verify incident evidence, and disburse settlements',
         badgeText: 'TAKAFUL RISK DESK',
         badgeColor: AppConstants.accentGreen,
         actions: [
@@ -90,7 +101,8 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
           NexPayStatItem(
             label: 'Settled Takaful Claims',
             value: '$approvedCount Approved',
-            sublabel: 'Rs. ${_money.format(approvedClaimAmt)} paid from Waqf pool',
+            sublabel:
+            'Rs. ${_money.format(approvedClaimAmt)} paid from Waqf pool',
             icon: Icons.health_and_safety_rounded,
             color: AppConstants.accentGreen,
           ),
@@ -117,14 +129,16 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
         filters: const ['ALL', 'PENDING', 'APPROVED', 'REJECTED'],
         selectedFilter: _statusFilter,
         onFilterChanged: (f) => setState(() => _statusFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${claims.length} claims',
+        resultSummary:
+        'Showing ${filtered.length} of ${claims.length} claims',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1140,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.health_and_safety_outlined,
           title: 'No Takaful Claims Found',
-          subtitle: 'There are no Islamic Takaful claims matching your filter in the live database.',
+          subtitle:
+          'There are no Islamic Takaful claims matching your filter in the live database.',
         ),
         columns: const [
           DataColumn(label: Text('CLAIM ID')),
@@ -141,35 +155,69 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
           final claimId = (c['claim_id'] ?? c['id'] ?? '').toString();
           final mobile = (c['user_mobile'] ?? c['mobile'] ?? '-').toString();
           final name = (c['user_name'] ?? 'Participant').toString();
-          final plan = (c['plan_name'] ?? c['policy_name'] ?? 'Takaful Shield').toString();
-          final reason = (c['incident_type'] ?? c['reason'] ?? c['description'] ?? 'Medical / Protection Claim').toString();
-          final amt = double.tryParse(c['claim_amount']?.toString() ?? c['amount']?.toString() ?? '0') ?? 0;
+          final plan =
+          (c['plan_name'] ?? c['policy_name'] ?? 'Takaful Shield')
+              .toString();
+          final reason = (c['incident_type'] ??
+              c['reason'] ??
+              c['description'] ??
+              'Medical / Protection Claim')
+              .toString();
+          final amt = double.tryParse(c['claim_amount']?.toString() ??
+              c['amount']?.toString() ??
+              '0') ??
+              0;
           final date = (c['created_at'] ?? c['date'] ?? '-').toString();
           final status = (c['status'] ?? 'PENDING').toString().toUpperCase();
           final isPending = status == 'PENDING' || status == 'UNDER_REVIEW';
 
           return DataRow(
             cells: [
-              DataCell(Text('#TKF-$claimId', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(
+                  NexPayCopyableId(text: '#TKF-$claimId', label: 'Claim ID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    Text(mobile, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(name,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700)),
+                    Text(mobile,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
-              DataCell(Text(plan, style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(
+                Text(plan,
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
               DataCell(
                 SizedBox(
                   width: 220,
-                  child: Text(reason, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5)),
+                  child: Text(reason,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: AppConstants.textSecondary, fontSize: 12.5)),
                 ),
               ),
-              DataCell(Text('Rs. ${_money.format(amt)}', style: const TextStyle(fontWeight: FontWeight.w700))),
-              DataCell(Text(date, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(
+                Text('Rs. ${_money.format(amt)}',
+                    style: TextStyle(
+                        color: AppConstants.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontFeatures: const [FontFeature.tabularFigures()])),
+              ),
+              DataCell(
+                Text(date,
+                    style:
+                    TextStyle(color: AppConstants.textMuted, fontSize: 12)),
+              ),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 OutlinedButton.icon(
@@ -185,12 +233,17 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
     );
   }
 
-  void _openClaimDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> c) {
+  void _openClaimDrawer(
+      BuildContext context, AdminProvider admin, Map<String, dynamic> c) {
     final claimId = (c['claim_id'] ?? c['id'] ?? '').toString();
     final mobile = (c['user_mobile'] ?? c['mobile'] ?? '-').toString();
     final name = (c['user_name'] ?? 'Participant').toString();
-    final plan = (c['plan_name'] ?? c['policy_name'] ?? 'Takaful Shield').toString();
-    final amt = double.tryParse(c['claim_amount']?.toString() ?? c['amount']?.toString() ?? '0') ?? 0;
+    final plan =
+    (c['plan_name'] ?? c['policy_name'] ?? 'Takaful Shield').toString();
+    final amt = double.tryParse(c['claim_amount']?.toString() ??
+        c['amount']?.toString() ??
+        '0') ??
+        0;
     final status = (c['status'] ?? 'PENDING').toString().toUpperCase();
     final isPending = status == 'PENDING' || status == 'UNDER_REVIEW';
 
@@ -212,44 +265,98 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('REQUESTED COVERAGE SETTLEMENT', style: TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
+                Text('REQUESTED COVERAGE SETTLEMENT',
+                    style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text('Rs. ${_money.format(amt)}', style: const TextStyle(color: AppConstants.accentGreen, fontSize: 24, fontWeight: FontWeight.w700)),
+                Text('Rs. ${_money.format(amt)}',
+                    style: TextStyle(
+                        color: AppConstants.accentGreen,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
                 NexPayStatusBadge(status: status),
               ],
             ),
           ),
           const SizedBox(height: 18),
-          _kv('Participant Name', name),
-          _kv('Mobile Number', mobile),
-          _kv('Policy / Plan', plan),
-          _kv('Incident Category', (c['incident_type'] ?? 'General Claim').toString()),
-          _kv('Claim Narrative', (c['description'] ?? c['reason'] ?? 'No additional notes provided.').toString()),
-          _kv('Submitted Timestamp', (c['created_at'] ?? c['date'] ?? '-').toString()),
+          NexPayDetailSection(
+            title: 'Participant & Policy Dossier',
+            children: [
+              NexPayKeyValueRow(
+                  label: 'Claim Reference',
+                  value: '#TKF-$claimId',
+                  copyable: true),
+              NexPayKeyValueRow(label: 'Participant Name', value: name),
+              NexPayKeyValueRow(
+                  label: 'Mobile Number', value: mobile, copyable: true),
+              NexPayKeyValueRow(label: 'Policy / Plan', value: plan),
+              NexPayKeyValueRow(
+                  label: 'Incident Type',
+                  value: (c['incident_type'] ?? 'General Claim').toString()),
+              NexPayKeyValueRow(
+                  label: 'Claim Narrative',
+                  value: (c['description'] ??
+                      c['reason'] ??
+                      'No additional notes provided.')
+                      .toString()),
+              NexPayKeyValueRow(
+                  label: 'Submitted Date',
+                  value: (c['created_at'] ?? c['date'] ?? '-').toString()),
+            ],
+          ),
         ],
       ),
       footerActions: isPending
           ? [
         OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(foregroundColor: AppConstants.dangerRed),
+          style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.dangerRed),
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Decline Takaful Claim',
+              message:
+              'Reject claim #TKF-$claimId filed by $name ($mobile)?',
+              confirmLabel: 'Reject Claim',
+              confirmColor: AppConstants.dangerRed,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.reviewTakafulClaim(claimId, 'REJECTED');
             if (context.mounted) {
-              _toast(context, ok ? 'Claim #TKF-$claimId rejected.' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Claim #TKF-$claimId rejected.'
+                      : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.close_rounded, size: 17),
           label: const Text('Reject Claim'),
         ),
-        const SizedBox(width: 12),
         ElevatedButton.icon(
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Approve & Settle Claim',
+              message:
+              'Approve claim #TKF-$claimId and settle Rs. ${_money.format(amt)} to $name ($mobile)?',
+              confirmLabel: 'Approve & Settle',
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
             final ok = await admin.reviewTakafulClaim(claimId, 'APPROVED');
             if (context.mounted) {
-              _toast(context, ok ? 'Claim #TKF-$claimId approved & settled!' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Claim #TKF-$claimId approved & settled!'
+                      : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.check_circle_rounded, size: 17),
@@ -257,28 +364,19 @@ class _TakafulClaimsDeskScreenState extends State<TakafulClaimsDeskScreen> {
         ),
       ]
           : [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
       ],
-    );
-  }
-
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600)),
-        ],
-      ),
     );
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

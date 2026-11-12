@@ -1,33 +1,64 @@
-import '../../widgets/institutional_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
+import '../../widgets/nexpay_ui_kit.dart';
 
 class ManualPayoutsDeskScreen extends StatefulWidget {
   const ManualPayoutsDeskScreen({super.key});
 
   @override
-  State<ManualPayoutsDeskScreen> createState() => _ManualPayoutsDeskScreenState();
+  State<ManualPayoutsDeskScreen> createState() =>
+      _ManualPayoutsDeskScreenState();
 }
 
 class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
+  final TextEditingController _searchCtrl = TextEditingController();
   String _searchQuery = "";
   String _statusFilter = "ALL"; // ALL, PENDING, COMPLETED, REJECTED
   final NumberFormat _currencyFormat = NumberFormat("#,##0.00", "en_US");
 
   @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final admin = context.watch<AdminProvider>();
-    final isDesktop = MediaQuery.of(context).size.width >= 1024;
     final payouts = admin.payouts;
 
-    // Filter Logic matching PHP backend
+    int pendingCount = 0;
+    double pendingVolume = 0;
+    int completedCount = 0;
+    double completedVolume = 0;
+    int rejectedCount = 0;
+
+    for (final p in payouts) {
+      if (p is! Map) continue;
+      final st = (p['status'] ?? 'PENDING').toString().toUpperCase();
+      final amt = double.tryParse(p['amount']?.toString() ?? '0') ?? 0;
+      if (st == 'PENDING') {
+        pendingCount++;
+        pendingVolume += amt;
+      } else if (st == 'COMPLETED' || st == 'ACCEPTED') {
+        completedCount++;
+        completedVolume += amt;
+      } else {
+        rejectedCount++;
+      }
+    }
+
     final filteredList = payouts.where((p) {
+      if (p is! Map) return false;
       final status = (p['status'] ?? '').toString().toUpperCase();
       if (_statusFilter == "PENDING" && status != "PENDING") return false;
-      if (_statusFilter == "COMPLETED" && (status != "COMPLETED" && status != "ACCEPTED")) return false;
+      if (_statusFilter == "COMPLETED" &&
+          (status != "COMPLETED" && status != "ACCEPTED")) {
+        return false;
+      }
       if (_statusFilter == "REJECTED" && status != "REJECTED") return false;
 
       if (_searchQuery.isNotEmpty) {
@@ -38,418 +69,343 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
         final acc = (p['beneficiary_account'] ?? '').toString().toLowerCase();
         final title = (p['beneficiary_title'] ?? '').toString().toLowerCase();
         final name = (p['sender_name'] ?? '').toString().toLowerCase();
-        return mob.contains(q) || tid.contains(q) || bank.contains(q) || acc.contains(q) || title.contains(q) || name.contains(q);
+        return mob.contains(q) ||
+            tid.contains(q) ||
+            bank.contains(q) ||
+            acc.contains(q) ||
+            title.contains(q) ||
+            name.contains(q);
       }
       return true;
     }).toList();
 
-    final pendingCount = payouts.where((p) => (p['status'] ?? '').toString().toUpperCase() == "PENDING").length;
-
-    return Padding(
-      padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Bar
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Manual Transfers & Payouts Desk",
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: isDesktop ? 22 : 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        if (pendingCount > 0) ...[
-                          const SizedBox(width: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: AppConstants.dangerRed.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              "$pendingCount PENDING",
-                              style: const TextStyle(color: AppConstants.dangerRed, fontSize: 10, fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Review customer withdrawal requests, dispatch to bank/wallets or auto-refund",
-                      style: TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.accentGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                onPressed: () => admin.fetchAllData(),
-                icon: const Icon(Icons.sync_rounded, size: 18),
-                label: const Text("Sync Ledger", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Search & Filter Controls
-          Wrap(
-            spacing: 12,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              // Search Field
-              SizedBox(
-                width: isDesktop ? 360 : double.infinity,
-                child: TextField(
-                  style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-                  decoration: InputDecoration(
-                    hintText: "Search TID, Mobile, Bank, Account...",
-                    hintStyle: const TextStyle(color: AppConstants.textMuted, fontSize: 12.5),
-                    prefixIcon: const Icon(Icons.search_rounded, color: AppConstants.textMuted, size: 20),
-                    filled: true,
-                    fillColor: AppConstants.surface,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                  ),
-                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                ),
-              ),
-
-              // Filter Chips
-              _buildFilterChip("ALL", "All Payouts"),
-              _buildFilterChip("PENDING", "Pending ($pendingCount)"),
-              _buildFilterChip("COMPLETED", "Completed"),
-              _buildFilterChip("REJECTED", "Rejected & Refunded"),
-            ],
-          ),
-          const SizedBox(height: 18),
-
-          // Main Table or Card List
-          Expanded(
-            child: filteredList.isEmpty
-                ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.receipt_long_outlined, size: 54, color: AppConstants.textMuted),
-                  const SizedBox(height: 12),
-                  const Text(
-                    "No payout transfers found matching criteria",
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Status filter: $_statusFilter",
-                    style: const TextStyle(color: AppConstants.textMuted, fontSize: 12),
-                  ),
-                ],
-              ),
-            )
-                : isDesktop
-                ? _buildDesktopTable(filteredList, admin)
-                : _buildMobileCards(filteredList, admin),
+    return NexPayDeskScaffold(
+      header: NexPayDeskHeader(
+        title: 'Manual Transfers & Payouts Desk',
+        subtitle:
+        'Review customer withdrawal requests, copy beneficiary IBANs, dispatch to banks or auto-refund',
+        badgeText: pendingCount > 0 ? '$pendingCount PENDING' : 'QUEUE CLEAR',
+        badgeColor: pendingCount > 0
+            ? AppConstants.dangerRed
+            : AppConstants.accentGreen,
+        actions: [
+          ElevatedButton.icon(
+            onPressed: () => admin.fetchAllData(),
+            icon: const Icon(Icons.sync_rounded, size: 17),
+            label: const Text('Sync Payout Queue'),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildFilterChip(String key, String label) {
-    final isSelected = _statusFilter == key;
-    return ChoiceChip(
-      label: Text(label),
-      selected: isSelected,
-      selectedColor: AppConstants.accentGreen,
-      backgroundColor: AppConstants.surface,
-      labelStyle: TextStyle(
-        color: isSelected ? Color(0xFF021A13) : AppConstants.textMuted,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-        fontSize: 12,
-      ),
-      side: BorderSide(color: isSelected ? AppConstants.accentGreen : Color(0xFFE2E8F0)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (_) => setState(() => _statusFilter = key),
-    );
-  }
-
-  // Desktop Scrollable Table
-  Widget _buildDesktopTable(List<dynamic> list, AdminProvider admin) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppConstants.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Color(0xFFE2E8F0)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: InstitutionalVScroll(
-          scrollDirection: Axis.vertical,
-          child: InstitutionalHScroll(
-            child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AppConstants.surfaceCard),
-              dataRowColor: WidgetStateProperty.all(Colors.transparent),
-              horizontalMargin: 20,
-              columnSpacing: 24,
-              columns: const [
-                DataColumn(label: Text("TIMESTAMP", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("CUSTOMER (SENDER)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("TARGET SERVICE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("ACCOUNT TITLE", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("ACCOUNT / IBAN", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("AMOUNT (PKR)", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("TID", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("STATUS", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-                DataColumn(label: Text("EXECUTIVE ACTION", style: TextStyle(color: AppConstants.textMuted, fontSize: 11, fontWeight: FontWeight.w800))),
-              ],
-              rows: list.map((p) {
-                final status = (p['status'] ?? 'PENDING').toString().toUpperCase();
-                final isPending = status == 'PENDING';
-                final isCompleted = status == 'COMPLETED' || status == 'ACCEPTED';
-                final amount = double.tryParse(p['amount']?.toString() ?? '0') ?? 0.0;
-                final dateStr = _formatTimestamp(p['created_at']);
-
-                return DataRow(
-                  cells: [
-                    DataCell(Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5))),
-                    DataCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(p['sender_name'] ?? 'Customer', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 13)),
-                          Text(p['sender_mobile'] ?? '-', style: const TextStyle(color: AppConstants.accentBlue, fontSize: 11.5, fontFamily: 'monospace')),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFA855F7).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Color(0xFFA855F7).withValues(alpha: 0.3)),
-                        ),
-                        child: Text(
-                          p['target_bank'] ?? 'Bank',
-                          style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w800, fontSize: 11.5),
-                        ),
-                      ),
-                    ),
-                    DataCell(Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 12.5))),
-                    DataCell(
-                      Text(
-                        p['beneficiary_account'] ?? '-',
-                        style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        "₨ ${_currencyFormat.format(amount)}",
-                        style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                    ),
-                    DataCell(Text(p['tid'] ?? '-', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11, fontFamily: 'monospace'))),
-                    DataCell(_buildStatusBadge(status)),
-                    DataCell(
-                      isPending
-                          ? Row(
-                        children: [
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppConstants.accentGreen,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmCompletePayout(context, p, admin),
-                            icon: const Icon(Icons.check_rounded, size: 14),
-                            label: const Text("Accept", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5)),
-                          ),
-                          const SizedBox(width: 8),
-                          OutlinedButton.icon(
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppConstants.dangerRed,
-                              side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: () => _confirmRejectAndRefund(context, p, admin),
-                            icon: const Icon(Icons.close_rounded, size: 14),
-                            label: const Text("Reject & Refund", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5)),
-                          ),
-                        ],
-                      )
-                          : Text(
-                        isCompleted ? "✓ Completed (${p['processed_by'] ?? 'Admin'})" : "✕ Refunded",
-                        style: TextStyle(
-                          color: isCompleted ? AppConstants.accentGreen : AppConstants.dangerRed,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
+      statStrip: NexPayStatStrip(
+        items: [
+          NexPayStatItem(
+            label: 'Pending Dispatch',
+            value: '$pendingCount Requests',
+            sublabel: 'Rs. ${_currencyFormat.format(pendingVolume)} queued',
+            icon: Icons.outbox_rounded,
+            color: AppConstants.accentGold,
           ),
+          NexPayStatItem(
+            label: 'Completed Transfers',
+            value: '$completedCount Settled',
+            sublabel:
+            'Rs. ${_currencyFormat.format(completedVolume)} disbursed',
+            icon: Icons.check_circle_outline_rounded,
+            color: AppConstants.accentGreen,
+          ),
+          NexPayStatItem(
+            label: 'Rejected & Refunded',
+            value: '$rejectedCount Returned',
+            sublabel: 'Auto-credited back to sender wallets',
+            icon: Icons.undo_rounded,
+            color: AppConstants.dangerRed,
+          ),
+          NexPayStatItem(
+            label: 'Total Payout Volume',
+            value:
+            'Rs. ${_currencyFormat.format(pendingVolume + completedVolume)}',
+            sublabel: '${payouts.length} total outward requests',
+            icon: Icons.account_balance_rounded,
+            color: AppConstants.accentBlue,
+          ),
+        ],
+      ),
+      filterBar: NexPayFilterBar(
+        searchController: _searchCtrl,
+        searchHint: 'Search TID, Mobile, Bank, IBAN, or Account Title...',
+        onSearchChanged: (v) => setState(() => _searchQuery = v.trim()),
+        filters: const ['ALL', 'PENDING', 'COMPLETED', 'REJECTED'],
+        selectedFilter: _statusFilter,
+        onFilterChanged: (f) => setState(() => _statusFilter = f),
+        resultSummary:
+        'Showing ${filteredList.length} of ${payouts.length} payouts',
+      ),
+      body: NexPayFullWidthTable(
+        minTableWidth: 1240,
+        emptyState: NexPayEmptyState(
+          icon: Icons.receipt_long_outlined,
+          title: 'No Payout Transfers Found',
+          subtitle: 'No withdrawal requests match your active filter ($_statusFilter).',
         ),
-      ),
-    );
-  }
+        columns: const [
+          DataColumn(label: Text('TIMESTAMP')),
+          DataColumn(label: Text('CUSTOMER (SENDER)')),
+          DataColumn(label: Text('TARGET BANK / WALLET')),
+          DataColumn(label: Text('BENEFICIARY TITLE')),
+          DataColumn(label: Text('ACCOUNT / IBAN')),
+          DataColumn(label: Text('AMOUNT (PKR)'), numeric: true),
+          DataColumn(label: Text('TID')),
+          DataColumn(label: Text('STATUS')),
+          DataColumn(label: Text('EXECUTIVE ACTION')),
+        ],
+        rows: filteredList.map((raw) {
+          final p = Map<String, dynamic>.from(raw as Map);
+          final status = (p['status'] ?? 'PENDING').toString().toUpperCase();
+          final isPending = status == 'PENDING';
+          final isCompleted = status == 'COMPLETED' || status == 'ACCEPTED';
+          final amount =
+              double.tryParse(p['amount']?.toString() ?? '0') ?? 0.0;
+          final dateStr = _formatTimestamp(p['created_at']);
+          final accountNo = (p['beneficiary_account'] ?? '-').toString();
+          final tid = (p['tid'] ?? '-').toString();
 
-  // Mobile Friendly Cards List
-  Widget _buildMobileCards(List<dynamic> list, AdminProvider admin) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, idx) {
-        final p = list[idx];
-        final status = (p['status'] ?? 'PENDING').toString().toUpperCase();
-        final isPending = status == 'PENDING';
-        final amount = double.tryParse(p['amount']?.toString() ?? '0') ?? 0.0;
-        final dateStr = _formatTimestamp(p['created_at']);
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppConstants.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: isPending ? Colors.amber.withValues(alpha: 0.3) : Color(0xFFE2E8F0)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFA855F7).withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      p['target_bank'] ?? 'Bank',
-                      style: const TextStyle(color: Color(0xFFA855F7), fontWeight: FontWeight.w700, fontSize: 11.5),
-                    ),
-                  ),
-                  _buildStatusBadge(status),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(p['beneficiary_title'] ?? '-', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w800, fontSize: 14)),
-                      const SizedBox(height: 2),
-                      Text(p['beneficiary_account'] ?? '-', style: const TextStyle(color: AppConstants.accentGold, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13)),
-                    ],
-                  ),
-                  Text(
-                    "₨ ${_currencyFormat.format(amount)}",
-                    style: const TextStyle(color: AppConstants.dangerRed, fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                ],
-              ),
-              const Divider(color: Color(0xFFE2E8F0), height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("From: ${p['sender_name']} (${p['sender_mobile']})", style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
-                  Text(dateStr, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Text("TID: ${p['tid']}", style: const TextStyle(color: Color(0xFF64748B), fontSize: 10.5, fontFamily: 'monospace')),
-
-              if (isPending) ...[
-                const SizedBox(height: 14),
-                Row(
+          return DataRow(
+            cells: [
+              DataCell(Text(dateStr,
+                  style: TextStyle(
+                      color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.accentGreen,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmCompletePayout(context, p, admin),
-                        icon: const Icon(Icons.check_rounded, size: 16),
-                        label: const Text("Accept Transfer", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
-                      ),
+                    Text(
+                      (p['sender_name'] ?? 'Customer').toString(),
+                      style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppConstants.dangerRed,
-                          side: BorderSide(color: AppConstants.dangerRed.withValues(alpha: 0.4)),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () => _confirmRejectAndRefund(context, p, admin),
-                        icon: const Icon(Icons.close_rounded, size: 16),
-                        label: const Text("Reject & Refund", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5)),
-                      ),
+                    Text(
+                      (p['sender_mobile'] ?? '-').toString(),
+                      style: TextStyle(
+                          color: AppConstants.accentBlue,
+                          fontSize: 11.5,
+                          fontFamily: 'Consolas'),
                     ),
                   ],
                 ),
-              ],
+              ),
+              DataCell(
+                Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF8B5CF6).withValues(alpha: 0.13),
+                    borderRadius: BorderRadius.circular(7),
+                    border: Border.all(
+                        color: const Color(0xFF8B5CF6).withValues(alpha: 0.28)),
+                  ),
+                  child: Text(
+                    (p['target_bank'] ?? 'Bank').toString(),
+                    style: const TextStyle(
+                        color: Color(0xFF8B5CF6),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11.5),
+                  ),
+                ),
+              ),
+              DataCell(
+                Text(
+                  (p['beneficiary_title'] ?? '-').toString(),
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.5),
+                ),
+              ),
+              DataCell(
+                NexPayCopyableId(text: accountNo, label: 'Account/IBAN'),
+              ),
+              DataCell(
+                Text(
+                  'Rs. ${_currencyFormat.format(amount)}',
+                  style: TextStyle(
+                    color: AppConstants.dangerRed,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13.5,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+              DataCell(NexPayCopyableId(text: tid, label: 'TID')),
+              DataCell(
+                NexPayStatusBadge(
+                  status: isPending
+                      ? 'PENDING DISPATCH'
+                      : (isCompleted ? 'COMPLETED' : 'REJECTED & REFUNDED'),
+                ),
+              ),
+              DataCell(
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isPending) ...[
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppConstants.accentGreen,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                        ),
+                        onPressed: () =>
+                            _confirmCompletePayout(context, p, admin),
+                        icon: const Icon(Icons.check_rounded, size: 15),
+                        label: const Text('Accept',
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const SizedBox(width: 6),
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppConstants.dangerRed,
+                          side: BorderSide(
+                              color: AppConstants.dangerRed
+                                  .withValues(alpha: 0.45)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                        ),
+                        onPressed: () =>
+                            _confirmRejectAndRefund(context, p, admin),
+                        icon: const Icon(Icons.close_rounded, size: 15),
+                        label: const Text('Reject',
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    IconButton(
+                      tooltip: 'Inspect Full Payout Ticket',
+                      icon: Icon(Icons.open_in_new_rounded,
+                          size: 18, color: AppConstants.textSecondary),
+                      onPressed: () =>
+                          _openPayoutInspector(context, p, admin),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          ),
-        );
-      },
+          );
+        }).toList(),
+      ),
     );
   }
 
-  Widget _buildStatusBadge(String status) {
-    Color bg;
-    Color text;
-    String label = status;
+  void _openPayoutInspector(
+      BuildContext context, Map<String, dynamic> p, AdminProvider admin) {
+    final status = (p['status'] ?? 'PENDING').toString().toUpperCase();
+    final isPending = status == 'PENDING';
+    final amount = double.tryParse(p['amount']?.toString() ?? '0') ?? 0.0;
+    final tid = (p['tid'] ?? '-').toString();
 
-    if (status == 'PENDING') {
-      bg = Colors.amber.withValues(alpha: 0.15);
-      text = Colors.amber;
-      label = "PENDING DISPATCH";
-    } else if (status == 'COMPLETED' || status == 'ACCEPTED') {
-      bg = AppConstants.accentGreen.withValues(alpha: 0.15);
-      text = AppConstants.accentGreen;
-      label = "COMPLETED";
-    } else {
-      bg = AppConstants.dangerRed.withValues(alpha: 0.15);
-      text = AppConstants.dangerRed;
-      label = "REJECTED & REFUNDED";
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(12),
+    showNexPayInspectorDrawer(
+      context: context,
+      title: 'Payout Dispatch Ticket',
+      subtitle: 'TID: $tid • ${p['target_bank'] ?? 'Bank'}',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppConstants.borderColor),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'DISPATCH AMOUNT',
+                  style: TextStyle(
+                      color: AppConstants.textMuted,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Rs. ${_currencyFormat.format(amount)}',
+                  style: TextStyle(
+                      color: AppConstants.textPrimary,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 8),
+                NexPayStatusBadge(status: status),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          NexPayDetailSection(
+            title: 'Beneficiary Bank Coordinates',
+            children: [
+              NexPayKeyValueRow(
+                  label: 'Target Bank',
+                  value: (p['target_bank'] ?? '-').toString()),
+              NexPayKeyValueRow(
+                  label: 'Account Title',
+                  value: (p['beneficiary_title'] ?? '-').toString(),
+                  copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Account / IBAN',
+                  value: (p['beneficiary_account'] ?? '-').toString(),
+                  copyable: true),
+            ],
+          ),
+          NexPayDetailSection(
+            title: 'Originating Customer',
+            children: [
+              NexPayKeyValueRow(
+                  label: 'Sender Name',
+                  value: (p['sender_name'] ?? 'Customer').toString()),
+              NexPayKeyValueRow(
+                  label: 'Sender Mobile',
+                  value: (p['sender_mobile'] ?? '-').toString(),
+                  copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Transaction TID', value: tid, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Submitted At',
+                  value: _formatTimestamp(p['created_at'])),
+            ],
+          ),
+        ],
       ),
-      child: Text(label, style: TextStyle(color: text, fontSize: 10.5, fontWeight: FontWeight.w700)),
+      footerActions: isPending
+          ? [
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(
+              foregroundColor: AppConstants.dangerRed),
+          onPressed: () {
+            Navigator.pop(context);
+            _confirmRejectAndRefund(context, p, admin);
+          },
+          icon: const Icon(Icons.close_rounded, size: 17),
+          label: const Text('Reject & Auto-Refund'),
+        ),
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.pop(context);
+            _confirmCompletePayout(context, p, admin);
+          },
+          icon: const Icon(Icons.check_rounded, size: 17),
+          label: const Text('Accept & Mark Completed'),
+        ),
+      ]
+          : [
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
+      ],
     );
   }
 
@@ -457,104 +413,70 @@ class _ManualPayoutsDeskScreenState extends State<ManualPayoutsDeskScreen> {
     if (timestamp == null) return "-";
     try {
       final date = DateTime.parse(timestamp.toString());
-      return DateFormat("dd MMM, hh:mm a").format(date);
+      return DateFormat("dd MMM yyyy, hh:mm a").format(date);
     } catch (_) {
       return timestamp.toString();
     }
   }
 
-  // Dialog: Complete / Accept Payout
-  void _confirmCompletePayout(BuildContext context, dynamic payout, AdminProvider admin) {
-    showDialog(
+  Future<void> _confirmCompletePayout(
+      BuildContext context, dynamic payout, AdminProvider admin) async {
+    final amount = double.tryParse(payout['amount']?.toString() ?? '0') ?? 0;
+    final confirmed = await showNexPayConfirmDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: const Row(
-          children: [
-            Icon(Icons.check_circle_rounded, color: AppConstants.accentGreen),
-            SizedBox(width: 8),
-            Text("Complete Transfer", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          "Have you sent ₨ ${_currencyFormat.format(double.tryParse(payout['amount']?.toString() ?? '0') ?? 0)} to ${payout['beneficiary_title']} (${payout['beneficiary_account']})?\n\nThis will mark the payout as COMPLETED.",
-          style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.accentGreen, foregroundColor: Colors.white),
-            onPressed: () async {
-              Navigator.pop(ctx);
-              final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
-              final tid = payout['tid']?.toString() ?? '';
-              final success = await admin.completePayout(id, tid);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: success ? AppConstants.accentGreen : AppConstants.dangerRed,
-                    content: Text(
-                      success ? "Payout #$tid marked as Completed!" : "Failed to update payout.",
-                      style: TextStyle(color: success ? Color(0xFF021A13) : Color(0xFF0F172A), fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                );
-              }
-            },
-            child: const Text("Yes, Mark Completed", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+      title: 'Complete Bank Transfer',
+      message:
+      'Have you dispatched Rs. ${_currencyFormat.format(amount)} to ${payout['beneficiary_title']} (${payout['beneficiary_account']})?\n\nThis will mark the payout as COMPLETED.',
+      confirmLabel: 'Yes, Mark Completed',
+      icon: Icons.check_circle_rounded,
     );
+    if (!confirmed || !context.mounted) return;
+
+    final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
+    final tid = payout['tid']?.toString() ?? '';
+    final success = await admin.completePayout(id, tid);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor:
+          success ? AppConstants.accentGreen : AppConstants.dangerRed,
+          content: Text(success
+              ? 'Payout #$tid marked as Completed!'
+              : 'Failed to update payout.'),
+        ),
+      );
+    }
   }
 
-  // Dialog: Reject & Refund
-  void _confirmRejectAndRefund(BuildContext context, dynamic payout, AdminProvider admin) {
+  Future<void> _confirmRejectAndRefund(
+      BuildContext context, dynamic payout, AdminProvider admin) async {
     final amount = double.tryParse(payout['amount']?.toString() ?? '0') ?? 0.0;
     final senderMobile = payout['sender_mobile']?.toString() ?? '';
+    final tid = payout['tid']?.toString() ?? '';
 
-    showDialog(
+    final confirmed = await showNexPayConfirmDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppConstants.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFFE2E8F0))),
-        title: const Row(
-          children: [
-            Icon(Icons.warning_amber_rounded, color: AppConstants.dangerRed),
-            SizedBox(width: 8),
-            Text("Reject & Auto-Refund", style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.w700, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          "Are you sure you want to REJECT payout TID: ${payout['tid']}?\n\n₨ ${_currencyFormat.format(amount)} will be automatically credited back into customer's ($senderMobile) primary wallet ledger.",
-          style: const TextStyle(color: AppConstants.textMuted, fontSize: 13),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Cancel", style: TextStyle(color: Color(0xFF64748B)))),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed, foregroundColor: Colors.white),
-            onPressed: () async {
-              Navigator.pop(ctx);
-              final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
-              final tid = payout['tid']?.toString() ?? '';
-              final success = await admin.rejectPayout(id, tid, senderMobile, amount);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: success ? AppConstants.accentGreen : AppConstants.dangerRed,
-                    content: Text(
-                      success ? "Payout rejected. ₨ ${_currencyFormat.format(amount)} refunded to $senderMobile!" : "Failed to refund payout.",
-                      style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                );
-              }
-            },
-            child: const Text("Reject & Refund Funds", style: TextStyle(fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+      title: 'Reject & Auto-Refund',
+      message:
+      'Are you sure you want to REJECT payout TID: $tid?\n\nRs. ${_currencyFormat.format(amount)} will be automatically credited back into customer\'s ($senderMobile) primary wallet ledger.',
+      confirmLabel: 'Reject & Refund Funds',
+      confirmColor: AppConstants.dangerRed,
+      icon: Icons.warning_amber_rounded,
     );
+    if (!confirmed || !context.mounted) return;
+
+    final id = int.tryParse(payout['id']?.toString() ?? '0') ?? 0;
+    final success = await admin.rejectPayout(id, tid, senderMobile, amount);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor:
+          success ? AppConstants.accentGreen : AppConstants.dangerRed,
+          content: Text(success
+              ? 'Payout rejected. Rs. ${_currencyFormat.format(amount)} refunded to $senderMobile!'
+              : 'Failed to refund payout.'),
+        ),
+      );
+    }
   }
 }

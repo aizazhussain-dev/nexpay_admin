@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
 class ClosureRequestsDeskScreen extends StatefulWidget {
   const ClosureRequestsDeskScreen({super.key});
 
   @override
-  State<ClosureRequestsDeskScreen> createState() => _ClosureRequestsDeskScreenState();
+  State<ClosureRequestsDeskScreen> createState() =>
+      _ClosureRequestsDeskScreenState();
 }
 
 class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
@@ -50,11 +50,15 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       if (raw is! Map) return false;
       final st = (raw['status'] ?? 'PENDING').toString().toUpperCase();
       if (_statusFilter == 'PENDING' && st != 'PENDING') return false;
-      if (_statusFilter == 'APPROVED' && !(st == 'APPROVED' || st == 'CLOSED' || st == 'COMPLETED')) return false;
+      if (_statusFilter == 'APPROVED' &&
+          !(st == 'APPROVED' || st == 'CLOSED' || st == 'COMPLETED')) {
+        return false;
+      }
       if (_statusFilter == 'REJECTED' && st != 'REJECTED') return false;
 
       if (_query.isEmpty) return true;
-      final hay = '${raw['id']} ${raw['user_mobile']} ${raw['mobile']} ${raw['user_name']} ${raw['reason']}'
+      final hay =
+      '${raw['id']} ${raw['user_mobile']} ${raw['mobile']} ${raw['user_name']} ${raw['reason']}'
           .toLowerCase();
       return hay.contains(_query);
     }).toList();
@@ -62,7 +66,8 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Account Closure & Offboarding Desk',
-        subtitle: 'Verify zero outstanding loan liabilities, audit residual balances, and execute permanent account closures',
+        subtitle:
+        'Verify zero outstanding loan liabilities, audit residual balances, and execute permanent account closures',
         badgeText: 'COMPLIANCE OFFBOARDING',
         badgeColor: AppConstants.dangerRed,
         actions: [
@@ -107,19 +112,22 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       ),
       filterBar: NexPayFilterBar(
         searchController: _searchCtrl,
-        searchHint: 'Search by request ID, customer mobile, name, or reason...',
+        searchHint:
+        'Search by request ID, customer mobile, name, or reason...',
         onSearchChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         filters: const ['ALL', 'PENDING', 'APPROVED', 'REJECTED'],
         selectedFilter: _statusFilter,
         onFilterChanged: (f) => setState(() => _statusFilter = f),
-        resultSummary: 'Showing ${filtered.length} of ${requests.length} requests',
+        resultSummary:
+        'Showing ${filtered.length} of ${requests.length} requests',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1120,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.person_off_rounded,
           title: 'No Account Closure Requests',
-          subtitle: 'There are no account termination requests matching your filter in the live database.',
+          subtitle:
+          'There are no account termination requests matching your filter in the live database.',
         ),
         columns: const [
           DataColumn(label: Text('REQUEST ID')),
@@ -134,40 +142,73 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
           final r = Map<String, dynamic>.from(raw as Map);
           final id = int.tryParse(r['id']?.toString() ?? '0') ?? 0;
           final mobile = (r['user_mobile'] ?? r['mobile'] ?? '-').toString();
-          final userMap = admin.users[mobile] is Map ? Map<String, dynamic>.from(admin.users[mobile]) : <String, dynamic>{};
-          final name = (r['user_name'] ?? userMap['name'] ?? 'Customer').toString();
-          final bal = double.tryParse(userMap['balance']?.toString() ?? r['balance']?.toString() ?? '0') ?? 0;
-          final reason = (r['reason'] ?? 'Customer requested account closure').toString();
+          final userMap = admin.users[mobile] is Map
+              ? Map<String, dynamic>.from(admin.users[mobile])
+              : <String, dynamic>{};
+          final name =
+          (r['user_name'] ?? userMap['name'] ?? 'Customer').toString();
+          final bal = double.tryParse(userMap['balance']?.toString() ??
+              r['balance']?.toString() ??
+              '0') ??
+              0;
+          final reason =
+          (r['reason'] ?? 'Customer requested account closure').toString();
           final date = (r['created_at'] ?? r['date'] ?? '-').toString();
           final status = (r['status'] ?? 'PENDING').toString().toUpperCase();
           final isPending = status == 'PENDING';
 
           return DataRow(
             cells: [
-              DataCell(Text('#CLS-$id', style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppConstants.accentBlue))),
+              DataCell(NexPayCopyableId(text: '#CLS-$id', label: 'Request ID')),
               DataCell(
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    Text(mobile, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(name,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700)),
+                    Text(mobile,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
-              DataCell(Text('Rs. ${_money.format(bal)}', style: const TextStyle(fontWeight: FontWeight.w700))),
+              DataCell(
+                Text(
+                  'Rs. ${_money.format(bal)}',
+                  style: TextStyle(
+                    color: bal > 0
+                        ? AppConstants.accentGold
+                        : AppConstants.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
               DataCell(
                 SizedBox(
                   width: 240,
-                  child: Text(reason, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5)),
+                  child: Text(reason,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: AppConstants.textSecondary, fontSize: 12.5)),
                 ),
               ),
-              DataCell(Text(date, style: const TextStyle(color: AppConstants.textMuted, fontSize: 12))),
+              DataCell(
+                Text(date,
+                    style:
+                    TextStyle(color: AppConstants.textMuted, fontSize: 12)),
+              ),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 OutlinedButton.icon(
-                  onPressed: () => _openClosureDrawer(context, admin, r, userMap),
-                  icon: const Icon(Icons.assignment_turned_in_outlined, size: 15),
+                  onPressed: () =>
+                      _openClosureDrawer(context, admin, r, userMap),
+                  icon: const Icon(Icons.assignment_turned_in_outlined,
+                      size: 15),
                   label: Text(isPending ? 'Adjudicate' : 'Details'),
                 ),
               ),
@@ -178,11 +219,15 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
     );
   }
 
-  void _openClosureDrawer(BuildContext context, AdminProvider admin, Map<String, dynamic> r, Map<String, dynamic> userMap) {
+  void _openClosureDrawer(BuildContext context, AdminProvider admin,
+      Map<String, dynamic> r, Map<String, dynamic> userMap) {
     final id = int.tryParse(r['id']?.toString() ?? '0') ?? 0;
     final mobile = (r['user_mobile'] ?? r['mobile'] ?? '-').toString();
     final name = (r['user_name'] ?? userMap['name'] ?? 'Customer').toString();
-    final bal = double.tryParse(userMap['balance']?.toString() ?? r['balance']?.toString() ?? '0') ?? 0;
+    final bal = double.tryParse(userMap['balance']?.toString() ??
+        r['balance']?.toString() ??
+        '0') ??
+        0;
     final status = (r['status'] ?? 'PENDING').toString().toUpperCase();
     final isPending = status == 'PENDING';
 
@@ -193,35 +238,123 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _kv('Customer Name', name),
-          _kv('Mobile Account', mobile),
-          _kv('Residual PKR Balance', 'Rs. ${_money.format(bal)}'),
-          _kv('Stated Reason', (r['reason'] ?? 'Customer requested closure').toString()),
-          _kv('Submitted Timestamp', (r['created_at'] ?? r['date'] ?? '-').toString()),
-          _kv('Current Status', status),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppConstants.surfaceCard,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppConstants.borderColor),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('RESIDUAL WALLET BALANCE',
+                    style: TextStyle(
+                        color: AppConstants.textMuted,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 4),
+                Text('Rs. ${_money.format(bal)}',
+                    style: TextStyle(
+                        color: bal > 0
+                            ? AppConstants.accentGold
+                            : AppConstants.accentGreen,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 8),
+                NexPayStatusBadge(status: status),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          NexPayDetailSection(
+            title: 'Offboarding Compliance Audit',
+            children: [
+              NexPayKeyValueRow(
+                  label: 'Request ID', value: '#CLS-$id', copyable: true),
+              NexPayKeyValueRow(label: 'Customer Name', value: name),
+              NexPayKeyValueRow(
+                  label: 'Mobile Account', value: mobile, copyable: true),
+              NexPayKeyValueRow(
+                  label: 'Stated Reason',
+                  value: (r['reason'] ?? 'Customer requested closure')
+                      .toString()),
+              NexPayKeyValueRow(
+                  label: 'Submitted At',
+                  value: (r['created_at'] ?? r['date'] ?? '-').toString()),
+            ],
+          ),
+          if (isPending && bal > 0)
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppConstants.dangerRedLight,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: AppConstants.dangerRed.withValues(alpha: 0.3)),
+              ),
+              child: Text(
+                'Compliance Warning: This account still holds Rs. ${_money.format(bal)}. Ensure residual funds are settled before approving permanent closure.',
+                style: TextStyle(
+                    color: AppConstants.dangerRed,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
         ],
       ),
       footerActions: isPending
           ? [
         OutlinedButton.icon(
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Reject Closure Request',
+              message:
+              'Decline closure request #CLS-$id and retain $mobile as active?',
+              confirmLabel: 'Reject Request',
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
-            final ok = await admin.reviewClosureRequest(id, mobile, 'REJECTED');
+            final ok = await admin.reviewClosureRequest(
+                id, mobile, 'REJECTED');
             if (context.mounted) {
-              _toast(context, ok ? 'Closure request #CLS-$id declined.' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Closure request #CLS-$id declined.'
+                      : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.close_rounded, size: 17),
           label: const Text('Reject Request'),
         ),
-        const SizedBox(width: 12),
         ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(backgroundColor: AppConstants.dangerRed),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: AppConstants.dangerRed),
           onPressed: () async {
+            final confirmed = await showNexPayConfirmDialog(
+              context: context,
+              title: 'Approve Permanent Closure',
+              message:
+              'Permanently close and offboard account $mobile ($name)?',
+              confirmLabel: 'Approve & Close',
+              confirmColor: AppConstants.dangerRed,
+              icon: Icons.person_off_rounded,
+            );
+            if (!confirmed || !context.mounted) return;
             Navigator.pop(context);
-            final ok = await admin.reviewClosureRequest(id, mobile, 'APPROVED');
+            final ok = await admin.reviewClosureRequest(
+                id, mobile, 'APPROVED');
             if (context.mounted) {
-              _toast(context, ok ? 'Account $mobile closed & offboarded.' : 'Action failed.', ok);
+              _toast(
+                  context,
+                  ok
+                      ? 'Account $mobile closed & offboarded.'
+                      : 'Action failed.',
+                  ok);
             }
           },
           icon: const Icon(Icons.person_off_rounded, size: 17),
@@ -229,28 +362,19 @@ class _ClosureRequestsDeskScreenState extends State<ClosureRequestsDeskScreen> {
         ),
       ]
           : [
-        OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close')),
       ],
-    );
-  }
-
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(k.toUpperCase(), style: const TextStyle(color: AppConstants.textMuted, fontSize: 10.5, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(v, style: const TextStyle(color: AppConstants.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600)),
-        ],
-      ),
     );
   }
 
   void _toast(BuildContext context, String msg, bool ok) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+      SnackBar(
+          content: Text(msg),
+          backgroundColor:
+          ok ? AppConstants.accentGreen : AppConstants.dangerRed),
     );
   }
 }

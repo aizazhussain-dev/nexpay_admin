@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
 import '../../providers/admin_provider.dart';
-import '../../widgets/institutional_scroll.dart';
 import '../../widgets/nexpay_image_picker.dart';
 import '../../widgets/nexpay_ui_kit.dart';
 
@@ -27,7 +26,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   List _getLiveBanners(AdminProvider admin) {
     final raw = admin.cmsConfig['homeBanners'];
     if (raw is List) {
-      return raw.whereType().map((e) => Map<String, dynamic>.from(e)).toList();
+      return raw
+          .whereType()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     }
     return [];
   }
@@ -37,7 +39,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
     final admin = context.watch<AdminProvider>();
     final banners = _getLiveBanners(admin);
 
-    final activeCount = banners.where((b) => (b['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE').length;
+    final activeCount = banners
+        .where((b) =>
+    (b['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE')
+        .length;
     final disabledCount = banners.length - activeCount;
 
     final filtered = banners.where((b) {
@@ -45,14 +50,16 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
       if (_filter == 'ACTIVE' && st != 'ACTIVE') return false;
       if (_filter == 'INACTIVE' && st == 'ACTIVE') return false;
       if (_query.isEmpty) return true;
-      final hay = '${b['title']} ${b['subtitle']} ${b['route']} ${b['tag']}'.toLowerCase();
+      final hay = '${b['title']} ${b['subtitle']} ${b['route']} ${b['tag']}'
+          .toLowerCase();
       return hay.contains(_query);
     }).toList();
 
     return NexPayDeskScaffold(
       header: NexPayDeskHeader(
         title: 'Home Promotional Banners & Campaign Sliders',
-        subtitle: 'Upload promotional banners directly from your gallery, configure deep-link routes, and publish live',
+        subtitle:
+        'Upload promotional banners directly from your gallery, configure deep-link routes, and publish live',
         badgeText: '$activeCount LIVE BANNERS',
         badgeColor: AppConstants.accentGreen,
         actions: [
@@ -91,7 +98,7 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
             icon: Icons.campaign_rounded,
             color: AppConstants.accentBlue,
           ),
-          const NexPayStatItem(
+          NexPayStatItem(
             label: 'Media Upload',
             value: 'Gallery Ready',
             sublabel: 'Direct PNG/JPG/WEBP upload supported',
@@ -107,14 +114,16 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
         filters: const ['ALL', 'ACTIVE', 'INACTIVE'],
         selectedFilter: _filter,
         onFilterChanged: (f) => setState(() => _filter = f),
-        resultSummary: 'Showing ${filtered.length} of ${banners.length} banners',
+        resultSummary:
+        'Showing ${filtered.length} of ${banners.length} banners',
       ),
       body: NexPayFullWidthTable(
         minTableWidth: 1120,
-        emptyState: const InstitutionalEmptyState(
+        emptyState: const NexPayEmptyState(
           icon: Icons.view_carousel_outlined,
           title: 'No Promotional Banners Configured',
-          subtitle: 'Click "Add New Banner" above to upload a banner image from your gallery and publish it.',
+          subtitle:
+          'Click "Add New Banner" above to upload a banner image from your gallery and publish it.',
         ),
         columns: const [
           DataColumn(label: Text('BANNER PREVIEW')),
@@ -145,7 +154,8 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(7),
-                    child: NexPaySmartImage(source: imgSrc, fit: BoxFit.cover),
+                    child:
+                    NexPaySmartImage(source: imgSrc, fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -154,41 +164,74 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                    Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: AppConstants.textMuted, fontSize: 11.5)),
+                    Text(title,
+                        style: TextStyle(
+                            color: AppConstants.textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13)),
+                    Text(subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: AppConstants.textMuted, fontSize: 11.5)),
                   ],
                 ),
               ),
               DataCell(
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                   decoration: BoxDecoration(
                     color: AppConstants.accentGoldLight,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(tag, style: const TextStyle(color: AppConstants.accentGold, fontSize: 11, fontWeight: FontWeight.w700)),
+                  child: Text(tag,
+                      style: TextStyle(
+                          color: AppConstants.accentGold,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700)),
                 ),
               ),
-              DataCell(Text(route, style: const TextStyle(fontFamily: 'monospace', fontSize: 12, color: AppConstants.accentBlue))),
+              DataCell(NexPayCopyableId(text: route, label: 'App Route')),
               DataCell(NexPayStatusBadge(status: status)),
               DataCell(
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     OutlinedButton.icon(
-                      onPressed: () => _openBannerDrawer(context, admin, banners, b),
+                      onPressed: () =>
+                          _openBannerDrawer(context, admin, banners, b),
                       icon: const Icon(Icons.edit_outlined, size: 15),
                       label: const Text('Edit'),
                     ),
                     const SizedBox(width: 6),
                     IconButton(
                       tooltip: 'Delete Banner',
-                      icon: const Icon(Icons.delete_outline_rounded, color: AppConstants.dangerRed, size: 19),
+                      icon: Icon(Icons.delete_outline_rounded,
+                          color: AppConstants.dangerRed, size: 19),
                       onPressed: () async {
-                        final updated = banners.where((item) => item['id'] != b['id']).toList();
-                        final ok = await admin.saveCmsConfig({'homeBanners': updated});
+                        final confirmed = await showNexPayConfirmDialog(
+                          context: context,
+                          title: 'Delete Home Banner',
+                          message:
+                          'Remove "$title" from the live customer app home carousel?',
+                          confirmLabel: 'Delete Banner',
+                          confirmColor: AppConstants.dangerRed,
+                          icon: Icons.delete_outline_rounded,
+                        );
+                        if (!confirmed || !context.mounted) return;
+                        final updated = banners
+                            .where((item) => item['id'] != b['id'])
+                            .toList();
+                        final ok = await admin
+                            .saveCmsConfig({'homeBanners': updated});
                         if (context.mounted) {
-                          _toast(context, ok ? 'Banner deleted & synced live.' : 'Delete failed.', ok);
+                          _toast(
+                              context,
+                              ok
+                                  ? 'Banner deleted & synced live.'
+                                  : 'Delete failed.',
+                              ok);
                         }
                       },
                     ),
@@ -209,18 +252,24 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   Map<String, dynamic>? existing,
   ) {
   final isEdit = existing != null;
-  final titleCtrl = TextEditingController(text: (existing?['title'] ?? '').toString());
-  final subtitleCtrl = TextEditingController(text: (existing?['subtitle'] ?? '').toString());
-  final tagCtrl = TextEditingController(text: (existing?['tag'] ?? 'FEATURED').toString());
-  final routeCtrl = TextEditingController(text: (existing?['route'] ?? '/gold').toString());
+  final titleCtrl =
+  TextEditingController(text: (existing?['title'] ?? '').toString());
+  final subtitleCtrl =
+  TextEditingController(text: (existing?['subtitle'] ?? '').toString());
+  final tagCtrl =
+  TextEditingController(text: (existing?['tag'] ?? 'FEATURED').toString());
+  final routeCtrl =
+  TextEditingController(text: (existing?['route'] ?? '/gold').toString());
   String imageValue = (existing?['imageUrl'] ?? '').toString();
-  bool isActive = existing == null || (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
+  bool isActive = existing == null ||
+  (existing['status'] ?? 'ACTIVE').toString().toUpperCase() == 'ACTIVE';
 
   showNexPayInspectorDrawer(
   context: context,
   width: 560,
   title: isEdit ? 'Edit Promotional Banner' : 'Create Promotional Banner',
-  subtitle: 'Upload banner artwork from gallery or provide direct image URL',
+  subtitle:
+  'Upload banner artwork from gallery or provide direct image URL',
   child: StatefulBuilder(
   builder: (ctx, setDrawerState) {
   return Column(
@@ -235,12 +284,16 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   const SizedBox(height: 16),
   TextField(
   controller: titleCtrl,
-  decoration: const InputDecoration(labelText: 'Banner Headline Title'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration:
+  const InputDecoration(labelText: 'Banner Headline Title'),
   ),
   const SizedBox(height: 14),
   TextField(
   controller: subtitleCtrl,
-  decoration: const InputDecoration(labelText: 'Promotional Subtitle'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration:
+  const InputDecoration(labelText: 'Promotional Subtitle'),
   ),
   const SizedBox(height: 14),
   Row(
@@ -248,14 +301,18 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   Expanded(
   child: TextField(
   controller: tagCtrl,
-  decoration: const InputDecoration(labelText: 'Pill Tag (e.g. 24K GOLD)'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'Pill Tag (e.g. 24K GOLD)'),
   ),
   ),
   const SizedBox(width: 12),
   Expanded(
   child: TextField(
   controller: routeCtrl,
-  decoration: const InputDecoration(labelText: 'App Deep-Link Route'),
+  style: TextStyle(color: AppConstants.textPrimary),
+  decoration: const InputDecoration(
+  labelText: 'App Deep-Link Route'),
   ),
   ),
   ],
@@ -263,7 +320,11 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   const SizedBox(height: 16),
   SwitchListTile(
   contentPadding: EdgeInsets.zero,
-  title: const Text('Publish Banner Live in Customer App', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5)),
+  title: Text('Publish Banner Live in Customer App',
+  style: TextStyle(
+  color: AppConstants.textPrimary,
+  fontWeight: FontWeight.w600,
+  fontSize: 13.5)),
   value: isActive,
   activeThumbColor: AppConstants.accentGreen,
   onChanged: (v) => setDrawerState(() => isActive = v),
@@ -273,8 +334,9 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   },
   ),
   footerActions: [
-  OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-  const SizedBox(width: 12),
+  OutlinedButton(
+  onPressed: () => Navigator.pop(context),
+  child: const Text('Cancel')),
   ElevatedButton.icon(
   onPressed: () async {
   final title = titleCtrl.text.trim();
@@ -284,10 +346,13 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   }
   Navigator.pop(context);
   final bannerObj = {
-  'id': isEdit ? existing['id'] : 'banner_${DateTime.now().millisecondsSinceEpoch}',
+  'id': isEdit
+  ? existing['id']
+      : 'banner_${DateTime.now().millisecondsSinceEpoch}',
   'title': title,
   'subtitle': subtitleCtrl.text.trim(),
-  'tag': tagCtrl.text.trim().isEmpty ? 'PROMO' : tagCtrl.text.trim(),
+  'tag':
+  tagCtrl.text.trim().isEmpty ? 'PROMO' : tagCtrl.text.trim(),
   'route': routeCtrl.text.trim(),
   'imageUrl': imageValue,
   'status': isActive ? 'ACTIVE' : 'INACTIVE',
@@ -305,7 +370,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
   }
   final ok = await admin.saveCmsConfig({'homeBanners': updated});
   if (context.mounted) {
-  _toast(context, ok ? 'Home banner published live!' : 'Save failed.', ok);
+  _toast(
+  context,
+  ok ? 'Home banner published live!' : 'Save failed.',
+  ok);
   }
   },
   icon: const Icon(Icons.publish_rounded, size: 17),
@@ -317,7 +385,10 @@ class _HomeBannersCmsScreenState extends State<HomeBannersCmsScreen> {
 
   void _toast(BuildContext context, String msg, bool ok) {
   ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(content: Text(msg), backgroundColor: ok ? AppConstants.accentGreen : AppConstants.dangerRed),
+  SnackBar(
+  content: Text(msg),
+  backgroundColor:
+  ok ? AppConstants.accentGreen : AppConstants.dangerRed),
   );
   }
 }

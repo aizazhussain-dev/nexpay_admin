@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/constants.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/nexpay_ui_kit.dart';
 import 'main_layout.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final pass = _passController.text.trim();
 
     if (user.isEmpty || pass.isEmpty) {
-      setState(() => _errorMsg = 'Please enter both Operator ID and Master Password.');
+      setState(() =>
+      _errorMsg = 'Please enter both Operator ID and Master Password.');
       return;
     }
 
@@ -50,7 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         setState(() {
-          _errorMsg = 'Authentication failed. Invalid Operator ID or Master Password.';
+          _errorMsg =
+          'Authentication failed. Invalid Operator ID or Master Password.';
         });
       }
     }
@@ -70,14 +73,14 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 5,
               child: Container(
                 padding: const EdgeInsets.all(48),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppConstants.bgDark,
-                  border: Border(right: BorderSide(color: Color(0xFF1E293B))),
+                  border: const Border(
+                      right: BorderSide(color: Color(0xFF1E293B))),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Brand Identity
                     Row(
                       children: [
                         Container(
@@ -161,7 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(10),
@@ -170,7 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.circle, size: 9, color: Color(0xFF10B981)),
+                          Icon(Icons.circle,
+                              size: 9, color: Color(0xFF10B981)),
                           SizedBox(width: 10),
                           Text(
                             'Node: smartvest.tech  •  256-Bit SSL Active',
@@ -191,175 +196,202 @@ class _LoginScreenState extends State<LoginScreen> {
           // Right Authentication Form
           Expanded(
             flex: 6,
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(32),
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  padding: const EdgeInsets.all(36),
-                  decoration: BoxDecoration(
-                    color: AppConstants.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppConstants.borderColor),
-                    boxShadow: AppConstants.cardShadow,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: AppConstants.accentGreenLight,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Text(
-                          'AUTHORIZED PERSONNEL ONLY',
-                          style: TextStyle(
-                            color: AppConstants.accentGreen,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
+            child: Stack(
+              children: [
+                // Top-Right Light/Dark Mode Toggle
+                const Positioned(
+                  top: 22,
+                  right: 26,
+                  child: NexPayThemeToggleButton(),
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(32),
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      padding: const EdgeInsets.all(36),
+                      decoration: BoxDecoration(
+                        color: AppConstants.surface,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppConstants.borderColor),
+                        boxShadow: AppConstants.cardShadow,
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Sign in to Command Console',
-                        style: TextStyle(
-                          color: AppConstants.textPrimary,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      const Text(
-                        'Enter your executive credentials to unlock live treasury operations.',
-                        style: TextStyle(
-                          color: AppConstants.textMuted,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const SizedBox(height: 26),
-                      if (_errorMsg != null)
-                        Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(bottom: 18),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppConstants.dangerRedLight,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppConstants.dangerRed.withValues(alpha: 0.3)),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.error_outline_rounded, color: AppConstants.dangerRed, size: 18),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  _errorMsg!,
-                                  style: const TextStyle(
-                                    color: AppConstants.dangerRed,
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      const Text(
-                        'Operator Username',
-                        style: TextStyle(
-                          color: AppConstants.textSecondary,
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      TextField(
-                        controller: _userController,
-                        textInputAction: TextInputAction.next,
-                        style: const TextStyle(
-                          color: AppConstants.textPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: 'Enter operator ID',
-                          prefixIcon: Icon(Icons.person_outline_rounded, size: 19, color: AppConstants.textMuted),
-                        ),
-                      ),
-                      const SizedBox(height: 18),
-                      const Text(
-                        'Master Security Password',
-                        style: TextStyle(
-                          color: AppConstants.textSecondary,
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      TextField(
-                        controller: _passController,
-                        obscureText: _obscurePassword,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (_) => _handleLogin(),
-                        style: const TextStyle(
-                          color: AppConstants.textPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Enter master password',
-                          prefixIcon: const Icon(Icons.lock_outline_rounded, size: 19, color: AppConstants.textMuted),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                              size: 19,
-                              color: AppConstants.textMuted,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: AppConstants.accentGreenLight,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            child: Text(
+                              'AUTHORIZED PERSONNEL ONLY',
+                              style: TextStyle(
+                                color: AppConstants.accentGreen,
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 26),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.accentGreen,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Sign in to Command Console',
+                            style: TextStyle(
+                              color: AppConstants.textPrimary,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.4,
+                            ),
                           ),
-                          onPressed: _isBusy ? null : _handleLogin,
-                          icon: _isBusy
-                              ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.2),
-                          )
-                              : const Icon(Icons.shield_outlined, size: 19),
-                          label: Text(
-                            _isBusy ? 'Authenticating Session...' : 'Authorize & Launch Console',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                          const SizedBox(height: 6),
+                          Text(
+                            'Enter your executive credentials to unlock live treasury operations.',
+                            style: TextStyle(
+                              color: AppConstants.textMuted,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 26),
+                          if (_errorMsg != null)
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 18),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: AppConstants.dangerRedLight,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: AppConstants.dangerRed
+                                        .withValues(alpha: 0.3)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.error_outline_rounded,
+                                      color: AppConstants.dangerRed, size: 18),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      _errorMsg!,
+                                      style: TextStyle(
+                                        color: AppConstants.dangerRed,
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          Text(
+                            'Operator Username',
+                            style: TextStyle(
+                              color: AppConstants.textSecondary,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 7),
+                          TextField(
+                            controller: _userController,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(
+                              color: AppConstants.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Enter operator ID',
+                              prefixIcon: Icon(Icons.person_outline_rounded,
+                                  size: 19, color: AppConstants.textMuted),
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Text(
+                            'Master Security Password',
+                            style: TextStyle(
+                              color: AppConstants.textSecondary,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 7),
+                          TextField(
+                            controller: _passController,
+                            obscureText: _obscurePassword,
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (_) => _handleLogin(),
+                            style: TextStyle(
+                              color: AppConstants.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Enter master password',
+                              prefixIcon: Icon(Icons.lock_outline_rounded,
+                                  size: 19, color: AppConstants.textMuted),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  size: 19,
+                                  color: AppConstants.textMuted,
+                                ),
+                                onPressed: () => setState(
+                                        () => _obscurePassword = !_obscurePassword),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 26),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 46,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppConstants.accentGreen,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              onPressed: _isBusy ? null : _handleLogin,
+                              icon: _isBusy
+                                  ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.2),
+                              )
+                                  : const Icon(Icons.shield_outlined, size: 19),
+                              label: Text(
+                                _isBusy
+                                    ? 'Authenticating Session...'
+                                    : 'Authorize & Launch Console',
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: Text(
+                              'All administrative actions are logged with forensic timestamps.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: AppConstants.textMuted,
+                                  fontSize: 11.5),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                      const Center(
-                        child: Text(
-                          'All administrative actions are logged with forensic timestamps.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: AppConstants.textMuted, fontSize: 11.5),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
